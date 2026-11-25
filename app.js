@@ -1638,14 +1638,25 @@
   }
 
   function renderWrMatchingExercise(ex, exKey, prog, isChecked) {
+    const opts = ex.options || [];
+    const maxOptLen = opts.reduce((max, o) => Math.max(max, String(o.text || "").length), 0);
+    const poolCls =
+      opts.length === 4 && maxOptLen <= 16
+        ? "cols-4"
+        : opts.length <= 2
+          ? "cols-2"
+          : maxOptLen > 68
+            ? "cols-1"
+            : "cols-2";
+
     return `
-      <div class="wr-matching-pool">
-        ${(ex.options || [])
+      <div class="wr-matching-pool ${poolCls}">
+        ${opts
           .map(
             opt => `
           <div class="wr-matching-pool-row">
             <span class="wr-pool-key">${escapeHtml(opt.key)}</span>
-            <span>${escapeHtml(opt.text)}</span>
+            <span class="wr-pool-text">${escapeHtml(opt.text)}</span>
           </div>
         `
           )

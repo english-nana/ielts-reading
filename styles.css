@@ -3916,32 +3916,61 @@ button, input, select, textarea {
 /* Matching / MCQ / TF / Fill / Rewrite / Reorder Controls */
 .wr-matching-pool {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 6px;
-  padding: 10px 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
   border-radius: 8px;
   border: 1.5px solid #E4E4E7;
   background: #FAF9F6;
 }
 
+.wr-matching-pool.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.wr-matching-pool.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wr-matching-pool.cols-1 {
+  grid-template-columns: 1fr;
+}
+
 .wr-matching-pool-row {
   display: flex;
-  align-items: baseline;
-  gap: 7px;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid #E4E4E7;
+  background: #FFFFFF;
   font-size: 13.5px;
-  color: #27272A;
+  line-height: 1.45;
+  color: #18181B;
 }
 
 .wr-pool-key {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
-  padding: 1px 6px;
-  border-radius: 4px;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  border-radius: 5px;
   background: var(--accent-yellow-bright);
-  border: 1px solid #18181B;
+  border: 1.5px solid #18181B;
   color: #18181B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.wr-pool-text {
+  min-width: 0;
+  font-weight: 500;
+  word-break: break-word;
 }
 
 .wr-items-stack {
@@ -4471,5 +4500,11 @@ button, input, select, textarea {
   }
   .wr-fill-row {
     flex-wrap: wrap;
+  }
+  .wr-matching-pool.cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .wr-matching-pool.cols-2 {
+    grid-template-columns: 1fr;
   }
 }
