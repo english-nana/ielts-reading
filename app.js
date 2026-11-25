@@ -13,6 +13,17 @@
 
   let currentAccount = null; // { id, name, email } when authenticated via Supabase (same project as ielts-listening)
 
+  const cloudState = {
+    isTeacher: false,
+    submissionsByLessonId: {}, // unit.id -> writing_submissions row
+    reviewsByLessonId: {},     // unit.id -> writing_ai_reviews row
+    submittingUnitId: "",
+    submitErrorByUnitId: {},
+    notifPollTimer: null,
+    lastReviewsRefreshMs: 0,
+    reviewsRefreshInFlight: false
+  };
+
   // --------------------------------------------------------------------------
   // HELPERS
   // --------------------------------------------------------------------------
@@ -404,17 +415,231 @@
 
   function getSubmittedWritingEssaysList() {
     const stu = getActiveStudent();
-    const list = [];
+    const mapByUnit = {};
+
     WRITING_UNITS.forEach(u => {
+      const cloudSub = cloudState.submissionsByLessonId[u.id];
+      if (cloudSub && cloudSub.is_submitted) {
+        mapByUnit[u.id] = {
+          unit: u,
+          exId: "cloud",
+          info: {
+            wordCount: cloudSub.word_count || countWords(cloudSub.content || ""),
+            text: cloudSub.content || "",
+            submittedAt: cloudSub.submitted_at || cloudSub.updated_at || cloudSub.created_at || ""
+          },
+          cloudSub,
+          releasedReview: getReleasedWritingReview(u.id)
+        };
+        return;
+      }
+
       const p = stu.writingProgress && stu.writingProgress[u.id];
       if (!p || !p.submittedWritings) return;
       Object.entries(p.submittedWritings).forEach(([exId, info]) => {
         if (info && info.submittedAt) {
-          list.push({ unit: u, exId, info });
+          mapByUnit[u.id] = {
+            unit: u,
+            exId,
+            info,
+            cloudSub: null,
+            releasedReview: getReleasedWritingReview(u.id)
+          };
         }
       });
     });
-    return list.sort((a, b) => new Date(b.info.submittedAt).getTime() - new Date(a.info.submittedAt).getTime());
+
+    return Object.values(mapByUnit).sort(
+      (a, b) => new Date(b.info.submittedAt || 0).getTime() - new Date(a.info.submittedAt || 0).getTime()
+    );
+  }
+
+  function getCloudWritingSubmission(unitId) {
+    return (unitId && cloudState.submissionsByLessonId[unitId]) || null;
+  }
+
+  function getReleasedWritingReview(unitId) {
+    if (!unitId) return null;
+    const rev = cloudState.reviewsByLessonId[unitId];
+    if (!rev || rev.status !== "ready" || !rev.review_json) return null;
+    const relMs = rev.release_at ? new Date(rev.release_at).getTime() : 0;
+    if (!isNaN(relMs) && relMs > Date.now() && !cloudState.isTeacher) return null;
+    return rev;
+  }
+
+  function getAllReleasedWritingReviews() {
+    return Object.keys(cloudState.reviewsByLessonId)
+      .map(uid => getReleasedWritingReview(uid))
+      .filter(Boolean)
+      .sort((a, b) => new Date(b.release_at || b.updated_at || 0).getTime() - new Date(a.release_at || a.updated_at || 0).getTime());
+  }
+
+  async function markWritingReviewSeen(unitId) {
+    const rev = getReleasedWritingReview(unitId);
+    if (!rev || rev.student_seen_at || !CLOUD || state.localPreviewMode) return;
+    const client = CLOUD.getClient();
+    if (!client) return;
+    rev.student_seen_at = new Date().toISOString();
+    try {
+      await client.rpc("mark_writing_review_seen", { p_submission_id: rev.submission_id });
+    } catch (e) {}
+  }
+
+  function findPrimaryWritingExercise(unit) {
+    if (!unit || !unit.sections || !unit.sections.writing || !unit.sections.writing.parts) return null;
+    const parts = Object.values(unit.sections.writing.parts);
+    for (let i = 0; i < parts.length; i++) {
+      const ex = (parts[i].exercises || []).find(item => item.type === "writing");
+      if (ex) return ex;
+    }
+    return null;
+  }
+
+  function hydrateWritingProgressFromCloud() {
+    let changed = false;
+    WRITING_UNITS.forEach(unit => {
+      const sub = cloudState.submissionsByLessonId[unit.id];
+      if (!sub || !sub.is_submitted) return;
+      const writingEx = findPrimaryWritingExercise(unit);
+      if (!writingEx) return;
+      const prog = ensureWritingUnitProgress(unit.id);
+      const exKey = `writing__${writingEx.id}`;
+      const ansKey = `${exKey}_1`;
+      if (sub.content && !prog.exerciseAnswers[ansKey]) {
+        prog.exerciseAnswers[ansKey] = sub.content;
+        changed = true;
+      }
+      if (!prog.checkedExercises[exKey]) {
+        prog.checkedExercises[exKey] = true;
+        changed = true;
+      }
+      if (!prog.completedSections.includes("writing")) {
+        prog.completedSections.push("writing");
+        changed = true;
+      }
+      prog.submittedWritings[writingEx.id] = {
+        wordCount: sub.word_count || countWords(sub.content || ""),
+        text: sub.content || "",
+        submittedAt: sub.submitted_at || sub.updated_at || new Date().toISOString()
+      };
+    });
+    if (changed) persist();
+  }
+
+  async function refreshCloudWritingReviews(force) {
+    const client = CLOUD ? CLOUD.getClient() : null;
+    if (!client || !currentAccount || state.localPreviewMode || cloudState.reviewsRefreshInFlight) return;
+    const now = Date.now();
+    if (!force && now - cloudState.lastReviewsRefreshMs < 10000) return;
+
+    cloudState.reviewsRefreshInFlight = true;
+    try {
+      const [subsRes, reviewsRes] = await Promise.all([
+        client.from("writing_submissions").select("*").eq("user_id", currentAccount.id),
+        client.from("writing_ai_reviews").select("*").eq("user_id", currentAccount.id)
+      ]);
+      cloudState.lastReviewsRefreshMs = Date.now();
+      if (Array.isArray(subsRes.data)) {
+        const subMap = {};
+        subsRes.data.forEach(row => {
+          if (row && row.lesson_id) subMap[row.lesson_id] = row;
+        });
+        cloudState.submissionsByLessonId = subMap;
+        hydrateWritingProgressFromCloud();
+      }
+      if (Array.isArray(reviewsRes.data)) {
+        const revMap = {};
+        reviewsRes.data.forEach(row => {
+          if (row && row.lesson_id) revMap[row.lesson_id] = row;
+        });
+        cloudState.reviewsByLessonId = revMap;
+      }
+      renderApp();
+    } catch (e) {} finally {
+      cloudState.reviewsRefreshInFlight = false;
+    }
+  }
+
+  function startCloudReviewPolling() {
+    if (cloudState.notifPollTimer) {
+      clearInterval(cloudState.notifPollTimer);
+      cloudState.notifPollTimer = null;
+    }
+    if (state.localPreviewMode) return;
+    cloudState.notifPollTimer = setInterval(() => {
+      if (currentAccount && document.visibilityState === "visible") {
+        refreshCloudWritingReviews(false);
+      }
+    }, 60000);
+  }
+
+  async function submitWritingEssayToCloud(unit, ex, content, wordCount) {
+    const client = CLOUD ? CLOUD.getClient() : null;
+    if (!client || !currentAccount || state.localPreviewMode) {
+      return { ok: false, skipped: true };
+    }
+    const nowMs = Date.now();
+    const nowIso = new Date(nowMs).toISOString();
+    const defaultReleaseIso = new Date(nowMs + 12 * 60 * 60 * 1000).toISOString();
+    const rowId = `${currentAccount.id}__${unit.id}`;
+    const existing = getCloudWritingSubmission(unit.id);
+    const promptSummary = [ex.instruction, ex.promptBox].filter(Boolean).join("\n\n");
+
+    const payload = {
+      id: rowId,
+      user_id: currentAccount.id,
+      lesson_id: unit.id,
+      lesson_title: `Unit ${unit.number}: ${unit.titleEn} (${unit.titleVi})`,
+      prompt_text: promptSummary,
+      content: content || "",
+      word_count: wordCount || 0,
+      is_submitted: true,
+      submitted_at: nowIso,
+      updated_at: nowIso
+    };
+
+    const { data, error } = await client
+      .from("writing_submissions")
+      .upsert(payload, { onConflict: "id" })
+      .select("*")
+      .maybeSingle();
+
+    if (error) {
+      return { ok: false, error: error.message || "Không thể lưu bài lên Supabase." };
+    }
+
+    try {
+      await client.from("profiles").update({ last_active_at: nowIso }).eq("id", currentAccount.id);
+    } catch (e) {}
+
+    // Clear previous cached review on resubmission while awaiting the new 12h correction
+    delete cloudState.reviewsByLessonId[unit.id];
+
+    const savedRow = {
+      ...(data || payload),
+      teacher_feedback: (data && data.teacher_feedback) || (existing ? existing.teacher_feedback : ""),
+      ai_status: "scheduled",
+      ai_release_at: (data && data.ai_release_at) || defaultReleaseIso
+    };
+    cloudState.submissionsByLessonId[unit.id] = savedRow;
+
+    // Trigger Edge Function in background to correct errors & schedule 12h return
+    if (CLOUD && typeof CLOUD.invokeGradeWriting === "function") {
+      CLOUD.invokeGradeWriting(rowId)
+        .then(gradeRes => {
+          if (gradeRes && gradeRes.ok && gradeRes.release_at) {
+            const cur = cloudState.submissionsByLessonId[unit.id];
+            if (cur) {
+              cur.ai_status = gradeRes.status || "scheduled";
+              cur.ai_release_at = gradeRes.release_at;
+              renderApp();
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    return { ok: true, row: savedRow };
   }
 
   function getWritingSectionExercises(secObj, activePartKey) {
@@ -912,7 +1137,10 @@
     const ex = getCurrentExercise();
     const wrUnit = isWritingLesson ? getCurrentWritingUnit() : null;
     const wrProg = wrUnit ? ensureWritingUnitProgress(wrUnit.id) : null;
-    const unreadNotifs = (stu.notifications || []).filter(n => !n.read).length;
+    const releasedReviews = getAllReleasedWritingReviews();
+    const unreadCloudReviews = releasedReviews.filter(r => !r.student_seen_at).length;
+    const unreadLocalNotifs = (stu.notifications || []).filter(n => !n.read).length;
+    const unreadNotifs = unreadLocalNotifs + unreadCloudReviews;
 
     let leftGroupHtml = `
       <button type="button" class="ej-mobile-menu-btn" id="ej-mobile-menu-btn" aria-label="Mở menu">
@@ -970,12 +1198,17 @@
           </div>
 
           <div class="dt-topbar-right-group">
+            ${
+              cloudState.isTeacher
+                ? `<a href="./teacher.html" class="top-pill-btn teacher-nav-pill" title="Mở trang Giáo viên sửa & trả bài viết">👨‍🏫 Trang Giáo viên</a>`
+                : ""
+            }
             <div class="notif-menu-wrap" id="topbar-notif-wrap">
               <button
                 type="button"
                 class="notif-bell-btn ${unreadNotifs > 0 ? "has-unread" : ""}"
                 id="topbar-notif-btn"
-                title="Thông báo học tập"
+                title="Thông báo học tập & bài sửa Writing"
               >
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 ${unreadNotifs > 0 ? `<span class="notif-unread-badge">${unreadNotifs}</span>` : ""}
@@ -986,14 +1219,43 @@
                   ? `
                 <div class="notif-dropdown">
                   <div class="notif-dropdown-header">
-                    <span>Thông báo kết quả</span>
-                    <span class="notif-header-sub">Cập nhật học tập</span>
+                    <span>Thông báo bài sửa &amp; kết quả</span>
+                    <span class="notif-header-sub">Trả bài sau 12 tiếng</span>
                   </div>
                   <div class="notif-dropdown-list">
                     ${
-                      stu.notifications.length === 0
-                        ? `<div class="notif-empty-state">Chưa có thông báo nào.</div>`
-                        : stu.notifications
+                      releasedReviews.length === 0 && stu.notifications.length === 0
+                        ? `<div class="notif-empty-state">Chưa có thông báo nào. Khi bài sửa Writing sẵn sàng (sau 12 tiếng kể từ lúc nộp), thông báo sẽ xuất hiện tại đây.</div>`
+                        : `
+                          ${releasedReviews
+                            .map(rev => {
+                              const isUnread = !rev.student_seen_at;
+                              const errCount =
+                                rev.review_json && Array.isArray(rev.review_json.corrections)
+                                  ? rev.review_json.corrections.length
+                                  : 0;
+                              const relTime = CLOUD ? CLOUD.formatDateTime(rev.release_at) : formatDateTime(rev.release_at);
+                              const uObj = WRITING_UNITS.find(u => u.id === rev.lesson_id);
+                              const title = uObj ? `Unit ${uObj.number}: ${uObj.titleEn}` : rev.lesson_title || rev.lesson_id;
+                              return `
+                                <button
+                                  type="button"
+                                  class="notif-item-btn ${isUnread ? "unread" : ""}"
+                                  data-open-writing-unit="${escapeHtml(rev.lesson_id)}"
+                                  data-open-writing-sec="writing"
+                                  data-mark-review-seen="${escapeHtml(rev.lesson_id)}"
+                                >
+                                  <div class="notif-item-top">
+                                    <span class="notif-item-tag ${isUnread ? "new-dot" : ""}">${isUnread ? "Bài sửa mới" : "✓ Đã xem"}</span>
+                                    <span class="notif-item-time">${escapeHtml(relTime)}</span>
+                                  </div>
+                                  <div class="notif-item-title">✅ Đã trả bài sửa: ${escapeHtml(title)}</div>
+                                  <div class="notif-item-sub">${errCount > 0 ? `Phát hiện ${errCount} lỗi cần chú ý — Bấm để xem bài sửa chi tiết.` : "Bài viết rất sạch lỗi — Bấm để xem nhận xét chi tiết."}</div>
+                                </button>
+                              `;
+                            })
+                            .join("")}
+                          ${stu.notifications
                             .map(
                               n => `
                               <button
@@ -1013,7 +1275,8 @@
                               </button>
                             `
                             )
-                            .join("")
+                            .join("")}
+                        `
                     }
                   </div>
                 </div>
@@ -1882,7 +2145,102 @@
       .join("");
   }
 
-  function renderWritingSingleExerciseCard(ex, secKey, prog) {
+  function renderWritingCorrectionPanelHtml(unit, ex, isChecked, localWc) {
+    const sub = getCloudWritingSubmission(unit.id);
+    const releasedReview = getReleasedWritingReview(unit.id);
+    const submitErr = cloudState.submitErrorByUnitId[unit.id] || "";
+    const blocks = [];
+
+    if (submitErr) {
+      blocks.push(`<div class="auth-msg-err" style="margin-top:10px;margin-bottom:0;">⚠️ Lỗi đồng bộ bài lên hệ thống: ${escapeHtml(submitErr)}</div>`);
+    }
+
+    if (sub && sub.is_submitted) {
+      const fmtTime = CLOUD ? CLOUD.formatDateTime : formatDateTime;
+      const submittedTime = fmtTime(sub.submitted_at || sub.updated_at || sub.created_at);
+      const hasTeacherFb = Boolean(sub.teacher_feedback && sub.teacher_feedback.trim());
+
+      if (hasTeacherFb) {
+        blocks.push(`
+          <div class="writing-teacher-feedback-box">
+            <div class="writing-tf-head">
+              <span class="writing-tf-title">👨‍🏫 Nhận xét từ Giáo viên${submittedTime ? ` · Đã nộp ${escapeHtml(submittedTime)}` : ""}</span>
+            </div>
+            <p class="writing-tf-comment">${escapeHtml(sub.teacher_feedback)}</p>
+          </div>
+        `);
+      }
+
+      if (releasedReview && CLOUD && typeof CLOUD.renderWritingReviewHtml === "function") {
+        const relTime = fmtTime(releasedReview.release_at);
+        blocks.push(`
+          <div class="writing-teacher-feedback-box">
+            <div class="writing-tf-head">
+              <span class="writing-tf-title">✅ Bài sửa chi tiết đã sẵn sàng${relTime ? ` · Trả lúc ${escapeHtml(relTime)}` : ""}</span>
+              <span class="writing-tf-meta">${escapeHtml(String(sub.word_count || localWc || 0))} từ</span>
+            </div>
+          </div>
+          ${CLOUD.renderWritingReviewHtml(sub.content || "", releasedReview.review_json)}
+        `);
+      } else {
+        const releaseAt =
+          sub.ai_release_at ||
+          (sub.submitted_at ? new Date(new Date(sub.submitted_at).getTime() + 12 * 60 * 60 * 1000).toISOString() : "");
+        const remainText = CLOUD && releaseAt ? CLOUD.formatRemainingTime(releaseAt) : "";
+        const releaseFormatted = releaseAt ? fmtTime(releaseAt) : "";
+
+        if (remainText) {
+          blocks.push(`
+            <div class="writing-schedule-box">
+              <div class="writing-schedule-head">
+                <span class="writing-schedule-title">⏳ Đã nộp bài thành công${submittedTime ? ` lúc ${escapeHtml(submittedTime)}` : ""} · Đang chờ trả bài sửa</span>
+                <span class="writing-schedule-pill">Còn ${escapeHtml(remainText)}</span>
+              </div>
+              <p class="writing-schedule-desc">
+                Bài sửa lỗi chi tiết (ngữ pháp, chính tả, dấu câu, từ vựng &amp; gợi ý ý) sẽ được gửi vào tài khoản của bạn sau <strong>12 tiếng</strong> — dự kiến lúc <strong>${escapeHtml(releaseFormatted)}</strong>. Bạn sẽ nhận được thông báo ở biểu tượng chuông 🔔 trên góc phải khi có bài sửa.
+              </p>
+            </div>
+          `);
+        } else if (!hasTeacherFb) {
+          blocks.push(`
+            <div class="writing-teacher-feedback-box">
+              <div class="writing-tf-head">
+                <span class="writing-tf-title">✓ Đã gửi bài viết thành công${submittedTime ? ` lúc ${escapeHtml(submittedTime)}` : ""}</span>
+                <span class="writing-tf-meta">${escapeHtml(String(sub.word_count || localWc || 0))} từ</span>
+              </div>
+              <p class="writing-tf-comment">Bài sửa lỗi chi tiết của bạn đang được hoàn tất. Thông báo sẽ tự động hiện ở biểu tượng chuông 🔔 trên góc phải ngay khi bài sửa sẵn sàng.</p>
+            </div>
+          `);
+        }
+      }
+    } else if (isChecked) {
+      blocks.push(`
+        <div class="writing-schedule-box">
+          <div class="writing-schedule-head">
+            <span class="writing-schedule-title">✓ Đã lưu bài viết (${localWc} từ)</span>
+          </div>
+          <p class="writing-schedule-desc">
+            Đăng nhập bằng tài khoản học viên để hệ thống tự động sửa lỗi chi tiết và trả bài sau 12 tiếng.
+          </p>
+        </div>
+      `);
+    }
+
+    if ((sub && sub.is_submitted) || isChecked) {
+      if (ex.sampleAnswer) {
+        blocks.push(`
+          <details class="wr-sample-details">
+            <summary class="wr-sample-summary">📖 Xem bài mẫu tham khảo</summary>
+            <div class="wr-sample-body">${escapeHtml(ex.sampleAnswer)}</div>
+          </details>
+        `);
+      }
+    }
+
+    return blocks.join("");
+  }
+
+  function renderWritingSingleExerciseCard(ex, secKey, prog, unit) {
     const exKey = `${secKey}__${ex.id}`;
     const safeExKey = domSafeId(exKey);
     const isChecked = Boolean(prog.checkedExercises[exKey]);
@@ -1895,6 +2253,8 @@
       const { minW, maxW } = getWritingWordLimits(ex);
       const needed = Math.max(0, minW - wc);
       const canSubmit = wc >= minW;
+      const isSubmitting = unit && cloudState.submittingUnitId === unit.id;
+      const hasSubmitted = Boolean((unit && getCloudWritingSubmission(unit.id)) || isChecked);
 
       return `
         <article class="wr-ex-card" data-wr-ex-key="${escapeHtml(exKey)}" data-wr-total="1">
@@ -1931,16 +2291,7 @@
               <span class="wr-wc-num" id="wr-wc-${safeExKey}">${wc} từ</span>
               <span>Yêu cầu ${minW}–${maxW} từ</span>
             </div>
-            ${
-              isChecked
-                ? `
-              <div class="wr-sample-box">
-                <div class="wr-sample-head">✓ Đã nộp bài viết (${wc} từ)</div>
-                <div class="wr-sample-body"><strong>Bài mẫu tham khảo:</strong> ${escapeHtml(ex.sampleAnswer || "")}</div>
-              </div>
-            `
-                : ""
-            }
+            ${unit ? renderWritingCorrectionPanelHtml(unit, ex, isChecked, wc) : ""}
           </div>
 
           <footer class="wr-ex-footer">
@@ -1948,16 +2299,16 @@
               ${canSubmit ? `${wc}/${minW} từ · Đủ điều kiện nộp bài` : `${wc}/${minW} từ · cần thêm ${needed} từ để nộp`}
             </span>
             <div style="display:flex;gap:8px;">
-              ${isChecked ? `<button type="button" class="nb-back-btn wr-mini-btn" data-wr-reset="${escapeHtml(exKey)}">Viết lại</button>` : ""}
+              ${hasSubmitted ? `<button type="button" class="nb-back-btn wr-mini-btn" data-wr-reset="${escapeHtml(exKey)}">Viết lại</button>` : ""}
               <button
                 type="button"
-                class="wr-check-btn ${!canSubmit && !isChecked ? "unanswered" : ""}"
+                class="wr-check-btn ${!canSubmit && !hasSubmitted ? "unanswered" : ""}"
                 id="wr-check-${safeExKey}"
                 data-wr-check="${escapeHtml(exKey)}"
                 data-wr-is-writing="1"
                 data-wr-ex-id="${escapeHtml(ex.id)}"
-                ${!canSubmit && !isChecked ? "disabled" : ""}
-              >Nộp bài</button>
+                ${(!canSubmit && !hasSubmitted) || isSubmitting ? "disabled" : ""}
+              >${isSubmitting ? "Đang gửi bài..." : hasSubmitted ? "Nộp bản sửa mới" : "Nộp bài sửa lỗi"}</button>
             </div>
           </footer>
         </article>
@@ -2095,7 +2446,7 @@
               ${
                 exercisesList.length === 0
                   ? `<div class="wr-ex-card"><div class="wr-ex-body" style="color:#52525B;">Không có bài tập ở mục này. Bấm tiếp theo ở góc dưới bên phải để chuyển phần.</div></div>`
-                  : exercisesList.map(ex => renderWritingSingleExerciseCard(ex, secKey, prog)).join("")
+                  : exercisesList.map(ex => renderWritingSingleExerciseCard(ex, secKey, prog, unit)).join("")
               }
             </div>
           </div>
@@ -3323,23 +3674,39 @@
               <h2 class="wr-history-group-title">✍️ Bài Writing đã nộp (${writingEssays.length})</h2>
               <div class="ej-history-list" style="margin-bottom:22px;">
                 ${writingEssays
-                  .map(
-                    ({ unit, info }) => `
+                  .map(({ unit, info, cloudSub, releasedReview }) => {
+                    const remain =
+                      !releasedReview && cloudSub && cloudSub.ai_release_at && CLOUD
+                        ? CLOUD.formatRemainingTime(cloudSub.ai_release_at)
+                        : "";
+                    const errCount =
+                      releasedReview && releasedReview.review_json && Array.isArray(releasedReview.review_json.corrections)
+                        ? releasedReview.review_json.corrections.length
+                        : 0;
+                    let statusTagHtml = `<span class="notif-item-tag">${info.wordCount || 0} từ</span>`;
+                    if (releasedReview) {
+                      statusTagHtml = `<span class="notif-item-tag">✅ Đã trả bài sửa (${errCount} lỗi)</span>`;
+                    } else if (remain) {
+                      statusTagHtml = `<span class="notif-item-tag" style="background:#FEF3C7;color:#92400E;">⏳ Chờ trả bài (còn ${escapeHtml(remain)})</span>`;
+                    }
+                    const hasTeacherFb = Boolean(cloudSub && cloudSub.teacher_feedback && cloudSub.teacher_feedback.trim());
+                    return `
                   <div class="ej-history-card">
                     <div class="ej-history-left">
                       <div class="ej-history-badges">
                         <span class="class-badge-pill">Writing · Unit ${escapeHtml(unit.number)}</span>
-                        <span class="notif-item-tag">${info.wordCount || 0} từ</span>
+                        ${statusTagHtml}
+                        ${hasTeacherFb ? `<span class="notif-item-tag" style="background:#EEF2FF;color:#3730A3;">👨‍🏫 Có nhận xét GV</span>` : ""}
                       </div>
                       <div class="ej-history-title">${escapeHtml(unit.titleEn)} — ${escapeHtml(unit.titleVi)}</div>
-                      <div class="ej-history-meta">Nộp lúc ${escapeHtml(formatDateTime(info.submittedAt))}</div>
+                      <div class="ej-history-meta">Nộp lúc ${escapeHtml(formatDateTime(info.submittedAt))} · ${info.wordCount || 0} từ</div>
                     </div>
                     <button type="button" class="nb-back-btn" data-open-writing-unit="${escapeHtml(unit.id)}" data-open-writing-sec="writing">
-                      Xem lại bài viết →
+                      ${releasedReview ? "Xem bài sửa chi tiết →" : "Xem lại bài viết →"}
                     </button>
                   </div>
-                `
-                  )
+                `;
+                  })
                   .join("")}
               </div>
             `
@@ -3940,6 +4307,9 @@
         }
         const unitId = btn.getAttribute("data-open-writing-unit");
         const secKey = btn.getAttribute("data-open-writing-sec") || "vocabulary";
+        if (btn.getAttribute("data-mark-review-seen") || secKey === "writing") {
+          markWritingReviewSeen(unitId);
+        }
         openWritingUnit(unitId, secKey);
       };
     });
@@ -4002,6 +4372,7 @@
         if (state.notifOpen) {
           stu.notifications.forEach(n => { n.read = true; });
           persist();
+          refreshCloudWritingReviews(true);
         }
         renderApp();
       };
@@ -4039,6 +4410,15 @@
           } catch (e) {}
         }
         currentAccount = null;
+        cloudState.isTeacher = false;
+        cloudState.submissionsByLessonId = {};
+        cloudState.reviewsByLessonId = {};
+        cloudState.submittingUnitId = "";
+        cloudState.submitErrorByUnitId = {};
+        if (cloudState.notifPollTimer) {
+          clearInterval(cloudState.notifPollTimer);
+          cloudState.notifPollTimer = null;
+        }
         state.localPreviewMode = false;
         state.authMode = "login";
         state.authError = "";
@@ -4570,9 +4950,17 @@
         };
       });
 
+      // Auto-mark released review as seen when viewing Writing section
+      if (unit && state.currentWritingSection === "writing") {
+        const rel = getReleasedWritingReview(unit.id);
+        if (rel && !rel.student_seen_at) {
+          markWritingReviewSeen(unit.id);
+        }
+      }
+
       // 6. Check / Submit & Reset Exercise
       document.querySelectorAll("[data-wr-check]").forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = async () => {
           if (!prog || !unit) return;
           const exKey = btn.getAttribute("data-wr-check");
           const isWritingTask = btn.getAttribute("data-wr-is-writing") === "1";
@@ -4585,22 +4973,30 @@
             const wc = countWords(text);
             if (wc < minW) return;
 
+            const writingEx = findPrimaryWritingExercise(unit) || { id: exId, instruction: "", promptBox: "" };
             const nowIso = new Date().toISOString();
             prog.submittedWritings[exId] = {
               wordCount: wc,
               text,
               submittedAt: nowIso
             };
-            stu.notifications.unshift({
-              id: "wr_" + Date.now(),
-              title: `Đã nộp Writing: Unit ${unit.number} — ${unit.titleEn}`,
-              sub: `Bài viết ${wc} từ đã được lưu. Bấm để xem lại bài mẫu tham khảo.`,
-              time: formatDateTime(nowIso),
-              read: false,
-              actionWritingUnitId: unit.id,
-              actionWritingSec: "writing"
-            });
-            if (stu.notifications.length > 20) stu.notifications = stu.notifications.slice(0, 20);
+            prog.checkedExercises[exKey] = true;
+            if (!prog.completedSections.includes(state.currentWritingSection)) {
+              prog.completedSections.push(state.currentWritingSection);
+            }
+            persist();
+
+            cloudState.submittingUnitId = unit.id;
+            delete cloudState.submitErrorByUnitId[unit.id];
+            renderApp();
+
+            const cloudRes = await submitWritingEssayToCloud(unit, writingEx, text, wc);
+            cloudState.submittingUnitId = "";
+            if (cloudRes && !cloudRes.ok && !cloudRes.skipped && cloudRes.error) {
+              cloudState.submitErrorByUnitId[unit.id] = cloudRes.error;
+            }
+            renderApp();
+            return;
           }
 
           prog.checkedExercises[exKey] = true;
@@ -4824,8 +5220,23 @@
     renderApp();
 
     let resolvedName = fallbackName;
+    let isTeacher = false;
+    const subsMap = {};
+    const reviewsMap = {};
+
     try {
-      const { data: prof } = await client.from("profiles").select("id, full_name").eq("id", uid).maybeSingle();
+      const [profRes, subsRes, reviewsRes, teacherRes] = await Promise.all([
+        client.from("profiles").select("id, full_name").eq("id", uid).maybeSingle(),
+        client.from("writing_submissions").select("*").eq("user_id", uid),
+        client.from("writing_ai_reviews").select("*").eq("user_id", uid),
+        client.rpc("is_teacher")
+      ]);
+
+      isTeacher =
+        Boolean(teacherRes && !teacherRes.error && teacherRes.data === true) ||
+        email === "mtung0208@gmail.com";
+
+      const prof = profRes && profRes.data;
       if (prof && prof.full_name) {
         const cleanProfName = CLOUD.stripClassPrefix(prof.full_name);
         if (cleanProfName) resolvedName = cleanProfName;
@@ -4843,14 +5254,37 @@
           { onConflict: "id" }
         );
       }
+
+      if (Array.isArray(subsRes && subsRes.data)) {
+        subsRes.data.forEach(row => {
+          if (row && row.lesson_id) subsMap[row.lesson_id] = row;
+        });
+      }
+      if (Array.isArray(reviewsRes && reviewsRes.data)) {
+        reviewsRes.data.forEach(row => {
+          if (row && row.lesson_id) reviewsMap[row.lesson_id] = row;
+        });
+      }
     } catch (e) {}
 
     currentAccount = { id: uid, name: resolvedName, email };
+    cloudState.isTeacher = isTeacher;
+    cloudState.submissionsByLessonId = subsMap;
+    cloudState.reviewsByLessonId = reviewsMap;
+    cloudState.lastReviewsRefreshMs = Date.now();
     reloadStoreForAccount();
+    hydrateWritingProgressFromCloud();
+    startCloudReviewPolling();
     state.authLoading = false;
     state.authError = "";
     renderApp();
   }
+
+  window.addEventListener("focus", () => {
+    if (currentAccount && !state.localPreviewMode) {
+      refreshCloudWritingReviews(false);
+    }
+  });
 
   window.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);

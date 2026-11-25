@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Trang Giáo Viên — Sửa &amp; Trả Bài Writing</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles.css?v=20261126d" />
+</head>
+<body>
+  <div id="teacher-app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./supabase-config.js?v=20261126d"></script>
+  <script src="./supabase-client.js?v=20261126d"></script>
+  <script src="./writing-data.js?v=20261126d"></script>
+  <script>
+    (function () {
+      const CLOUD = window.ReadingCloud;
+      const UNITS = window.WRITING_UNITS || [];
+      const escapeHtml = CLOUD.escapeHtml;
+
+      const unitById = {};
+      UNITS.forEach(u => {
+        unitById[u.id] = u;
+      });
+
+      const tState = {
+        loading: false,
+        authenticated: false,
+        unauthorizedEmail: "",
+        teacherEmail: "",
+        teacherUserId: "",
+        gradingSubId: "",
+        releasingSubId: "",
+        flushingQueue: false,
+        authError: "",
+        dbError: "",
+        submissions: [],
+        searchQuery: "",
+        filterLesson: "all",
+        filterStatus: "all", // "all" | "waiting" | "released" | "no_feedback"
+        savedToastId: ""
+      };
+
+      async function verifyAndLoadCloudTeacher(user) {
+        const client = CLOUD.getClient();
+        if (!client || !user) return;
+
+        tState.loading = true;
+        tState.authError = "";
+        tState.unauthorizedEmail = "";
+        renderTeacherApp();
+
+        const email = String(user.email || "").trim().toLowerCase();
+        const { data: isTeacherFlag, error: rpcError } = await client.rpc("is_teacher");
+        const allowed = Boolean(!rpcError && isTeacherFlag === true) || email === "mtung0208@gmail.com";
+        if (!allowed) {
+          tState.loading = false;
+          tState.authenticated = false;
+          tState.unauthorizedEmail = email;
+          renderTeacherApp();
+          return;
+        }
+
+        tState.authenticated = true;
+        tState.teacherEmail = email;
+        tState.teacherUserId = user.id || "";
+        await refreshCloudDashboardData();
+      }
+
+      async function refreshCloudDashboardData() {
+        const client = CLOUD.getClient();
+        if (!client) return;
+
+        tState.loading = true;
+        tState.dbError = "";
+        renderTeacherApp();
+
+        const [profilesRes, subsRes, reviewsRes] = await Promise.all([
+          client.from("profiles").select("id, email, full_name").order("last_active_at", { ascending: false }),
+          client.from("writing_submissions").select("*").order("submitted_at", { ascending: false }),
+          client.from("writing_ai_reviews").select("*")
+        ]);
+
+        const firstErr = profilesRes.error || subsRes.error;
+        if (firstErr) {
+          tState.dbError =
+            "Không thể đọc dữ liệu từ Supabase (" +
+            (firstErr.code ? firstErr.code + ": " : "") +
+            firstErr.message +
+            "). Vui lòng chạy file supabase-setup.sql trong Supabase SQL Editor để tạo bảng writing_submissions & writing_ai_reviews.";
+        }
+
+        const profiles = Array.isArray(profilesRes.data) ? profilesRes.data : [];
+        const subRows = Array.isArray(subsRes.data) ? subsRes.data : [];
+        const reviewRows = Array.isArray(reviewsRes.data) ? reviewsRes.data : [];
+
+        const profileById = {};
+        profiles.forEach(p => {
+          profileById[p.id] = p;
+        });
+
+        const reviewBySubId = {};
+        reviewRows.forEach(r => {
+          if (r && r.submission_id) reviewBySubId[r.submission_id] = r;
+        });
+
+        const submissions = subRows.map(row => {
+          const prof = profileById[row.user_id] || { id: row.user_id, full_name: "Học viên", email: "" };
+          const cleanName = CLOUD.stripClassPrefix(prof.full_name || "") || prof.email || "Học viên";
+          const unitObj = unitById[row.lesson_id];
+          const lessonTitle = unitObj
+            ? `Unit ${unitObj.number}: ${unitObj.titleEn} (${unitObj.titleVi})`
+            : row.lesson_title || row.lesson_id;
+          const ts = row.submitted_at || row.updated_at || row.created_at;
+
+          return {
+            submissionId: row.id,
+            studentId: row.user_id,
+            studentName: cleanName,
+            studentEmail: prof.email || "",
+            lessonId: row.lesson_id,
+            lessonTitle,
+            promptText: row.prompt_text || "",
+            content: row.content || "",
+            wordCount: row.word_count || 0,
+            isSubmitted: Boolean(row.is_submitted),
+            submittedAt: CLOUD.formatDateTime(ts),
+            rawTime: new Date(ts || 0).getTime(),
+            teacherFeedback: row.teacher_feedback || "",
+            aiStatus: row.ai_status || "",
+            aiReleaseAt: row.ai_release_at || "",
+            aiReview: reviewBySubId[row.id] || null
+          };
+        });
+
+        submissions.sort((a, b) => (b.rawTime || 0) - (a.rawTime || 0));
+        tState.submissions = submissions;
+        tState.loading = false;
+        renderTeacherApp();
+      }
+
+      async function saveTeacherFeedback(submissionId, feedbackVal) {
+        const client = CLOUD.getClient();
+        if (!client) return;
+        const { error } = await client
+          .from("writing_submissions")
+          .update({ teacher_feedback: feedbackVal })
+          .eq("id", submissionId);
+
+        if (!error) {
+          const item = tState.submissions.find(s => s.submissionId === submissionId);
+          if (item) item.teacherFeedback = feedbackVal;
+          tState.savedToastId = submissionId;
+          renderTeacherApp();
+          setTimeout(() => {
+            if (tState.savedToastId === submissionId) {
+              tState.savedToastId = "";
+              renderTeacherApp();
+            }
+          }, 2200);
+        } else {
+          alert("Lỗi lưu nhận xét: " + error.message);
+        }
+      }
+
+      async function triggerTeacherAiCorrection(submissionId) {
+        if (!submissionId || tState.gradingSubId) return;
+        tState.gradingSubId = submissionId;
+        renderTeacherApp();
+
+        const res = await CLOUD.invokeGradeWriting(submissionId, {
+          forceTeacher: true,
+          releaseNow: false
+        });
+        tState.gradingSubId = "";
+        if (!res.ok) {
+          renderTeacherApp();
+          alert(
+            "Không chạy được sửa bài AI: " +
+              (res.error || "Vui lòng kiểm tra đã deploy Edge Function grade-writing và cài GEMINI_API_KEY chưa.")
+          );
+          return;
+        }
+        await refreshCloudDashboardData();
+      }
+
+      async function releaseReviewNow(submissionId) {
+        const client = CLOUD.getClient();
+        if (!client || !submissionId || tState.releasingSubId) return;
+        tState.releasingSubId = submissionId;
+        renderTeacherApp();
+
+        const { error } = await client.rpc("teacher_release_review_now", { p_submission_id: submissionId });
+        tState.releasingSubId = "";
+        if (error) {
+          renderTeacherApp();
+          alert("Không trả bài sửa sớm được: " + error.message);
+          return;
+        }
+        await refreshCloudDashboardData();
+      }
+
+      async function flushPendingQueueNow() {
+        if (tState.flushingQueue) return;
+        tState.flushingQueue = true;
+        renderTeacherApp();
+        const res = await CLOUD.invokeProcessQueue(5);
+        tState.flushingQueue = false;
+        if (!res.ok) {
+          renderTeacherApp();
+          alert("Không chạy được hàng đợi sửa bài: " + (res.error || "Lỗi không xác định"));
+          return;
+        }
+        await refreshCloudDashboardData();
+        alert(`Đã xử lý ${res.processed || 0} bài chờ: thành công ${res.succeeded || 0} bài, còn chờ thử lại ${res.failed || 0} bài.`);
+      }
+
+      function exportCsvReport(rows) {
+        const csvCell = v => `"${String(v || "").replace(/"/g, '""')}"`;
+        const header = [
+          "Học viên",
+          "Email",
+          "Bài học Writing",
+          "Số từ",
+          "Thời gian nộp",
+          "Nội dung bài viết",
+          "Số lỗi phát hiện",
+          "Nhận xét giáo viên"
+        ];
+        const lines = [header.map(csvCell).join(",")];
+        rows.forEach(sub => {
+          const errCount =
+            sub.aiReview && sub.aiReview.review_json && Array.isArray(sub.aiReview.review_json.corrections)
+              ? sub.aiReview.review_json.corrections.length
+              : "";
+          lines.push(
+            [
+              sub.studentName,
+              sub.studentEmail,
+              sub.lessonTitle,
+              sub.wordCount || 0,
+              sub.submittedAt,
+              sub.content,
+              errCount,
+              sub.teacherFeedback
+            ]
+              .map(csvCell)
+              .join(",")
+          );
+        });
+        const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `bao-cao-writing-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      function getFilteredSubmissions() {
+        const q = tState.searchQuery.trim().toLowerCase();
+        return tState.submissions.filter(sub => {
+          if (q && !`${sub.studentName} ${sub.studentEmail} ${sub.lessonTitle}`.toLowerCase().includes(q)) {
+            return false;
+          }
+          if (tState.filterLesson !== "all" && sub.lessonId !== tState.filterLesson) return false;
+          const rev = sub.aiReview;
+          const hasReady = Boolean(rev && rev.status === "ready" && rev.review_json);
+          const isWaiting12h = hasReady && rev.release_at && new Date(rev.release_at).getTime() > Date.now();
+          if (tState.filterStatus === "waiting" && !(isWaiting12h || !hasReady)) return false;
+          if (tState.filterStatus === "released" && !(hasReady && !isWaiting12h)) return false;
+          if (tState.filterStatus === "no_feedback" && sub.teacherFeedback.trim()) return false;
+          return true;
+        });
+      }
+
+      function renderUnauthorizedView() {
+        return `
+          <div class="auth-wrapper">
+            <div class="auth-card-box">
+              <div style="margin-bottom:10px;">
+                <span class="auth-badge-tag" style="background:#FEE2E2;color:#991B1B;">KHÔNG CÓ QUYỀN TRUY CẬP</span>
+              </div>
+              <h1 style="font-size:21px;font-weight:900;color:#18181B;margin-bottom:8px;">
+                Tài khoản không phải Giáo viên
+              </h1>
+              <p style="font-size:13.5px;color:#52525B;line-height:1.55;margin-bottom:16px;">
+                Tài khoản <strong>${escapeHtml(tState.unauthorizedEmail)}</strong> chưa có trong bảng <code>public.teachers</code> trên Supabase.
+              </p>
+              <button type="button" class="form-submit-btn" id="btn-teacher-logout">
+                Đăng xuất &amp; Đăng nhập tài khoản Giáo viên →
+              </button>
+              <a href="./index.html" style="display:block;text-align:center;margin-top:10px;font-size:12.5px;font-weight:600;color:#71717A;text-decoration:none;">
+                ← Quay về trang luyện tập
+              </a>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderTeacherLogin() {
+        return `
+          <div class="auth-wrapper">
+            <div class="auth-card-box">
+              <div style="margin-bottom:10px;">
+                <span class="auth-badge-tag" style="background:#DCFCE7;color:#166534;">TRANG GIÁO VIÊN · SỬA &amp; TRẢ BÀI WRITING</span>
+              </div>
+              <h1 style="font-size:22px;font-weight:900;color:#18181B;margin-bottom:6px;">
+                Đăng nhập Giáo viên
+              </h1>
+              <p style="font-size:13.5px;color:#52525B;line-height:1.55;margin-bottom:16px;">
+                Đăng nhập bằng tài khoản Giáo viên đã khai báo trên Supabase để xem bài viết sơ cấp của học viên, xem bài sửa lỗi chi tiết và trả bài sớm.
+              </p>
+
+              ${tState.authError ? `<div class="auth-msg-err">⚠️ ${escapeHtml(tState.authError)}</div>` : ""}
+
+              <button type="button" class="google-auth-btn" id="btn-teacher-google-login" ${tState.loading ? "disabled" : ""}>
+                ${CLOUD.renderGoogleIconSvg(19)}
+                <span>${tState.loading ? "Đang xác thực quyền Giáo viên..." : "Đăng nhập Giáo viên bằng Google"}</span>
+              </button>
+
+              <div class="auth-or-divider"><span>Hoặc đăng nhập Email Giáo viên</span></div>
+
+              <form id="teacher-cloud-email-form" onsubmit="return false;">
+                <div class="form-field">
+                  <label class="form-label" for="inp-teacher-email">Email Giáo viên</label>
+                  <input type="email" id="inp-teacher-email" class="form-input" placeholder="giaovien@gmail.com" required />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="inp-teacher-pass">Mật khẩu</label>
+                  <input type="password" id="inp-teacher-pass" class="form-input" placeholder="Nhập mật khẩu..." required />
+                </div>
+                <button type="submit" class="form-submit-btn" ${tState.loading ? "disabled" : ""}>
+                  Đăng nhập trang Giáo viên →
+                </button>
+              </form>
+
+              <a href="./index.html" style="display:block;text-align:center;margin-top:12px;font-size:12.5px;font-weight:600;color:#71717A;text-decoration:none;">
+                ← Quay về trang luyện tập
+              </a>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderTeacherDashboard() {
+        const filteredSubs = getFilteredSubmissions();
+        const totalSubmitted = tState.submissions.filter(s => s.isSubmitted).length;
+        const pendingAiCount = tState.submissions.filter(s => s.isSubmitted && (!s.aiReview || s.aiReview.status !== "ready")).length;
+        const waitingReleaseCount = tState.submissions.filter(s => {
+          const rev = s.aiReview;
+          return rev && rev.status === "ready" && rev.release_at && new Date(rev.release_at).getTime() > Date.now();
+        }).length;
+        const releasedCount = tState.submissions.filter(s => {
+          const rev = s.aiReview;
+          return rev && rev.status === "ready" && (!rev.release_at || new Date(rev.release_at).getTime() <= Date.now());
+        }).length;
+
+        return `
+          <div class="teacher-page-shell">
+            <header class="teacher-topbar">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <div class="teacher-brand-title">👨‍🏫 TRANG GIÁO VIÊN · SỬA BÀI WRITING</div>
+                <span class="cloud-mode-pill">KHÔNG CHẤM ĐIỂM · CHỈ SỬA LỖI</span>
+              </div>
+
+              <div class="teacher-topbar-actions">
+                <a href="./index.html" class="top-pill-btn">← Về trang luyện tập</a>
+                ${
+                  pendingAiCount > 0
+                    ? `<button type="button" class="top-pill-btn yellow" id="btn-flush-queue" ${tState.flushingQueue ? "disabled" : ""}>
+                        ${tState.flushingQueue ? "⏳ Đang sửa hàng đợi..." : `🔄 Sửa bài chờ (${pendingAiCount})`}
+                      </button>`
+                    : ""
+                }
+                <button type="button" class="top-pill-btn" id="btn-refresh-data">
+                  ${tState.loading ? "⏳ Đang tải..." : "↻ Làm mới"}
+                </button>
+                <button type="button" class="top-pill-btn yellow" id="btn-export-csv">📊 Xuất Excel (.csv)</button>
+                <button type="button" class="user-account-pill" id="btn-teacher-logout">
+                  <span>${escapeHtml(tState.teacherEmail || "Giáo viên")} · Đăng xuất</span>
+                </button>
+              </div>
+            </header>
+
+            <main class="teacher-container">
+              ${
+                tState.dbError
+                  ? `<div class="auth-msg-err" style="margin-bottom:18px;">⚠️ ${escapeHtml(tState.dbError)}</div>`
+                  : ""
+              }
+
+              <div class="teacher-stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));">
+                <div class="teacher-stat-card">
+                  <div class="teacher-stat-label">Bài viết đã nộp</div>
+                  <div class="teacher-stat-value">${totalSubmitted}</div>
+                </div>
+                <div class="teacher-stat-card">
+                  <div class="teacher-stat-label">Chờ tạo bài sửa AI</div>
+                  <div class="teacher-stat-value" style="color:#B45309;">${pendingAiCount}</div>
+                </div>
+                <div class="teacher-stat-card">
+                  <div class="teacher-stat-label">Đã sửa · chờ trả (12h)</div>
+                  <div class="teacher-stat-value" style="color:#0369A1;">${waitingReleaseCount}</div>
+                </div>
+                <div class="teacher-stat-card">
+                  <div class="teacher-stat-label">Đã trả bài cho học viên</div>
+                  <div class="teacher-stat-value" style="color:#15803D;">${releasedCount}</div>
+                </div>
+              </div>
+
+              <div class="teacher-filter-bar" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+                <div style="font-size:13.5px;font-weight:700;color:#18181B;">
+                  Đang hiển thị <strong>${filteredSubs.length}</strong> / ${tState.submissions.length} bài viết
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <input
+                    type="text"
+                    id="inp-filter-search"
+                    class="form-input"
+                    style="height:36px;width:230px;font-size:13px;"
+                    placeholder="🔍 Tìm tên hoặc email học viên..."
+                    value="${escapeHtml(tState.searchQuery)}"
+                  />
+                  <select id="sel-filter-lesson" class="form-input" style="height:36px;width:auto;max-width:260px;font-size:13px;font-weight:600;">
+                    <option value="all">Tất cả 10 bài Writing</option>
+                    ${UNITS.map(
+                      u => `<option value="${escapeHtml(u.id)}" ${tState.filterLesson === u.id ? "selected" : ""}>Unit ${escapeHtml(u.number)}: ${escapeHtml(u.titleEn)}</option>`
+                    ).join("")}
+                  </select>
+                  <select id="sel-filter-status" class="form-input" style="height:36px;width:auto;font-size:13px;font-weight:600;">
+                    <option value="all" ${tState.filterStatus === "all" ? "selected" : ""}>Mọi trạng thái</option>
+                    <option value="waiting" ${tState.filterStatus === "waiting" ? "selected" : ""}>Chờ sửa / Chờ trả 12h</option>
+                    <option value="released" ${tState.filterStatus === "released" ? "selected" : ""}>Đã trả bài sửa</option>
+                    <option value="no_feedback" ${tState.filterStatus === "no_feedback" ? "selected" : ""}>Chưa có nhận xét GV</option>
+                  </select>
+                </div>
+              </div>
+
+              ${
+                filteredSubs.length === 0
+                  ? `
+                  <div style="padding:36px;text-align:center;border:2px dashed #D4D4D8;background:#FFFFFF;color:#52525B;border-radius:10px;">
+                    <p style="font-size:16px;font-weight:700;margin-bottom:6px;">Chưa có bài viết nào khớp bộ lọc.</p>
+                    <p style="font-size:13.5px;">Khi học viên hoàn thành bài viết trong mục Writing (Unit 01–10) và bấm <strong>Nộp bài sửa lỗi</strong>, bài sẽ tự động đồng bộ về đây.</p>
+                  </div>
+                `
+                  : filteredSubs
+                      .map(sub => {
+                        const rev = sub.aiReview;
+                        const isGrading = tState.gradingSubId === sub.submissionId;
+                        const isReleasing = tState.releasingSubId === sub.submissionId;
+                        const hasReadyReview = Boolean(rev && rev.status === "ready" && rev.review_json);
+                        const relMs = rev && rev.release_at ? new Date(rev.release_at).getTime() : 0;
+                        const isWaiting12h = hasReadyReview && relMs > Date.now();
+                        const remain = isWaiting12h ? CLOUD.formatRemainingTime(rev.release_at) : "";
+                        const errCount =
+                          hasReadyReview && Array.isArray(rev.review_json.corrections)
+                            ? rev.review_json.corrections.length
+                            : 0;
+
+                        let statusHtml = `<span style="font-size:12.5px;color:#52525B;">Chưa có bài sửa lỗi AI.</span>`;
+                        if (hasReadyReview && isWaiting12h) {
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#92400E;">⏳ Bài sửa AI đã sẵn sàng · Hẹn trả học viên lúc ${escapeHtml(CLOUD.formatDateTime(rev.release_at))} (còn ${escapeHtml(remain)})</span>`;
+                        } else if (hasReadyReview) {
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#166534;">✅ Đã trả bài sửa cho học viên (${escapeHtml(CLOUD.formatDateTime(rev.release_at))}) · ${rev.student_seen_at ? "Học viên đã xem" : "Học viên chưa xem"}</span>`;
+                        } else if (rev && rev.status === "error") {
+                          const tries = rev.retry_count || 1;
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#B45309;">🔄 AI tạm quá tải (lần thử ${tries}/20) — hệ thống sẽ tự động sửa lại mỗi 5 phút trước giờ trả bài.</span>`;
+                        } else if (sub.aiStatus === "pending" || sub.aiStatus === "pending_retry") {
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#92400E;">⏳ Đang nằm trong hàng đợi tự động sửa lỗi (hẹn trả sau 12 tiếng).</span>`;
+                        }
+
+                        return `
+                          <div class="submission-review-card">
+                            <div class="submission-review-top">
+                              <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
+                                <span style="font-size:14.5px;font-weight:800;color:#18181B;">👤 ${escapeHtml(sub.studentName)}</span>
+                                <span style="font-size:12.5px;color:#71717A;">(${escapeHtml(sub.studentEmail)})</span>
+                                <span style="color:#D4D4D8;">|</span>
+                                <span style="font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;color:#0C4A6E;background:#E0F2FE;">
+                                  ${escapeHtml(sub.lessonTitle)}
+                                </span>
+                                <span style="font-family:var(--font-mono);font-size:11.5px;font-weight:700;color:#27272A;background:#F4F4F5;padding:2px 8px;border-radius:4px;">
+                                  ${sub.wordCount} từ
+                                </span>
+                              </div>
+                              <div>
+                                <span class="submitted-badge">✓ Đã nộp (${escapeHtml(sub.submittedAt || "")})</span>
+                              </div>
+                            </div>
+
+                            ${
+                              sub.promptText
+                                ? `<div class="teacher-prompt-snippet"><strong>Đề bài:</strong> ${escapeHtml(sub.promptText)}</div>`
+                                : ""
+                            }
+
+                            <div class="teacher-writing-body">${escapeHtml(sub.content || "(Bài viết trống)")}</div>
+
+                            <div class="teacher-ai-bar">
+                              <div>${statusHtml}</div>
+                              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                                ${
+                                  isWaiting12h
+                                    ? `<button type="button" class="top-pill-btn yellow" data-release-now="${escapeHtml(sub.submissionId)}" ${isReleasing ? "disabled" : ""}>
+                                        ${isReleasing ? "Đang trả..." : "⚡ Trả bài sửa ngay"}
+                                      </button>`
+                                    : ""
+                                }
+                                <button type="button" class="top-pill-btn" data-ai-grade="${escapeHtml(sub.submissionId)}" ${isGrading ? "disabled" : ""}>
+                                  ${isGrading ? "⏳ Đang sửa bài AI..." : hasReadyReview ? "↻ Sửa lại bằng AI" : "✨ Tạo bài sửa AI"}
+                                </button>
+                              </div>
+                            </div>
+
+                            ${
+                              hasReadyReview
+                                ? `
+                                  <details class="teacher-ai-details">
+                                    <summary>📝 Xem bài sửa chi tiết (${errCount} lỗi)</summary>
+                                    ${CLOUD.renderWritingReviewHtml(sub.content || "", rev.review_json)}
+                                  </details>
+                                `
+                                : ""
+                            }
+
+                            <div class="grade-row">
+                              <input
+                                type="text"
+                                class="form-input"
+                                style="height:36px;font-size:13px;flex:1;min-width:240px;"
+                                placeholder="Nhận xét thêm của Giáo viên (học viên sẽ thấy ngay dưới bài viết)..."
+                                value="${escapeHtml(sub.teacherFeedback)}"
+                                id="inp-fb-${escapeHtml(sub.submissionId)}"
+                              />
+                              <button type="button" class="save-grade-btn" data-save-grade="${escapeHtml(sub.submissionId)}">
+                                ${tState.savedToastId === sub.submissionId ? "✓ Đã lưu!" : "Lưu nhận xét"}
+                              </button>
+                            </div>
+                          </div>
+                        `;
+                      })
+                      .join("")
+              }
+            </main>
+          </div>
+        `;
+      }
+
+      function renderTeacherApp() {
+        const root = document.getElementById("teacher-app");
+        if (!root) return;
+        if (tState.unauthorizedEmail) root.innerHTML = renderUnauthorizedView();
+        else if (tState.authenticated) root.innerHTML = renderTeacherDashboard();
+        else root.innerHTML = renderTeacherLogin();
+        bindTeacherEvents();
+      }
+
+      function bindTeacherEvents() {
+        const btnGoogle = document.getElementById("btn-teacher-google-login");
+        if (btnGoogle) {
+          btnGoogle.onclick = async () => {
+            tState.loading = true;
+            tState.authError = "";
+            renderTeacherApp();
+            const { error } = await CLOUD.signInWithGoogle();
+            if (error) {
+              tState.loading = false;
+              tState.authError = "Lỗi đăng nhập Google: " + error.message;
+              renderTeacherApp();
+            }
+          };
+        }
+
+        const cloudEmailForm = document.getElementById("teacher-cloud-email-form");
+        if (cloudEmailForm) {
+          cloudEmailForm.onsubmit = async e => {
+            e.preventDefault();
+            const client = CLOUD.getClient();
+            if (!client) {
+              tState.authError = "Chưa cấu hình kết nối Supabase.";
+              renderTeacherApp();
+              return;
+            }
+            const email = (document.getElementById("inp-teacher-email").value || "").trim().toLowerCase();
+            const password = (document.getElementById("inp-teacher-pass").value || "").trim();
+            tState.loading = true;
+            tState.authError = "";
+            renderTeacherApp();
+            const { data, error } = await client.auth.signInWithPassword({ email, password });
+            if (error || !data || !data.user) {
+              tState.loading = false;
+              tState.authError = "Email hoặc mật khẩu chưa đúng.";
+              renderTeacherApp();
+              return;
+            }
+            await verifyAndLoadCloudTeacher(data.user);
+          };
+        }
+
+        const btnLogout = document.getElementById("btn-teacher-logout");
+        if (btnLogout) {
+          btnLogout.onclick = async () => {
+            const client = CLOUD.getClient();
+            if (client) {
+              try { await client.auth.signOut(); } catch (e) {}
+            }
+            tState.authenticated = false;
+            tState.unauthorizedEmail = "";
+            tState.teacherEmail = "";
+            tState.teacherUserId = "";
+            renderTeacherApp();
+          };
+        }
+
+        const btnRefresh = document.getElementById("btn-refresh-data");
+        if (btnRefresh) btnRefresh.onclick = () => refreshCloudDashboardData();
+
+        const btnFlush = document.getElementById("btn-flush-queue");
+        if (btnFlush) btnFlush.onclick = () => flushPendingQueueNow();
+
+        const btnExportCsv = document.getElementById("btn-export-csv");
+        if (btnExportCsv) btnExportCsv.onclick = () => exportCsvReport(getFilteredSubmissions());
+
+        const inpSearch = document.getElementById("inp-filter-search");
+        if (inpSearch) {
+          inpSearch.oninput = e => {
+            tState.searchQuery = e.target.value;
+            const pos = e.target.selectionStart;
+            renderTeacherApp();
+            const nextEl = document.getElementById("inp-filter-search");
+            if (nextEl) {
+              nextEl.focus();
+              nextEl.setSelectionRange(pos, pos);
+            }
+          };
+        }
+
+        const selLesson = document.getElementById("sel-filter-lesson");
+        if (selLesson) {
+          selLesson.onchange = e => {
+            tState.filterLesson = e.target.value;
+            renderTeacherApp();
+          };
+        }
+
+        const selStatus = document.getElementById("sel-filter-status");
+        if (selStatus) {
+          selStatus.onchange = e => {
+            tState.filterStatus = e.target.value;
+            renderTeacherApp();
+          };
+        }
+
+        document.querySelectorAll("[data-save-grade]").forEach(btn => {
+          btn.onclick = async () => {
+            const subId = btn.getAttribute("data-save-grade");
+            const fbInp = document.getElementById("inp-fb-" + subId);
+            await saveTeacherFeedback(subId, fbInp ? fbInp.value.trim() : "");
+          };
+        });
+
+        document.querySelectorAll("[data-ai-grade]").forEach(btn => {
+          btn.onclick = () => triggerTeacherAiCorrection(btn.getAttribute("data-ai-grade"));
+        });
+
+        document.querySelectorAll("[data-release-now]").forEach(btn => {
+          btn.onclick = () => releaseReviewNow(btn.getAttribute("data-release-now"));
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        const client = CLOUD ? CLOUD.getClient() : null;
+        if (!client) {
+          tState.authError = "Chưa cấu hình kết nối Supabase.";
+          renderTeacherApp();
+          return;
+        }
+        renderTeacherApp();
+        const { data } = await client.auth.getSession();
+        if (data && data.session && data.session.user) {
+          await verifyAndLoadCloudTeacher(data.session.user);
+        }
+        client.auth.onAuthStateChange(async (event, session) => {
+          if (event === "SIGNED_IN" && session && session.user && !tState.authenticated && !tState.unauthorizedEmail) {
+            await verifyAndLoadCloudTeacher(session.user);
+          } else if (event === "SIGNED_OUT") {
+            tState.authenticated = false;
+            tState.unauthorizedEmail = "";
+            tState.teacherEmail = "";
+            tState.teacherUserId = "";
+            renderTeacherApp();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
