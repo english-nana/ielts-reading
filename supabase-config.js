@@ -7,5 +7,6 @@
 
 window.SUPABASE_CONFIG = {
   url: "https://plqpsxcvdwhtclokwafy.supabase.co",
-  anonKey: "sb_publishable_1BJ8jRmOrrwE5ryyR9AIUQ_EmeBb9u8"
+  anonKey: "sb_publishable_1BJ8jRmOrrwE5ryyR9AIUQ_EmeBb9u8",
+  gradeFunctionSlug: "hyper-api"
 };

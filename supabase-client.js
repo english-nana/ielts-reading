@@ -132,7 +132,8 @@
         return { ok: false, error: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại." };
       }
 
-      const res = await fetch(`${baseUrl}/functions/v1/grade-writing`, {
+      const fnSlug = String(cfg.gradeFunctionSlug || "grade-writing").trim();
+      const res = await fetch(`${baseUrl}/functions/v1/${encodeURIComponent(fnSlug)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -181,7 +182,8 @@
       if (!accessToken) {
         return { ok: false, error: "Phiên đăng nhập đã hết hạn." };
       }
-      const res = await fetch(`${baseUrl}/functions/v1/grade-writing`, {
+      const fnSlug = String(cfg.gradeFunctionSlug || "grade-writing").trim();
+      const res = await fetch(`${baseUrl}/functions/v1/${encodeURIComponent(fnSlug)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

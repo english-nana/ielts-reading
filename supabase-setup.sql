@@ -284,7 +284,7 @@ grant execute on function public.teacher_release_review_now(text) to authenticat
 --   '*/5 * * * *',
 --   $$
 --   select net.http_post(
---     url := 'https://plqpsxcvdwhtclokwafy.supabase.co/functions/v1/grade-writing',
+--     url := 'https://plqpsxcvdwhtclokwafy.supabase.co/functions/v1/hyper-api',
 --     headers := jsonb_build_object(
 --       'Content-Type', 'application/json',
 --       'x-cron-secret', 'THAY_BANG_CRON_SECRET_CUA_BAN'
