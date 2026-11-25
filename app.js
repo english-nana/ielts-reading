@@ -289,8 +289,8 @@
     sidebarCollapsed: initialSidebarCollapsed,
     mobileSidebarOpen: false,
     sbTheoryCollapsed: true,
-    sbReadingCollapsed: false,
-    sbWritingCollapsed: false,
+    sbReadingCollapsed: true,
+    sbWritingCollapsed: true,
     sbGapCollapsed: false,
     sbMatchCollapsed: false,
     sbMcqCollapsed: false,
@@ -716,15 +716,25 @@
     return String(s || "").replace(/[^a-zA-Z0-9_-]/g, "_");
   }
 
+  function syncSidebarSkillAccordion(viewName) {
+    if (viewName === "reading-hub" || viewName === "part-topics" || viewName === "practice") {
+      state.sbReadingCollapsed = false;
+      state.sbWritingCollapsed = true;
+    } else if (viewName === "writing-hub" || viewName === "writing-lesson") {
+      state.sbWritingCollapsed = false;
+      state.sbReadingCollapsed = true;
+    } else if (viewName === "home") {
+      state.sbReadingCollapsed = true;
+      state.sbWritingCollapsed = true;
+    }
+  }
+
   function renderSidebarHtml() {
     const stu = getActiveStudent();
     const readingDone = getCompletedExercisesCount();
     const readingTotal = EXERCISES.length;
     const writingDone = getCompletedWritingUnitsCount();
     const writingTotal = WRITING_UNITS.length;
-    const totalDone = readingDone + writingDone;
-    const totalAll = readingTotal + writingTotal;
-    const pct = totalAll > 0 ? Math.round((totalDone / totalAll) * 100) : 0;
     const essaysCount = getSubmittedWritingEssaysList().length;
 
     const readingParts = [
@@ -886,16 +896,6 @@
         </nav>
 
         <div class="vs-sb-footer">
-          <div class="vs-sb-progress-card">
-            <div class="vs-sb-progress-top">
-              <span>Reading ${readingDone}/${readingTotal} · Writing ${writingDone}/${writingTotal}</span>
-              <strong>${pct}%</strong>
-            </div>
-            <div class="vs-sb-progress-track">
-              <div class="vs-sb-progress-fill" style="width:${pct}%;"></div>
-            </div>
-          </div>
-
           <button type="button" class="vs-sb-collapse-footer-btn" id="ej-sidebar-collapse-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
             <span class="ej-sb-label">Thu gọn menu</span>
@@ -3646,6 +3646,7 @@
     state.notifOpen = false;
     state.accountMenuOpen = false;
     state.view = "writing-lesson";
+    syncSidebarSkillAccordion(state.view);
     renderApp(true);
   }
 
@@ -3724,6 +3725,7 @@
     state.notifOpen = false;
     state.accountMenuOpen = false;
     state.view = "practice";
+    syncSidebarSkillAccordion(state.view);
     renderApp();
     const lp = document.querySelector(".left-pane");
     const rp = document.querySelector(".right-pane");
@@ -3875,6 +3877,7 @@
         const target = btn.getAttribute("data-sb-nav");
         state.view = target || "home";
         state.prevDashboardView = state.view;
+        syncSidebarSkillAccordion(state.view);
         state.mobileSidebarOpen = false;
         state.notifOpen = false;
         state.accountMenuOpen = false;
@@ -3889,6 +3892,7 @@
         state.selectedPart = btn.getAttribute("data-open-part") || "gap-filling";
         state.view = "part-topics";
         state.prevDashboardView = "part-topics";
+        syncSidebarSkillAccordion(state.view);
         state.mobileSidebarOpen = false;
         state.notifOpen = false;
         state.accountMenuOpen = false;
@@ -3946,6 +3950,7 @@
       btnReadingAcc.onclick = e => {
         e.stopPropagation();
         state.sbReadingCollapsed = !state.sbReadingCollapsed;
+        if (!state.sbReadingCollapsed) state.sbWritingCollapsed = true;
         renderApp();
       };
     }
@@ -3955,6 +3960,7 @@
       btnWritingAcc.onclick = e => {
         e.stopPropagation();
         state.sbWritingCollapsed = !state.sbWritingCollapsed;
+        if (!state.sbWritingCollapsed) state.sbReadingCollapsed = true;
         renderApp();
       };
     }
@@ -4085,6 +4091,7 @@
       btnBackDash.onclick = () => {
         stopSpeech();
         state.view = state.prevDashboardView === "my-submissions" ? "my-submissions" : "part-topics";
+        syncSidebarSkillAccordion(state.view);
         renderApp();
       };
     }
@@ -4351,6 +4358,7 @@
           } else {
             stopSpeech();
             state.view = "part-topics";
+            syncSidebarSkillAccordion(state.view);
             renderApp();
           }
         };
@@ -4367,6 +4375,7 @@
         btnBackWr.onclick = () => {
           stopSpeech();
           state.view = "writing-hub";
+          syncSidebarSkillAccordion(state.view);
           renderApp(true);
         };
       }
