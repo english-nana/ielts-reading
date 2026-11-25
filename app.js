@@ -7,6 +7,7 @@
   const THEORY = window.READING_THEORY;
   const GUIDES = window.READING_GUIDES;
   const EXERCISES = window.READING_EXERCISES || [];
+  const WRITING_UNITS = window.WRITING_UNITS || [];
   const CLOUD = window.ReadingCloud || null;
   const STORAGE_KEY = "ielts_reading_tinh_gon_v1";
 
@@ -53,7 +54,15 @@
       .replace(/\s+/g, " ");
   }
 
-  function speakEnglishText(rawText, rate) {
+  function normalizeWritingSentence(text) {
+    return String(text || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[.,!?]+/g, "")
+      .replace(/\s+/g, " ");
+  }
+
+  function speakEnglishText(rawText, rate, accent) {
     const cleanText = String(rawText || "")
       .replace(/<br\s*\/?>/gi, " ")
       .replace(/<[^>]*>?/gm, " ")
@@ -64,8 +73,12 @@
       try {
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(cleanText);
-        utter.lang = "en-US";
+        const lang = accent === "UK" ? "en-GB" : "en-US";
+        utter.lang = lang;
         utter.rate = rate || 0.9;
+        const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+        const matched = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(lang.toLowerCase()));
+        if (matched) utter.voice = matched;
         window.speechSynthesis.speak(utter);
       } catch (e) {}
     }
@@ -112,13 +125,14 @@
           ],
       theoryQuiz: base.theoryQuiz || { answers: {}, submitted: false, score: 0 },
       exercises: base.exercises || {},
+      writingProgress: base.writingProgress || {},
       notifications: Array.isArray(base.notifications)
         ? base.notifications
         : [
             {
               id: "welcome-1",
-              title: "Chào mừng tới IELTS Reading Tinh Gọn!",
-              sub: "Hãy bắt đầu với các bài tập thực hành theo từng dạng câu hỏi.",
+              title: "Chào mừng tới IELTS Reading & Writing!",
+              sub: "Chọn kỹ năng Reading hoặc Writing để bắt đầu luyện tập ngay.",
               time: formatDateTime(new Date().toISOString()),
               read: false,
               actionView: "home"
@@ -206,6 +220,7 @@
     }
     const stu = store.profile;
     if (!stu.exercises) stu.exercises = {};
+    if (!stu.writingProgress) stu.writingProgress = {};
     if (!stu.savedVocab) stu.savedVocab = [];
     if (!stu.theoryQuiz) stu.theoryQuiz = { answers: {}, submitted: false, score: 0 };
     if (!stu.notifications) stu.notifications = [];
@@ -235,6 +250,25 @@
     return stu.exercises[exId];
   }
 
+  function ensureWritingUnitProgress(unitId) {
+    const stu = getActiveStudent();
+    if (!stu.writingProgress) stu.writingProgress = {};
+    if (!stu.writingProgress[unitId]) {
+      stu.writingProgress[unitId] = {
+        completedSections: [],
+        exerciseAnswers: {},
+        checkedExercises: {},
+        submittedWritings: {}
+      };
+    }
+    const p = stu.writingProgress[unitId];
+    if (!Array.isArray(p.completedSections)) p.completedSections = [];
+    if (!p.exerciseAnswers) p.exerciseAnswers = {};
+    if (!p.checkedExercises) p.checkedExercises = {};
+    if (!p.submittedWritings) p.submittedWritings = {};
+    return p;
+  }
+
   // --------------------------------------------------------------------------
   // UI STATE
   // --------------------------------------------------------------------------
@@ -244,13 +278,19 @@
   } catch (e) {}
 
   const state = {
-    view: "home", // "home" | "theory" | "part-topics" | "practice" | "my-submissions" | "keyword-hub"
+    view: "home", // "home" | "reading-hub" | "writing-hub" | "writing-lesson" | "theory" | "part-topics" | "practice" | "my-submissions" | "keyword-hub"
     selectedPart: "gap-filling", // "gap-filling" | "matching-names" | "multiple-choice" | "matching-info"
     prevDashboardView: "home",
     currentExerciseId: EXERCISES[0] ? EXERCISES[0].id : "gf-1",
+    currentWritingUnitId: WRITING_UNITS[0] ? WRITING_UNITS[0].id : "wr-unit-1",
+    currentWritingSection: "vocabulary", // "vocabulary" | "phrases" | "writing"
+    currentWritingPart: "A",
+    activeReorderKey: "",
     sidebarCollapsed: initialSidebarCollapsed,
     mobileSidebarOpen: false,
     sbTheoryCollapsed: true,
+    sbReadingCollapsed: false,
+    sbWritingCollapsed: false,
     sbGapCollapsed: false,
     sbMatchCollapsed: false,
     sbMcqCollapsed: false,
@@ -339,6 +379,95 @@
   function getCompletedExercisesCount() {
     const stu = getActiveStudent();
     return EXERCISES.filter(e => stu.exercises[e.id] && stu.exercises[e.id].submitted).length;
+  }
+
+  const WRITING_SECTIONS = [
+    { key: "vocabulary", num: "1", label: "Vocabulary", labelVi: "Từ vựng" },
+    { key: "phrases", num: "2", label: "Phrases", labelVi: "Cụm từ" },
+    { key: "writing", num: "3", label: "Writing", labelVi: "Luyện viết" }
+  ];
+
+  function getCurrentWritingUnit() {
+    return WRITING_UNITS.find(u => u.id === state.currentWritingUnitId) || WRITING_UNITS[0] || null;
+  }
+
+  function getWritingUnitDoneSectionsCount(unitId) {
+    const stu = getActiveStudent();
+    const p = stu.writingProgress && stu.writingProgress[unitId];
+    if (!p || !Array.isArray(p.completedSections)) return 0;
+    return WRITING_SECTIONS.filter(s => p.completedSections.includes(s.key)).length;
+  }
+
+  function getCompletedWritingUnitsCount() {
+    return WRITING_UNITS.filter(u => getWritingUnitDoneSectionsCount(u.id) >= 3).length;
+  }
+
+  function getSubmittedWritingEssaysList() {
+    const stu = getActiveStudent();
+    const list = [];
+    WRITING_UNITS.forEach(u => {
+      const p = stu.writingProgress && stu.writingProgress[u.id];
+      if (!p || !p.submittedWritings) return;
+      Object.entries(p.submittedWritings).forEach(([exId, info]) => {
+        if (info && info.submittedAt) {
+          list.push({ unit: u, exId, info });
+        }
+      });
+    });
+    return list.sort((a, b) => new Date(b.info.submittedAt).getTime() - new Date(a.info.submittedAt).getTime());
+  }
+
+  function getWritingSectionExercises(secObj, activePartKey) {
+    if (!secObj || !secObj.parts) return [];
+    if (secObj.allExercisesInOneList) {
+      return Object.keys(secObj.parts).reduce((acc, pk) => {
+        const part = secObj.parts[pk];
+        return acc.concat((part && part.exercises) || []);
+      }, []);
+    }
+    const part = secObj.parts[activePartKey] || secObj.parts[Object.keys(secObj.parts)[0]];
+    return (part && part.exercises) || [];
+  }
+
+  function getWritingWordLimits(ex) {
+    const fallbackMin = ex && typeof ex.minWords === "number" ? ex.minWords : 40;
+    const fallbackMax = ex && typeof ex.maxWords === "number" ? ex.maxWords : 60;
+    const sources = [ex && ex.instruction, ex && ex.promptBox].filter(Boolean);
+    for (let i = 0; i < sources.length; i++) {
+      const text = String(sources[i]);
+      const rangeMatch = text.match(/(\d+)\s*(?:[-–—]|to|đến)\s*(\d+)\s*(?:words?|từ)(?=$|[\s.,;:!?()\]])/i);
+      if (rangeMatch) {
+        const minW = parseInt(rangeMatch[1], 10);
+        const maxW = parseInt(rangeMatch[2], 10);
+        if (minW > 0 && maxW >= minW) return { minW, maxW };
+      }
+      const minMatch = text.match(/(?:at\s+least|minimum(?:\s+of)?|ít\s+nhất)\s*(\d+)\s*(?:words?|từ)(?=$|[\s.,;:!?()\]])/i);
+      if (minMatch) {
+        const minW = parseInt(minMatch[1], 10);
+        if (minW > 0) return { minW, maxW: Math.max(fallbackMax, minW) };
+      }
+    }
+    return { minW: fallbackMin, maxW: fallbackMax };
+  }
+
+  function getWritingUnitCounts(unit) {
+    const countWords = secKey =>
+      Object.values((unit.sections[secKey] && unit.sections[secKey].parts) || {}).reduce(
+        (sum, p) => sum + (Array.isArray(p.words) ? p.words.length : 0),
+        0
+      );
+    const countEx = secKey =>
+      Object.values((unit.sections[secKey] && unit.sections[secKey].parts) || {}).reduce(
+        (sum, p) => sum + (Array.isArray(p.exercises) ? p.exercises.length : 0),
+        0
+      );
+    return {
+      vocabWords: countWords("vocabulary"),
+      phraseWords: countWords("phrases"),
+      vocabEx: countEx("vocabulary"),
+      phraseEx: countEx("phrases"),
+      writingEx: countEx("writing")
+    };
   }
 
   function getMasterKeywordList() {
@@ -583,71 +712,31 @@
   // --------------------------------------------------------------------------
   // RENDER: SIDEBAR & TOPBAR
   // --------------------------------------------------------------------------
-  function renderSidebarPartCardHtml(partId, pillText, cardTitle, list, isCollapsed, toggleBtnId) {
-    const stu = getActiveStudent();
-    const isActivePart =
-      (state.view === "part-topics" && state.selectedPart === partId) ||
-      (state.view === "practice" && getCurrentExercise().part === partId);
-
-    return `
-      <div class="vs-sb-card ${isCollapsed ? "collapsed" : ""}">
-        <div class="vs-sb-card-head">
-          <button
-            type="button"
-            class="ej-sb-item vs-sb-head-btn ${isActivePart ? "active" : ""}"
-            data-open-part="${partId}"
-            title="${escapeHtml(cardTitle)}"
-          >
-            <span class="vs-sb-task-pill">${escapeHtml(pillText)}</span>
-            <span class="ej-sb-label">${escapeHtml(cardTitle)}</span>
-          </button>
-          <button
-            type="button"
-            class="vs-sb-acc-toggle"
-            id="${escapeHtml(toggleBtnId)}"
-            aria-expanded="${isCollapsed ? "false" : "true"}"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-        </div>
-
-        <div class="vs-sb-card-list">
-          ${list
-            .map(ex => {
-              const st = stu.exercises[ex.id];
-              const isDone = Boolean(st && st.submitted);
-              return `
-                <button
-                  type="button"
-                  class="vs-sb-lesson-btn ${isDone ? "submitted" : ""} ${state.view === "practice" && state.currentExerciseId === ex.id ? "active" : ""}"
-                  data-open-exercise="${escapeHtml(ex.id)}"
-                  title="Bài ${escapeHtml(ex.number)}: ${escapeHtml(ex.title)}"
-                >
-                  <span class="vs-sb-num">${escapeHtml(ex.number)}</span>
-                  <span class="vs-sb-topic-text">${escapeHtml(ex.title)}</span>
-                  ${
-                    isDone
-                      ? `<span class="vs-sb-mini-prog">${st.score}/${st.total} ✓</span>`
-                      : ""
-                  }
-                </button>
-              `;
-            })
-            .join("")}
-        </div>
-      </div>
-    `;
+  function domSafeId(s) {
+    return String(s || "").replace(/[^a-zA-Z0-9_-]/g, "_");
   }
 
   function renderSidebarHtml() {
     const stu = getActiveStudent();
-    const completed = getCompletedExercisesCount();
-    const total = EXERCISES.length;
-    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
-    const gapList = getExercisesByPart("gap-filling");
-    const matchList = getExercisesByPart("matching-names");
-    const mcqList = getExercisesByPart("multiple-choice");
-    const infoList = getExercisesByPart("matching-info");
+    const readingDone = getCompletedExercisesCount();
+    const readingTotal = EXERCISES.length;
+    const writingDone = getCompletedWritingUnitsCount();
+    const writingTotal = WRITING_UNITS.length;
+    const totalDone = readingDone + writingDone;
+    const totalAll = readingTotal + writingTotal;
+    const pct = totalAll > 0 ? Math.round((totalDone / totalAll) * 100) : 0;
+    const essaysCount = getSubmittedWritingEssaysList().length;
+
+    const readingParts = [
+      { id: "gap-filling", code: "D1", label: "Gap-filling", list: getExercisesByPart("gap-filling") },
+      { id: "matching-names", code: "D2", label: "Matching Names", list: getExercisesByPart("matching-names") },
+      { id: "multiple-choice", code: "D3", label: "Multiple Choice", list: getExercisesByPart("multiple-choice") },
+      { id: "matching-info", code: "D4", label: "Matching Info", list: getExercisesByPart("matching-info") }
+    ];
+
+    const isReadingActive =
+      state.view === "reading-hub" || state.view === "part-topics" || state.view === "practice";
+    const isWritingActive = state.view === "writing-hub" || state.view === "writing-lesson";
 
     return `
       <div class="ej-sidebar-backdrop" id="ej-sidebar-backdrop"></div>
@@ -662,14 +751,25 @@
               </svg>
             </span>
             <div class="ej-sb-logo-text">
-              <span class="ej-sb-logo-main">IELTS Reading</span>
-              <span class="ej-sb-logo-sub">Tinh Gọn · 4 Dạng Bài</span>
+              <span class="ej-sb-logo-main">Reading &amp; Writing</span>
+              <span class="ej-sb-logo-sub">Luyện Kỹ Năng IELTS</span>
             </div>
           </button>
         </div>
 
         <nav class="ej-sidebar-nav">
           <div class="ej-sb-group">
+            <button
+              type="button"
+              class="ej-sb-item ${state.view === "home" ? "active" : ""}"
+              data-sb-nav="home"
+            >
+              <span class="ej-sb-ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </span>
+              <span class="ej-sb-label">Trang chủ (2 kỹ năng)</span>
+            </button>
+
             <button
               type="button"
               class="ej-sb-item ${state.view === "keyword-hub" ? "active" : ""}"
@@ -691,21 +791,105 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
               </span>
               <span class="ej-sb-label">Lịch sử bài làm</span>
-              ${completed > 0 ? `<span class="ej-sb-count">${completed}</span>` : ""}
+              ${readingDone + essaysCount > 0 ? `<span class="ej-sb-count">${readingDone + essaysCount}</span>` : ""}
             </button>
           </div>
 
-          ${renderSidebarPartCardHtml("gap-filling", "D1", "Dạng 1: Gap-filling", gapList, state.sbGapCollapsed, "btn-sb-gap-acc")}
-          ${renderSidebarPartCardHtml("matching-names", "D2", "Dạng 2: Matching Names", matchList, state.sbMatchCollapsed, "btn-sb-match-acc")}
-          ${renderSidebarPartCardHtml("multiple-choice", "D3", "Dạng 3: Multiple Choice", mcqList, state.sbMcqCollapsed, "btn-sb-mcq-acc")}
-          ${renderSidebarPartCardHtml("matching-info", "D4", "Dạng 4: Matching Information", infoList, state.sbInfoCollapsed, "btn-sb-info-acc")}
+          <!-- SKILL 1: READING -->
+          <div class="vs-sb-card ${state.sbReadingCollapsed ? "collapsed" : ""}">
+            <div class="vs-sb-card-head">
+              <button
+                type="button"
+                class="ej-sb-item vs-sb-head-btn ${isReadingActive ? "active" : ""}"
+                data-sb-nav="reading-hub"
+                title="Kỹ năng Reading (4 dạng bài)"
+              >
+                <span class="vs-sb-task-pill">R</span>
+                <span class="ej-sb-label">Reading (${readingDone}/${readingTotal})</span>
+              </button>
+              <button
+                type="button"
+                class="vs-sb-acc-toggle"
+                id="btn-sb-reading-acc"
+                aria-expanded="${state.sbReadingCollapsed ? "false" : "true"}"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+
+            <div class="vs-sb-card-list">
+              ${readingParts
+                .map(part => {
+                  const done = part.list.filter(e => stu.exercises[e.id] && stu.exercises[e.id].submitted).length;
+                  const isAct =
+                    (state.view === "part-topics" && state.selectedPart === part.id) ||
+                    (state.view === "practice" && getCurrentExercise().part === part.id);
+                  return `
+                    <button
+                      type="button"
+                      class="vs-sb-lesson-btn ${done === part.list.length && part.list.length > 0 ? "submitted" : ""} ${isAct ? "active" : ""}"
+                      data-open-part="${part.id}"
+                      title="${escapeHtml(part.code + ": " + part.label)}"
+                    >
+                      <span class="vs-sb-num">${escapeHtml(part.code)}</span>
+                      <span class="vs-sb-topic-text">${escapeHtml(part.label)}</span>
+                      <span class="vs-sb-mini-prog">${done}/${part.list.length}${done === part.list.length && part.list.length > 0 ? " ✓" : ""}</span>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
+          </div>
+
+          <!-- SKILL 2: WRITING -->
+          <div class="vs-sb-card ${state.sbWritingCollapsed ? "collapsed" : ""}">
+            <div class="vs-sb-card-head">
+              <button
+                type="button"
+                class="ej-sb-item vs-sb-head-btn ${isWritingActive ? "active" : ""}"
+                data-sb-nav="writing-hub"
+                title="Kỹ năng Writing (10 bài học)"
+              >
+                <span class="vs-sb-task-pill wr-pill">W</span>
+                <span class="ej-sb-label">Writing (${writingDone}/${writingTotal})</span>
+              </button>
+              <button
+                type="button"
+                class="vs-sb-acc-toggle"
+                id="btn-sb-writing-acc"
+                aria-expanded="${state.sbWritingCollapsed ? "false" : "true"}"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+
+            <div class="vs-sb-card-list">
+              ${WRITING_UNITS.map(u => {
+                const secDone = getWritingUnitDoneSectionsCount(u.id);
+                const isDone = secDone >= 3;
+                const isAct = state.view === "writing-lesson" && state.currentWritingUnitId === u.id;
+                return `
+                  <button
+                    type="button"
+                    class="vs-sb-lesson-btn ${isDone ? "submitted" : ""} ${isAct ? "active" : ""}"
+                    data-open-writing-unit="${escapeHtml(u.id)}"
+                    title="Unit ${escapeHtml(u.number)}: ${escapeHtml(u.titleEn)}"
+                  >
+                    <span class="vs-sb-num">${escapeHtml(u.number)}</span>
+                    <span class="vs-sb-topic-text">${escapeHtml(u.titleEn)}</span>
+                    ${secDone > 0 ? `<span class="vs-sb-mini-prog">${secDone}/3${isDone ? " ✓" : ""}</span>` : ""}
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </div>
         </nav>
 
         <div class="vs-sb-footer">
           <div class="vs-sb-progress-card">
             <div class="vs-sb-progress-top">
-              <span>Tiến độ ${total} bài thực hành</span>
-              <strong>${completed}/${total}</strong>
+              <span>Reading ${readingDone}/${readingTotal} · Writing ${writingDone}/${writingTotal}</span>
+              <strong>${pct}%</strong>
             </div>
             <div class="vs-sb-progress-track">
               <div class="vs-sb-progress-fill" style="width:${pct}%;"></div>
@@ -724,31 +908,65 @@
   function renderTopbarHtml() {
     const stu = getActiveStudent();
     const isPractice = state.view === "practice";
+    const isWritingLesson = state.view === "writing-lesson";
     const ex = getCurrentExercise();
+    const wrUnit = isWritingLesson ? getCurrentWritingUnit() : null;
+    const wrProg = wrUnit ? ensureWritingUnitProgress(wrUnit.id) : null;
     const unreadNotifs = (stu.notifications || []).filter(n => !n.read).length;
+
+    let leftGroupHtml = `
+      <button type="button" class="ej-mobile-menu-btn" id="ej-mobile-menu-btn" aria-label="Mở menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    `;
+
+    if (isPractice) {
+      leftGroupHtml = `
+        <div class="ej-focus-nav-group">
+          <button type="button" class="nb-back-btn" id="btn-back-dashboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span>Danh sách ${escapeHtml(getPartMeta(ex.part).shortLabel)}</span>
+          </button>
+          <h1 class="header-topic-name">${escapeHtml(ex.title)}</h1>
+          <span class="header-part-badge">${escapeHtml(ex.wordLimitLabel)}</span>
+        </div>
+      `;
+    } else if (isWritingLesson && wrUnit) {
+      leftGroupHtml = `
+        <div class="ej-focus-nav-group wr-topbar-focus">
+          <button type="button" class="nb-back-btn" id="btn-back-writing-hub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span>Writing</span>
+          </button>
+          <div class="wr-topbar-title-wrap">
+            <span class="wr-topbar-unit-tag">Unit ${escapeHtml(wrUnit.number)}</span>
+            <h1 class="header-topic-name">${escapeHtml(wrUnit.titleEn)}</h1>
+          </div>
+          <nav class="wr-section-tabs" aria-label="Các phần bài học Writing">
+            ${WRITING_SECTIONS.map(sec => {
+              const isAct = state.currentWritingSection === sec.key;
+              const isDone = wrProg && wrProg.completedSections.includes(sec.key);
+              return `
+                <button
+                  type="button"
+                  class="wr-sec-tab ${isAct ? "active" : ""} ${isDone ? "done" : ""}"
+                  data-wr-section="${sec.key}"
+                >
+                  <span class="wr-sec-num">${isDone ? "✓" : sec.num}</span>
+                  <span>${escapeHtml(sec.label)}</span>
+                </button>
+              `;
+            }).join("")}
+          </nav>
+        </div>
+      `;
+    }
 
     return `
       <header class="dt-topbar">
         <div class="dt-topbar-inner">
           <div class="dt-topbar-left-group">
-            ${
-              !isPractice
-                ? `
-              <button type="button" class="ej-mobile-menu-btn" id="ej-mobile-menu-btn" aria-label="Mở menu">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-              </button>
-            `
-                : `
-              <div class="ej-focus-nav-group">
-                <button type="button" class="nb-back-btn" id="btn-back-dashboard">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                  <span>Danh sách ${escapeHtml(getPartMeta(ex.part).shortLabel)}</span>
-                </button>
-                <h1 class="header-topic-name">${escapeHtml(ex.title)}</h1>
-                <span class="header-part-badge">${escapeHtml(ex.wordLimitLabel)}</span>
-              </div>
-            `
-            }
+            ${leftGroupHtml}
           </div>
 
           <div class="dt-topbar-right-group">
@@ -769,7 +987,7 @@
                 <div class="notif-dropdown">
                   <div class="notif-dropdown-header">
                     <span>Thông báo kết quả</span>
-                    <span class="notif-header-sub">Chấm tự động tức thì</span>
+                    <span class="notif-header-sub">Cập nhật học tập</span>
                   </div>
                   <div class="notif-dropdown-list">
                     ${
@@ -783,6 +1001,7 @@
                                 class="notif-item-btn ${!n.read ? "unread" : ""}"
                                 data-notif-id="${escapeHtml(n.id)}"
                                 ${n.actionExerciseId ? `data-open-exercise="${escapeHtml(n.actionExerciseId)}"` : ""}
+                                ${n.actionWritingUnitId ? `data-open-writing-unit="${escapeHtml(n.actionWritingUnitId)}" data-open-writing-sec="${escapeHtml(n.actionWritingSec || "writing")}"` : ""}
                                 ${n.actionView ? `data-sb-nav="${escapeHtml(n.actionView)}"` : ""}
                               >
                                 <div class="notif-item-top">
@@ -839,9 +1058,93 @@
   }
 
   // --------------------------------------------------------------------------
-  // VIEW 1: 4-PART HOME HUB
+  // VIEW 1: DUAL-SKILL HOME HUB (READING & WRITING)
   // --------------------------------------------------------------------------
   function renderHomeView() {
+    const readingDone = getCompletedExercisesCount();
+    const readingTotal = EXERCISES.length;
+    const writingDone = getCompletedWritingUnitsCount();
+    const writingTotal = WRITING_UNITS.length;
+
+    const gapList = getExercisesByPart("gap-filling");
+    const matchList = getExercisesByPart("matching-names");
+    const mcqList = getExercisesByPart("multiple-choice");
+    const infoList = getExercisesByPart("matching-info");
+
+    return `
+      <main class="home-container">
+        <div class="home-header-block">
+          <div>
+            <div class="home-eyebrow">LUYỆN KỸ NĂNG TIẾNG ANH · READING &amp; WRITING</div>
+            <h1 class="home-h1">CHỌN KỸ NĂNG LUYỆN TẬP</h1>
+          </div>
+        </div>
+
+        <div class="parts-hub-grid skill-home-grid">
+          <!-- SKILL CARD 1: READING -->
+          <article class="topic-card skill-hub-card" data-sb-nav="reading-hub">
+            <div class="topic-card-top">
+              <div class="topic-num-badge skill-badge-reading">READING</div>
+              <span class="topic-progress-tag ${readingDone === readingTotal && readingTotal > 0 ? "done" : ""}">
+                ${readingDone === readingTotal && readingTotal > 0 ? `Hoàn thành ${readingTotal}/${readingTotal} ✓` : `Đã làm ${readingDone}/${readingTotal} bài`}
+              </span>
+            </div>
+
+            <h2 class="topic-card-title">Luyện Kỹ Năng Reading</h2>
+            <div class="topic-card-vi">4 Dạng câu hỏi trọng tâm · ${readingTotal} Bài đọc thực hành</div>
+            <p class="topic-card-desc">
+              Luyện đọc hiểu với bút gạch chân 5 màu, quét tên riêng &amp; số liệu, dịch từng câu, bảng Keyword Table và chấm điểm giải thích chi tiết từng câu.
+            </p>
+
+            <ul class="topic-questions-preview">
+              <li><span class="preview-q-num">D1.</span><span><strong>Gap-filling</strong> — Điền từ vào chỗ trống (${gapList.length} bài)</span></li>
+              <li><span class="preview-q-num">D2.</span><span><strong>Matching Names</strong> — Nối tên riêng với phát biểu (${matchList.length} bài)</span></li>
+              <li><span class="preview-q-num">D3.</span><span><strong>Multiple Choice</strong> — Trắc nghiệm nhiều lựa chọn (${mcqList.length} bài)</span></li>
+              <li><span class="preview-q-num">D4.</span><span><strong>Matching Information</strong> — Tìm đoạn chứa thông tin (${infoList.length} bài)</span></li>
+            </ul>
+
+            <div class="topic-card-footer">
+              <span>4 Chuyên đề · ${readingTotal} bài thực hành</span>
+              <span>Vào luyện Reading →</span>
+            </div>
+          </article>
+
+          <!-- SKILL CARD 2: WRITING -->
+          <article class="topic-card skill-hub-card" data-sb-nav="writing-hub">
+            <div class="topic-card-top">
+              <div class="topic-num-badge skill-badge-writing">WRITING</div>
+              <span class="topic-progress-tag ${writingDone === writingTotal && writingTotal > 0 ? "done" : ""}">
+                ${writingDone === writingTotal && writingTotal > 0 ? `Hoàn thành ${writingTotal}/${writingTotal} ✓` : `Hoàn thành ${writingDone}/${writingTotal} bài học`}
+              </span>
+            </div>
+
+            <h2 class="topic-card-title">Luyện Kỹ Năng Writing</h2>
+            <div class="topic-card-vi">${writingTotal} Chủ đề · Vocabulary · Phrases · Writing</div>
+            <p class="topic-card-desc">
+              Xây dựng kỹ năng viết chắc chắn qua 3 bước trong mỗi bài: học Từ vựng trọng tâm (Vocabulary), Cụm từ diễn đạt (Phrases) và thực hành Viết bài hoàn chỉnh (Writing) kèm dàn ý &amp; bài mẫu.
+            </p>
+
+            <ul class="topic-questions-preview">
+              <li><span class="preview-q-num">01–03.</span><span>Greetings &amp; Introductions · Countries &amp; Languages · Numbers, Dates &amp; Time</span></li>
+              <li><span class="preview-q-num">04–06.</span><span>Family &amp; Friends · Physical Appearance · Feelings &amp; Emotions</span></li>
+              <li><span class="preview-q-num">07–08.</span><span>Jobs &amp; Occupations · Daily Routines</span></li>
+              <li><span class="preview-q-num">09–10.</span><span>House &amp; Rooms · Furniture &amp; Household Items</span></li>
+            </ul>
+
+            <div class="topic-card-footer">
+              <span>${writingTotal} Bài học · 3 phần mỗi bài</span>
+              <span>Vào luyện Writing →</span>
+            </div>
+          </article>
+        </div>
+      </main>
+    `;
+  }
+
+  // --------------------------------------------------------------------------
+  // VIEW 1B: READING HUB (4 READING QUESTION TYPES)
+  // --------------------------------------------------------------------------
+  function renderReadingHubView() {
     const stu = getActiveStudent();
     const gapList = getExercisesByPart("gap-filling");
     const matchList = getExercisesByPart("matching-names");
@@ -858,9 +1161,16 @@
 
     return `
       <main class="home-container">
+        <div style="margin-bottom:14px;">
+          <button type="button" class="nb-back-btn" data-sb-nav="home">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span>Quay lại Trang chủ</span>
+          </button>
+        </div>
+
         <div class="home-header-block">
           <div>
-            <div class="home-eyebrow">LỘ TRÌNH CƠ BẢN · ĐỀ LUYỆN TẬP CHUẨN IELTS READING</div>
+            <div class="home-eyebrow">KỸ NĂNG ĐỌC HIỂU · 4 DẠNG BÀI TRỌNG TÂM</div>
             <h1 class="home-h1">TÀI LIỆU IELTS READING TINH GỌN</h1>
           </div>
         </div>
@@ -975,6 +1285,839 @@
           </article>
         </div>
       </main>
+    `;
+  }
+
+  // --------------------------------------------------------------------------
+  // VIEW 1C: WRITING HUB (10 UNITS: VOCABULARY · PHRASES · WRITING)
+  // --------------------------------------------------------------------------
+  function renderWritingHubView() {
+    const stu = getActiveStudent();
+
+    return `
+      <main class="home-container">
+        <div style="margin-bottom:14px;">
+          <button type="button" class="nb-back-btn" data-sb-nav="home">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span>Quay lại Trang chủ</span>
+          </button>
+        </div>
+
+        <div class="home-header-block">
+          <div>
+            <div class="home-eyebrow">KỸ NĂNG VIẾT · VOCABULARY · PHRASES · WRITING</div>
+            <h1 class="home-h1">LUYỆN KỸ NĂNG WRITING (${WRITING_UNITS.length} BÀI HỌC)</h1>
+            <p class="home-desc">
+              Mỗi bài học gồm 3 phần liền mạch: <strong>1. Vocabulary</strong> (Từ vựng + nghe US/UK), <strong>2. Phrases</strong> (Cụm từ &amp; câu mẫu) và <strong>3. Writing</strong> (Dàn ý gợi ý + thực hành viết đoạn kèm bài mẫu).
+            </p>
+          </div>
+        </div>
+
+        <div class="topics-grid">
+          ${WRITING_UNITS.map(unit => {
+            const prog = (stu.writingProgress && stu.writingProgress[unit.id]) || { completedSections: [] };
+            const doneCount = WRITING_SECTIONS.filter(s => (prog.completedSections || []).includes(s.key)).length;
+            const isAllDone = doneCount >= 3;
+            const counts = getWritingUnitCounts(unit);
+
+            return `
+              <article class="topic-card wr-unit-card" data-open-writing-unit="${escapeHtml(unit.id)}">
+                <div class="topic-card-top">
+                  <div class="topic-num-badge">${escapeHtml(unit.number)}</div>
+                  <span class="topic-progress-tag ${isAllDone ? "done" : doneCount > 0 ? "warn" : ""}">
+                    ${isAllDone ? "Hoàn thành 3/3 ✓" : doneCount > 0 ? `Đã học ${doneCount}/3 phần` : "3 phần học"}
+                  </span>
+                </div>
+
+                <h2 class="topic-card-title">${escapeHtml(unit.titleEn)}</h2>
+                <div class="topic-card-vi">${escapeHtml(unit.titleVi)}</div>
+                <p class="topic-card-desc">${escapeHtml(unit.description)}</p>
+
+                <div class="wr-unit-sec-pills">
+                  ${WRITING_SECTIONS.map(sec => {
+                    const secDone = (prog.completedSections || []).includes(sec.key);
+                    return `
+                      <button
+                        type="button"
+                        class="wr-unit-sec-chip ${secDone ? "done" : ""}"
+                        data-open-writing-unit="${escapeHtml(unit.id)}"
+                        data-open-writing-sec="${sec.key}"
+                      >
+                        <span>${secDone ? "✓" : sec.num + "."}</span>
+                        <span>${escapeHtml(sec.label)}</span>
+                      </button>
+                    `;
+                  }).join("")}
+                </div>
+
+                <div class="topic-card-footer">
+                  <span>${counts.vocabWords} từ · ${counts.phraseWords} cụm · ${counts.writingEx} bài viết</span>
+                  <span>${doneCount > 0 ? "Học tiếp →" : "Vào học →"}</span>
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      </main>
+    `;
+  }
+
+  // --------------------------------------------------------------------------
+  // VIEW 1D: WRITING LESSON WORKSPACE (50/50 SPLIT: THEORY & EXERCISES)
+  // --------------------------------------------------------------------------
+  function renderWritingDialoguesHtml(exampleSentences) {
+    if (!exampleSentences || exampleSentences.length === 0) return "";
+    return `
+      <ul class="wr-dialogue-list">
+        ${exampleSentences
+          .map(
+            ex => `
+          <li class="wr-dialogue-row">
+            <div style="min-width:0;flex:1;">
+              <p class="wr-dialogue-en">${escapeHtml(ex.en)}</p>
+              <p class="wr-dialogue-vi">${escapeHtml(ex.vi)}</p>
+            </div>
+            <button
+              type="button"
+              class="wr-speak-btn"
+              data-speak-word="${escapeHtml(ex.en)}"
+              data-speak-accent="US"
+              title="Nghe câu mẫu"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </button>
+          </li>
+        `
+          )
+          .join("")}
+      </ul>
+    `;
+  }
+
+  function renderWritingWordsHtml(words, unit, secLabel) {
+    if (!words || words.length === 0) return "";
+    const stu = getActiveStudent();
+    const sourceTopic = `Writing Unit ${unit.number} · ${secLabel}`;
+    return `
+      <ul class="wr-vocab-list">
+        ${words
+          .map(w => {
+            const isSaved = stu.savedVocab.some(v => v.word.toLowerCase() === String(w.word || "").toLowerCase());
+            return `
+              <li class="wr-vocab-card">
+                <div style="min-width:0;flex:1;">
+                  <p class="wr-vocab-head-line">
+                    <span class="wr-vocab-word">${escapeHtml(w.word)}</span>
+                    ${w.ipa ? `<span class="wr-vocab-ipa">${escapeHtml(w.ipa)}</span>` : ""}
+                    <span class="wr-vocab-meaning">${escapeHtml(w.meaning)}</span>
+                  </p>
+                  ${
+                    w.exampleEn || w.exampleVi
+                      ? `
+                    <p class="wr-vocab-example">
+                      ${w.exampleEn ? `<span class="wr-vocab-ex-en">${escapeHtml(w.exampleEn)}</span>` : ""}
+                      ${w.exampleVi ? `<span class="wr-vocab-ex-vi">${escapeHtml(w.exampleVi)}</span>` : ""}
+                    </p>
+                  `
+                      : ""
+                  }
+                </div>
+                <div class="wr-vocab-actions">
+                  <button type="button" class="wr-voice-btn" data-speak-word="${escapeHtml(w.word)}" data-speak-accent="US" title="Giọng Mỹ (US)">🔊 US</button>
+                  <button type="button" class="wr-voice-btn" data-speak-word="${escapeHtml(w.word)}" data-speak-accent="UK" title="Giọng Anh (UK)">🔊 UK</button>
+                  <button
+                    type="button"
+                    class="vocab-save-mini-btn ${isSaved ? "saved" : ""}"
+                    data-toggle-save-vocab="${escapeHtml(w.word)}"
+                    data-vocab-ipa="${escapeHtml(w.ipa || "")}"
+                    data-vocab-pos="${secLabel.toLowerCase()}"
+                    data-vocab-meaning="${escapeHtml(w.meaning || "")}"
+                    data-vocab-example="${escapeHtml(w.exampleEn || "")}"
+                    data-vocab-topic="${escapeHtml(sourceTopic)}"
+                    title="Lưu vào Kho từ vựng của tôi"
+                  >${isSaved ? "✓" : "+ Lưu"}</button>
+                </div>
+              </li>
+            `;
+          })
+          .join("")}
+      </ul>
+    `;
+  }
+
+  function renderWritingSinglePartTheoryHtml(part, unit, secLabel, isCurrentPart, hasMultipleParts) {
+    if (!part) return "";
+    return `
+      <section
+        id="wr-theory-part-${escapeHtml(part.code)}"
+        class="wr-theory-part ${hasMultipleParts && isCurrentPart ? "is-active" : ""}"
+      >
+        <header class="wr-part-header">
+          <span class="wr-part-badge">${escapeHtml(part.code)}</span>
+          <div style="min-width:0;flex:1;">
+            <h2 class="wr-part-title-en">${escapeHtml(part.titleEn)}</h2>
+            ${part.titleVi ? `<p class="wr-part-title-vi">${escapeHtml(part.titleVi)}</p>` : ""}
+          </div>
+          ${
+            hasMultipleParts && !isCurrentPart
+              ? `<button type="button" class="wr-switch-part-btn" data-wr-part="${escapeHtml(part.code)}">Làm bài Part ${escapeHtml(part.code)} →</button>`
+              : ""
+          }
+        </header>
+
+        ${
+          part.intro || (part.bullets && part.bullets.length > 0) || part.writingSteps
+            ? `
+          <div class="wr-prose-block">
+            ${part.intro ? `<p class="wr-intro-text">${escapeHtml(part.intro)}</p>` : ""}
+            ${
+              part.bullets && part.bullets.length > 0
+                ? `<ul class="wr-bullet-list">${part.bullets.map(b => `<li>${b}</li>`).join("")}</ul>`
+                : ""
+            }
+            ${
+              part.writingSteps
+                ? `
+              <div class="wr-steps-box">
+                ${part.writingStepsHeader !== "" ? `<p class="wr-steps-head">${escapeHtml(part.writingStepsHeader || "Bài viết nên có các ý sau:")}</p>` : ""}
+                <div class="wr-steps-list">
+                  ${part.writingSteps.map(step => `<p class="wr-step-item">${step}</p>`).join("")}
+                </div>
+              </div>
+            `
+                : ""
+            }
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          part.figureTop
+            ? `<figure class="wr-figure"><img src="${escapeHtml(part.figureTop)}" alt="${escapeHtml(part.titleEn)}" class="wr-illustration-img" /></figure>`
+            : ""
+        }
+
+        ${
+          part.table
+            ? `
+          <div class="wr-table-wrap">
+            <table class="wr-theory-table">
+              <thead>
+                <tr>${part.table.headers.map(h => `<th>${escapeHtml(h)}</th>`).join("")}</tr>
+              </thead>
+              <tbody>
+                ${part.table.rows
+                  .map(
+                    row => `
+                  <tr>${row.map((cell, idx) => `<td class="${idx === 0 ? "cell-primary" : "cell-secondary"}">${escapeHtml(cell)}</td>`).join("")}</tr>
+                `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          part.wordsBeforeDialogues
+            ? `
+          ${renderWritingWordsHtml(part.words, unit, secLabel)}
+          ${renderWritingDialoguesHtml(part.exampleSentences)}
+        `
+            : `
+          ${renderWritingDialoguesHtml(part.exampleSentences)}
+          ${
+            part.figureBeforeWords
+              ? `<figure class="wr-figure"><img src="${escapeHtml(part.figureBeforeWords)}" alt="${escapeHtml(part.titleEn)}" class="wr-illustration-img" /></figure>`
+              : ""
+          }
+          ${renderWritingWordsHtml(part.words, unit, secLabel)}
+        `
+        }
+
+        ${
+          part.outlineGuide
+            ? `
+          <details class="wr-outline-accordion">
+            <summary class="wr-outline-summary">
+              <span>📋 Gợi ý dàn bài &amp; từ vựng nên dùng</span>
+            </summary>
+            <div class="wr-outline-body">
+              ${
+                part.outlineGuide.analysis && part.outlineGuide.analysis.length > 0
+                  ? `
+                <div>
+                  <h3 class="wr-outline-h3">I. Phân tích đề bài</h3>
+                  <ul class="wr-bullet-list">${part.outlineGuide.analysis.map(it => `<li>${it}</li>`).join("")}</ul>
+                </div>
+              `
+                  : ""
+              }
+              ${
+                part.outlineGuide.outline && part.outlineGuide.outline.length > 0
+                  ? `
+                <div>
+                  <h3 class="wr-outline-h3">II. Dàn ý chi tiết</h3>
+                  <ul class="wr-bullet-list">
+                    ${part.outlineGuide.outline
+                      .map(
+                        it => `
+                      <li style="margin-bottom:6px;">
+                        <div>${it.text}</div>
+                        ${it.quote ? `<blockquote class="wr-outline-quote">${escapeHtml(it.quote)}</blockquote>` : ""}
+                      </li>
+                    `
+                      )
+                      .join("")}
+                  </ul>
+                </div>
+              `
+                  : ""
+              }
+              ${
+                part.outlineGuide.mistakes && part.outlineGuide.mistakes.length > 0
+                  ? `
+                <div>
+                  <h3 class="wr-outline-h3">III. Lỗi cần tránh</h3>
+                  <ul class="wr-bullet-list">${part.outlineGuide.mistakes.map(m => `<li>${escapeHtml(m)}</li>`).join("")}</ul>
+                </div>
+              `
+                  : ""
+              }
+              ${
+                part.outlineGuide.vocab && part.outlineGuide.vocab.length > 0
+                  ? `
+                <div>
+                  <h3 class="wr-outline-h3">IV. Từ vựng nên dùng</h3>
+                  <div class="wr-table-wrap">
+                    <table class="wr-theory-table">
+                      <thead>
+                        <tr><th>Từ / cụm từ</th><th>Loại từ</th><th>Nghĩa</th><th>Ví dụ</th></tr>
+                      </thead>
+                      <tbody>
+                        ${part.outlineGuide.vocab
+                          .map(
+                            row => `
+                          <tr>
+                            <td class="cell-primary">${escapeHtml(row[0])}</td>
+                            <td class="cell-secondary">${escapeHtml(row[1])}</td>
+                            <td class="cell-secondary">${escapeHtml(row[2])}</td>
+                            <td class="cell-secondary">${escapeHtml(row[3])}</td>
+                          </tr>
+                        `
+                          )
+                          .join("")}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              `
+                  : ""
+              }
+            </div>
+          </details>
+        `
+            : ""
+        }
+
+        ${
+          part.callout
+            ? `
+          <div class="wr-callout-box">
+            <p class="wr-callout-title">💡 ${escapeHtml(part.callout.title)}</p>
+            <div>${escapeHtml(part.callout.text)}</div>
+          </div>
+        `
+            : ""
+        }
+      </section>
+    `;
+  }
+
+  function renderWrMatchingExercise(ex, exKey, prog, isChecked) {
+    return `
+      <div class="wr-matching-pool">
+        ${(ex.options || [])
+          .map(
+            opt => `
+          <div class="wr-matching-pool-row">
+            <span class="wr-pool-key">${escapeHtml(opt.key)}</span>
+            <span>${escapeHtml(opt.text)}</span>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+      <div class="wr-items-stack">
+        ${(ex.items || [])
+          .map(item => {
+            const ansKey = `${exKey}_${item.num}`;
+            const val = prog.exerciseAnswers[ansKey] || "";
+            const isCorrect = val === item.answer;
+            const statusCls = isChecked ? (isCorrect ? "correct" : "wrong") : val === "" ? "unselected" : "";
+            return `
+              <div class="wr-item-row">
+                <span class="wr-item-idx ${val !== "" ? "filled" : ""}">${item.num}</span>
+                <span class="wr-item-text">${escapeHtml(item.prompt)}</span>
+                <select class="wr-match-select ${statusCls}" data-wr-select="${escapeHtml(ansKey)}" data-wr-parent="${escapeHtml(exKey)}">
+                  <option value="" ${val === "" ? "selected" : ""}>${item.num}</option>
+                  ${(ex.options || []).map(o => `<option value="${escapeHtml(o.key)}" ${val === o.key ? "selected" : ""}>${escapeHtml(o.key)}</option>`).join("")}
+                </select>
+                ${isChecked ? `<span class="wr-inline-fb ${isCorrect ? "ok" : "err"}">${isCorrect ? "✓ Đúng" : `✗ Đáp án: ${escapeHtml(item.answer)}`}</span>` : ""}
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  }
+
+  function renderWrMcqExercise(ex, exKey, prog, isChecked) {
+    return (ex.items || [])
+      .map(item => {
+        const ansKey = `${exKey}_${item.num}`;
+        const val = prog.exerciseAnswers[ansKey] || "";
+        return `
+          <div class="wr-q-block">
+            <div class="wr-q-prompt">
+              <span class="wr-item-idx ${val ? "filled" : ""}">${item.num}</span>
+              <span>${escapeHtml(item.prompt)}</span>
+            </div>
+            <div class="wr-choices-stack">
+              ${(item.choices || [])
+                .map(ch => {
+                  const selected = val === ch.key;
+                  let cls = selected ? "selected" : "";
+                  if (isChecked) {
+                    if (ch.key === item.answer) cls = "correct";
+                    else if (selected && ch.key !== item.answer) cls = "wrong";
+                  }
+                  return `
+                    <button type="button" class="wr-choice-btn ${cls}" data-wr-mcq-key="${escapeHtml(ansKey)}" data-wr-mcq-val="${escapeHtml(ch.key)}" data-wr-parent="${escapeHtml(exKey)}">
+                      <span class="wr-choice-badge">${escapeHtml(ch.key)}</span>
+                      <span>${escapeHtml(ch.text)}</span>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  function renderWrTfExercise(ex, exKey, prog, isChecked) {
+    return (ex.items || [])
+      .map(item => {
+        const ansKey = `${exKey}_${item.num}`;
+        const val = prog.exerciseAnswers[ansKey] || "";
+        return `
+          <div class="wr-q-block">
+            <div class="wr-q-prompt">
+              <span class="wr-item-idx ${val ? "filled" : ""}">${item.num}</span>
+              <span>${escapeHtml(item.prompt)}</span>
+            </div>
+            <div class="wr-choices-stack wr-tf-row">
+              ${["True", "False"]
+                .map(tf => {
+                  const selected = val === tf;
+                  let cls = selected ? "selected" : "";
+                  if (isChecked) {
+                    if (tf === item.answer) cls = "correct";
+                    else if (selected && tf !== item.answer) cls = "wrong";
+                  }
+                  return `
+                    <button type="button" class="wr-choice-btn ${cls}" data-wr-mcq-key="${escapeHtml(ansKey)}" data-wr-mcq-val="${tf}" data-wr-parent="${escapeHtml(exKey)}">
+                      <span class="wr-choice-badge">${tf[0]}</span>
+                      <span>${tf}</span>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  function renderWrFillExercise(ex, exKey, prog, isChecked) {
+    return `
+      <div class="wr-items-stack">
+        ${(ex.items || [])
+          .map(item => {
+            const ansKey = `${exKey}_${item.num}`;
+            const val = prog.exerciseAnswers[ansKey] || "";
+            const isCorrect = val.trim().toLowerCase() === String(item.answer || "").trim().toLowerCase();
+            const statusCls = isChecked ? (isCorrect ? "correct" : "wrong") : "";
+            return `
+              <div class="wr-item-row wr-fill-row">
+                <span class="wr-item-idx ${val.trim() !== "" ? "filled" : ""}" id="wr-badge-${domSafeId(ansKey)}">${item.num}</span>
+                <span class="wr-fill-sentence">
+                  ${escapeHtml(item.before)}
+                  <input
+                    type="text"
+                    class="wr-fill-input ${statusCls}"
+                    placeholder="${item.num}"
+                    value="${escapeHtml(val)}"
+                    data-wr-fill-key="${escapeHtml(ansKey)}"
+                    data-wr-parent="${escapeHtml(exKey)}"
+                  />
+                  <span class="wr-fill-after">${escapeHtml(item.after)}</span>
+                </span>
+                ${isChecked ? `<span class="wr-inline-fb ${isCorrect ? "ok" : "err"}">${isCorrect ? "✓ Đúng" : `✗ ${escapeHtml(item.answer)}`}</span>` : ""}
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  }
+
+  function renderWrRewriteExercise(ex, exKey, prog, isChecked) {
+    return `
+      <div class="wr-items-stack">
+        ${(ex.items || [])
+          .map(item => {
+            const ansKey = `${exKey}_${item.num}`;
+            const val = prog.exerciseAnswers[ansKey] || "";
+            const isCorrect = normalizeWritingSentence(val) === normalizeWritingSentence(item.answer);
+            const statusCls = isChecked ? (isCorrect ? "correct" : "wrong") : "";
+            return `
+              <div class="wr-item-row" style="align-items:flex-start;">
+                <span class="wr-item-idx ${val.trim() !== "" ? "filled" : ""}" id="wr-badge-${domSafeId(ansKey)}" style="margin-top:2px;">${item.num}</span>
+                <div style="flex:1;min-width:0;">
+                  <div class="wr-rewrite-prompt">${escapeHtml(item.prompt)}</div>
+                  <div class="wr-rewrite-controls">
+                    <input
+                      type="text"
+                      class="wr-fill-input wr-rewrite-input ${statusCls}"
+                      placeholder="Viết lại câu ${item.num}..."
+                      value="${escapeHtml(val)}"
+                      data-wr-fill-key="${escapeHtml(ansKey)}"
+                      data-wr-parent="${escapeHtml(exKey)}"
+                    />
+                    ${isChecked ? `<span class="wr-inline-fb ${isCorrect ? "ok" : "err"}">${isCorrect ? "✓ Đúng" : `✗ Đáp án: ${escapeHtml(item.answer)}`}</span>` : ""}
+                  </div>
+                </div>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  }
+
+  function renderWrReorderExercise(ex, exKey, prog, isChecked) {
+    return (ex.items || [])
+      .map(item => {
+        const ansKey = `${exKey}_${item.num}`;
+        const chosenIndices = Array.isArray(prog.exerciseAnswers[ansKey]) ? prog.exerciseAnswers[ansKey] : [];
+        const builtSentence = chosenIndices.map(idx => item.tiles[idx]).join(" ");
+        const isCorrect = normalizeWritingSentence(builtSentence) === normalizeWritingSentence(item.answer);
+        const statusCls = isChecked ? (isCorrect ? "correct" : "wrong") : "";
+        const isActiveRow = state.activeReorderKey === ansKey;
+        const remainingCount = item.tiles.length - chosenIndices.length;
+
+        return `
+          <div class="wr-reorder-row ${isActiveRow ? "active-row" : ""}" data-wr-reorder-row="${escapeHtml(ansKey)}">
+            <div class="wr-reorder-line">
+              <span class="wr-item-idx ${chosenIndices.length > 0 ? "filled" : ""}">${item.num}</span>
+              <div class="wr-reorder-slot ${chosenIndices.length === 0 ? "empty" : ""} ${statusCls}">
+                ${chosenIndices.length === 0 ? `<span class="wr-reorder-placeholder">Bấm các thẻ từ bên dưới theo đúng thứ tự</span>` : ""}
+                ${chosenIndices
+                  .map(
+                    (tileIdx, pos) => `
+                  <button type="button" class="wr-placed-tile" data-wr-remove-tile="${escapeHtml(ansKey)}" data-wr-tile-pos="${pos}" data-wr-parent="${escapeHtml(exKey)}" title="Bấm để bỏ từ này">
+                    ${escapeHtml(item.tiles[tileIdx])}
+                  </button>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+
+            ${
+              remainingCount > 0
+                ? `
+              <div class="wr-tiles-pool">
+                ${item.tiles
+                  .map((word, idx) => {
+                    const used = chosenIndices.includes(idx);
+                    return `
+                      <button type="button" class="wr-tile-btn ${used ? "used" : ""}" data-wr-add-tile="${escapeHtml(ansKey)}" data-wr-tile-idx="${idx}" data-wr-parent="${escapeHtml(exKey)}" ${used ? "disabled" : ""}>
+                        ${escapeHtml(word)}
+                      </button>
+                    `;
+                  })
+                  .join("")}
+              </div>
+            `
+                : ""
+            }
+
+            ${
+              isChecked
+                ? `<div class="wr-reorder-fb ${isCorrect ? "ok" : "err"}">${isCorrect ? "✓ Chính xác!" : `✗ Câu đúng: "${escapeHtml(item.answer)}"`}</div>`
+                : ""
+            }
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  function renderWritingSingleExerciseCard(ex, secKey, prog) {
+    const exKey = `${secKey}__${ex.id}`;
+    const safeExKey = domSafeId(exKey);
+    const isChecked = Boolean(prog.checkedExercises[exKey]);
+    const items = ex.items || [];
+
+    if (ex.type === "writing") {
+      const ansKey = `${exKey}_1`;
+      const val = prog.exerciseAnswers[ansKey] || "";
+      const wc = countWords(val);
+      const { minW, maxW } = getWritingWordLimits(ex);
+      const needed = Math.max(0, minW - wc);
+      const canSubmit = wc >= minW;
+
+      return `
+        <article class="wr-ex-card" data-wr-ex-key="${escapeHtml(exKey)}" data-wr-total="1">
+          <header class="wr-ex-header">
+            <div class="wr-ex-head-left">
+              <span class="wr-ex-num-pill">${escapeHtml(ex.id)}</span>
+              <div>
+                <h3 class="wr-ex-title">${escapeHtml(ex.title)}</h3>
+                <div class="wr-ex-instr">${escapeHtml(ex.instruction)}</div>
+              </div>
+            </div>
+            ${
+              ex.partTag
+                ? `<button type="button" class="wr-ex-part-tag" data-wr-jump-theory="${escapeHtml(ex.partTag)}">📖 ${escapeHtml(ex.partTag)}</button>`
+                : ""
+            }
+          </header>
+
+          <div class="wr-ex-body">
+            ${ex.promptBox ? `<div class="wr-prompt-box">${escapeHtml(ex.promptBox)}</div>` : ""}
+            <textarea
+              rows="9"
+              maxlength="10000"
+              spellcheck="false"
+              placeholder="Viết bài của bạn ở đây..."
+              class="wr-writing-textarea"
+              data-wr-writing-key="${escapeHtml(ansKey)}"
+              data-wr-parent="${escapeHtml(exKey)}"
+              data-wr-ex-id="${escapeHtml(ex.id)}"
+              data-wr-min-words="${minW}"
+              data-wr-max-words="${maxW}"
+            >${escapeHtml(val)}</textarea>
+            <div class="wr-counter-row">
+              <span class="wr-wc-num" id="wr-wc-${safeExKey}">${wc} từ</span>
+              <span>Yêu cầu ${minW}–${maxW} từ</span>
+            </div>
+            ${
+              isChecked
+                ? `
+              <div class="wr-sample-box">
+                <div class="wr-sample-head">✓ Đã nộp bài viết (${wc} từ)</div>
+                <div class="wr-sample-body"><strong>Bài mẫu tham khảo:</strong> ${escapeHtml(ex.sampleAnswer || "")}</div>
+              </div>
+            `
+                : ""
+            }
+          </div>
+
+          <footer class="wr-ex-footer">
+            <span class="wr-status-text ${canSubmit ? "ready" : ""}" id="wr-status-${safeExKey}">
+              ${canSubmit ? `${wc}/${minW} từ · Đủ điều kiện nộp bài` : `${wc}/${minW} từ · cần thêm ${needed} từ để nộp`}
+            </span>
+            <div style="display:flex;gap:8px;">
+              ${isChecked ? `<button type="button" class="nb-back-btn wr-mini-btn" data-wr-reset="${escapeHtml(exKey)}">Viết lại</button>` : ""}
+              <button
+                type="button"
+                class="wr-check-btn ${!canSubmit && !isChecked ? "unanswered" : ""}"
+                id="wr-check-${safeExKey}"
+                data-wr-check="${escapeHtml(exKey)}"
+                data-wr-is-writing="1"
+                data-wr-ex-id="${escapeHtml(ex.id)}"
+                ${!canSubmit && !isChecked ? "disabled" : ""}
+              >Nộp bài</button>
+            </div>
+          </footer>
+        </article>
+      `;
+    }
+
+    let answeredCount = 0;
+    items.forEach(item => {
+      const val = prog.exerciseAnswers[`${exKey}_${item.num}`];
+      if (Array.isArray(val) ? val.length > 0 : val !== undefined && String(val).trim() !== "") {
+        answeredCount++;
+      }
+    });
+
+    return `
+      <article class="wr-ex-card" data-wr-ex-key="${escapeHtml(exKey)}" data-wr-total="${items.length}">
+        <header class="wr-ex-header">
+          <div class="wr-ex-head-left">
+            <span class="wr-ex-num-pill">${escapeHtml(ex.id)}</span>
+            <div>
+              <h3 class="wr-ex-title">${escapeHtml(ex.title)}</h3>
+              <div class="wr-ex-instr">${escapeHtml(ex.instruction)}</div>
+            </div>
+          </div>
+          ${
+            ex.partTag
+              ? `<button type="button" class="wr-ex-part-tag" data-wr-jump-theory="${escapeHtml(ex.partTag)}">📖 ${escapeHtml(ex.partTag)}</button>`
+              : ""
+          }
+        </header>
+
+        <div class="wr-ex-body">
+          ${ex.type === "matching" ? renderWrMatchingExercise(ex, exKey, prog, isChecked) : ""}
+          ${ex.type === "mcq" ? renderWrMcqExercise(ex, exKey, prog, isChecked) : ""}
+          ${ex.type === "tf" ? renderWrTfExercise(ex, exKey, prog, isChecked) : ""}
+          ${ex.type === "fill" ? renderWrFillExercise(ex, exKey, prog, isChecked) : ""}
+          ${ex.type === "rewrite" ? renderWrRewriteExercise(ex, exKey, prog, isChecked) : ""}
+          ${ex.type === "reorder" ? renderWrReorderExercise(ex, exKey, prog, isChecked) : ""}
+        </div>
+
+        <footer class="wr-ex-footer">
+          <span class="wr-done-status" id="wr-status-${safeExKey}">Đã làm ${answeredCount}/${items.length}</span>
+          <div style="display:flex;gap:8px;">
+            ${isChecked ? `<button type="button" class="nb-back-btn wr-mini-btn" data-wr-reset="${escapeHtml(exKey)}">Làm lại</button>` : ""}
+            <button
+              type="button"
+              class="wr-check-btn ${answeredCount === 0 && !isChecked ? "unanswered" : ""}"
+              id="wr-check-${safeExKey}"
+              data-wr-check="${escapeHtml(exKey)}"
+            >Kiểm tra</button>
+          </div>
+        </footer>
+      </article>
+    `;
+  }
+
+  function renderWritingLessonView() {
+    const unit = getCurrentWritingUnit();
+    if (!unit) return renderWritingHubView();
+    const prog = ensureWritingUnitProgress(unit.id);
+    const secKey = state.currentWritingSection || "vocabulary";
+    const secMeta = WRITING_SECTIONS.find(s => s.key === secKey) || WRITING_SECTIONS[0];
+    const secObj = unit.sections[secKey];
+    const partsMap = (secObj && secObj.parts) || {};
+    const partKeys = Object.keys(partsMap);
+    const activePartKey = partKeys.includes(state.currentWritingPart) ? state.currentWritingPart : partKeys[0] || "A";
+    const activePart = partsMap[activePartKey];
+    const exercisesList = getWritingSectionExercises(secObj, activePartKey);
+    const doneExercisesCount = exercisesList.filter(ex => prog.checkedExercises[`${secKey}__${ex.id}`]).length;
+    const hasMultipleParts = partKeys.length > 1;
+    const secDoneTotal = getWritingUnitDoneSectionsCount(unit.id);
+    const isFirstStep = secKey === "vocabulary" && partKeys.indexOf(activePartKey) <= 0;
+    const lastPart = partsMap[partKeys[partKeys.length - 1]];
+    const nextStepLabel =
+      secObj && secObj.allExercisesInOneList
+        ? (lastPart && lastPart.nextLabel) || "Phần tiếp theo →"
+        : (activePart && activePart.nextLabel) || "Phần tiếp theo →";
+
+    return `
+      <main class="practice-workspace" style="flex:1;min-height:0;">
+        <!-- LEFT PANE: WRITING THEORY (VOCABULARY / PHRASES / WRITING GUIDE) -->
+        <section class="left-pane" id="wr-theory-pane" aria-label="Lý thuyết Writing">
+          <div class="left-pane-inner wr-pane-inner">
+            <div class="wr-pane-bar">
+              <div class="wr-pane-bar-title">
+                <span class="wr-pane-step">Phần ${secMeta.num}</span>
+                <strong>${escapeHtml(secMeta.label)}</strong>
+                <span class="wr-pane-sub">· ${escapeHtml(secMeta.labelVi)}</span>
+              </div>
+              ${
+                hasMultipleParts
+                  ? `
+                <div class="wr-part-pills">
+                  ${partKeys
+                    .map(pk => {
+                      const pObj = partsMap[pk];
+                      return `
+                        <button
+                          type="button"
+                          class="wr-part-pill-btn ${pk === activePartKey ? "active" : ""}"
+                          data-wr-part="${escapeHtml(pk)}"
+                          title="Part ${escapeHtml(pk)}: ${escapeHtml(pObj ? pObj.titleEn : "")}"
+                        >Part ${escapeHtml(pk)}</button>
+                      `;
+                    })
+                    .join("")}
+                </div>
+              `
+                  : ""
+              }
+            </div>
+
+            <div class="wr-theory-stack">
+              ${partKeys
+                .map(pk =>
+                  renderWritingSinglePartTheoryHtml(partsMap[pk], unit, secMeta.label, pk === activePartKey, hasMultipleParts)
+                )
+                .join('<hr class="wr-part-divider" />')}
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT PANE: INTERACTIVE EXERCISES & WRITING TASK -->
+        <aside class="right-pane" id="wr-exercises-pane" aria-label="Bài tập thực hành Writing">
+          <div class="right-pane-inner wr-pane-inner">
+            <div class="wr-pane-bar">
+              <div class="wr-pane-bar-title">
+                <strong>Bài tập · ${escapeHtml(secMeta.label)}</strong>
+                ${hasMultipleParts && !(secObj && secObj.allExercisesInOneList) ? `<span class="wr-pane-sub">· Part ${escapeHtml(activePartKey)}</span>` : ""}
+              </div>
+              <span class="wr-pane-counter">Đã kiểm tra ${doneExercisesCount}/${exercisesList.length}</span>
+            </div>
+
+            <div class="wr-exercises-stack">
+              ${
+                exercisesList.length === 0
+                  ? `<div class="wr-ex-card"><div class="wr-ex-body" style="color:#52525B;">Không có bài tập ở mục này. Bấm tiếp theo ở góc dưới bên phải để chuyển phần.</div></div>`
+                  : exercisesList.map(ex => renderWritingSingleExerciseCard(ex, secKey, prog)).join("")
+              }
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <nav class="practice-bottom-nav" aria-label="Điều hướng bài học Writing">
+        <div class="bottom-q-pills">
+          <span class="bottom-part-text">Unit ${escapeHtml(unit.number)}</span>
+          ${WRITING_SECTIONS.map(s => {
+            const isAct = s.key === secKey;
+            const isDone = prog.completedSections.includes(s.key);
+            return `
+              <button
+                type="button"
+                class="q-pill-btn wr-bottom-sec-pill ${isAct ? "active" : ""} ${isDone ? "done" : ""}"
+                data-wr-section="${s.key}"
+                title="${escapeHtml(s.num + ". " + s.label)}"
+              >${s.num}. ${escapeHtml(s.label)}</button>
+            `;
+          }).join("")}
+          <span class="bottom-q-counter">Đã học ${secDoneTotal}/3 phần</span>
+        </div>
+
+        <div class="stepper-row">
+          <button type="button" class="btn-prev-q" id="btn-wr-prev" ${isFirstStep ? "disabled" : ""}>
+            ← Phần trước
+          </button>
+          <button type="button" class="btn-next-q" id="btn-wr-next">
+            ${escapeHtml(nextStepLabel)}
+          </button>
+        </div>
+      </nav>
     `;
   }
 
@@ -1238,9 +2381,9 @@
     return `
       <main class="home-container">
         <div style="margin-bottom:14px;">
-          <button type="button" class="nb-back-btn" data-sb-nav="home">
+          <button type="button" class="nb-back-btn" data-sb-nav="reading-hub">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            <span>Quay lại trang chủ</span>
+            <span>Quay lại Reading</span>
           </button>
         </div>
 
@@ -2126,22 +3269,23 @@
   }
 
   // --------------------------------------------------------------------------
-  // VIEW 6: MY SUBMISSIONS HISTORY
+  // VIEW 6: MY SUBMISSIONS HISTORY (READING + WRITING)
   // --------------------------------------------------------------------------
   function renderSubmissionsView() {
     const stu = getActiveStudent();
     const submittedList = EXERCISES.filter(ex => stu.exercises[ex.id] && stu.exercises[ex.id].submitted)
       .map(ex => ({ ex, st: stu.exercises[ex.id] }))
       .sort((a, b) => new Date(b.st.submittedAt || 0).getTime() - new Date(a.st.submittedAt || 0).getTime());
+    const writingEssays = getSubmittedWritingEssaysList();
 
     return `
       <main class="home-container">
         <div class="home-header-block">
           <div>
-            <div class="home-eyebrow">IELTS READING · SUBMISSION HISTORY</div>
+            <div class="home-eyebrow">READING &amp; WRITING · SUBMISSION HISTORY</div>
             <h1 class="home-h1">LỊCH SỬ BÀI LÀM &amp; TIẾN ĐỘ</h1>
             <p class="home-desc">
-              Theo dõi toàn bộ điểm số các bài tập em đã hoàn thành và xem lại đáp án, bằng chứng chi tiết.
+              Theo dõi toàn bộ kết quả bài đọc (Reading) và bài viết (Writing) đã hoàn thành.
             </p>
           </div>
           <button type="button" class="top-pill-btn yellow" id="btn-export-student-json-2">
@@ -2150,39 +3294,78 @@
         </div>
 
         ${
-          submittedList.length === 0
+          submittedList.length === 0 && writingEssays.length === 0
             ? `
             <div class="ej-history-empty">
-              <p style="font-size:15.5px;font-weight:800;color:#18181B;margin-bottom:6px;">Em chưa nộp bài đọc nào.</p>
-              <p style="font-size:13.5px;margin-bottom:14px;">Hãy bắt đầu từ Dạng 1: Gap-filling (Bài 1: The Cork Oak) nhé!</p>
-              <button type="button" class="submit-take-btn" data-open-exercise="gf-1">Mở Bài tập 1 ngay →</button>
+              <p style="font-size:15.5px;font-weight:800;color:#18181B;margin-bottom:6px;">Chưa có bài nộp nào.</p>
+              <p style="font-size:13.5px;margin-bottom:14px;">Chọn một bài Reading hoặc Writing để bắt đầu luyện tập ngay nhé!</p>
+              <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+                <button type="button" class="submit-take-btn" data-sb-nav="reading-hub">Luyện Reading →</button>
+                <button type="button" class="nb-back-btn" data-sb-nav="writing-hub">Luyện Writing →</button>
+              </div>
             </div>
           `
             : `
-            <div class="ej-history-list">
-              ${submittedList
-                .map(({ ex, st }) => {
-                  const pct = st.total ? Math.round((st.score / st.total) * 100) : 0;
-                  return `
-                    <div class="ej-history-card">
-                      <div class="ej-history-left">
-                        <div class="ej-history-badges">
-                          <span class="class-badge-pill">${escapeHtml(getPartMeta(ex.part).shortLabel)} · Bài ${ex.number}</span>
-                          <span class="notif-item-tag" style="${pct >= 60 ? "" : "background:#FEE2E2;color:#991B1B;"}">
-                            Điểm: ${st.score}/${st.total} (${pct}%)
-                          </span>
-                        </div>
-                        <div class="ej-history-title">${escapeHtml(ex.title)}</div>
-                        <div class="ej-history-meta">Nộp lúc ${escapeHtml(formatDateTime(st.submittedAt))} · ${escapeHtml(ex.badge)}</div>
+            ${
+              writingEssays.length > 0
+                ? `
+              <h2 class="wr-history-group-title">✍️ Bài Writing đã nộp (${writingEssays.length})</h2>
+              <div class="ej-history-list" style="margin-bottom:22px;">
+                ${writingEssays
+                  .map(
+                    ({ unit, info }) => `
+                  <div class="ej-history-card">
+                    <div class="ej-history-left">
+                      <div class="ej-history-badges">
+                        <span class="class-badge-pill">Writing · Unit ${escapeHtml(unit.number)}</span>
+                        <span class="notif-item-tag">${info.wordCount || 0} từ</span>
                       </div>
-                      <button type="button" class="nb-back-btn" data-open-exercise="${escapeHtml(ex.id)}">
-                        Xem lại &amp; Bằng chứng →
-                      </button>
+                      <div class="ej-history-title">${escapeHtml(unit.titleEn)} — ${escapeHtml(unit.titleVi)}</div>
+                      <div class="ej-history-meta">Nộp lúc ${escapeHtml(formatDateTime(info.submittedAt))}</div>
                     </div>
-                  `;
-                })
-                .join("")}
-            </div>
+                    <button type="button" class="nb-back-btn" data-open-writing-unit="${escapeHtml(unit.id)}" data-open-writing-sec="writing">
+                      Xem lại bài viết →
+                    </button>
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+            `
+                : ""
+            }
+
+            ${
+              submittedList.length > 0
+                ? `
+              <h2 class="wr-history-group-title">📖 Bài Reading đã nộp (${submittedList.length})</h2>
+              <div class="ej-history-list">
+                ${submittedList
+                  .map(({ ex, st }) => {
+                    const pct = st.total ? Math.round((st.score / st.total) * 100) : 0;
+                    return `
+                      <div class="ej-history-card">
+                        <div class="ej-history-left">
+                          <div class="ej-history-badges">
+                            <span class="class-badge-pill">${escapeHtml(getPartMeta(ex.part).shortLabel)} · Bài ${ex.number}</span>
+                            <span class="notif-item-tag" style="${pct >= 60 ? "" : "background:#FEE2E2;color:#991B1B;"}">
+                              Điểm: ${st.score}/${st.total} (${pct}%)
+                            </span>
+                          </div>
+                          <div class="ej-history-title">${escapeHtml(ex.title)}</div>
+                          <div class="ej-history-meta">Nộp lúc ${escapeHtml(formatDateTime(st.submittedAt))} · ${escapeHtml(ex.badge)}</div>
+                        </div>
+                        <button type="button" class="nb-back-btn" data-open-exercise="${escapeHtml(ex.id)}">
+                          Xem lại &amp; Bằng chứng →
+                        </button>
+                      </div>
+                    `;
+                  })
+                  .join("")}
+              </div>
+            `
+                : ""
+            }
           `
         }
       </main>
@@ -2325,15 +3508,15 @@
       <div class="auth-wrapper">
         <div class="auth-card-box">
           <div style="margin-bottom:10px;">
-            <span class="auth-badge-tag">IELTS READING · ĐĂNG NHẬP</span>
+            <span class="auth-badge-tag">IELTS READING &amp; WRITING · ĐĂNG NHẬP</span>
           </div>
 
           <h1 style="font-size:22px;font-weight:900;color:#18181B;margin-bottom:6px;">
-            ${isReg ? "Tạo tài khoản mới" : "Đăng nhập luyện Reading"}
+            ${isReg ? "Tạo tài khoản mới" : "Đăng nhập luyện Reading &amp; Writing"}
           </h1>
           <p style="font-size:13.2px;color:#52525B;line-height:1.5;margin-bottom:16px;">
             ${isReg
-              ? "Tài khoản này dùng chung cho cả hệ thống IELTS Reading và IELTS Listening."
+              ? "Tài khoản này dùng chung cho cả hệ thống IELTS Reading, Writing và IELTS Listening."
               : "Sử dụng tài khoản Google hoặc Email đã đăng ký ở <strong>IELTS Listening</strong> để đăng nhập ngay."}
           </p>
 
@@ -2382,7 +3565,7 @@
   // --------------------------------------------------------------------------
   // MAIN RENDER
   // --------------------------------------------------------------------------
-  function renderApp() {
+  function renderApp(resetScrollPanes, scrollToWrPart) {
     const root = document.getElementById("app");
     if (!root) return;
 
@@ -2395,22 +3578,27 @@
     const leftPane = document.querySelector(".left-pane");
     const rightPane = document.querySelector(".right-pane");
     const sbNav = document.querySelector(".ej-sidebar-nav");
-    const savedL = leftPane ? leftPane.scrollTop : 0;
-    const savedR = rightPane ? rightPane.scrollTop : 0;
+    const savedL = !resetScrollPanes && leftPane ? leftPane.scrollTop : 0;
+    const savedR = !resetScrollPanes && rightPane ? rightPane.scrollTop : 0;
     const savedS = sbNav ? sbNav.scrollTop : 0;
 
     const isPractice = state.view === "practice";
+    const isWritingLesson = state.view === "writing-lesson";
+    const isFocusLesson = isPractice || isWritingLesson;
     const layoutClasses = [
       "app-layout",
       state.sidebarCollapsed ? "sidebar-collapsed" : "",
       state.mobileSidebarOpen ? "mobile-sidebar-open" : "",
-      isPractice ? "focus-lesson-mode split-tab-active" : ""
+      isFocusLesson ? "focus-lesson-mode split-tab-active" : ""
     ]
       .filter(Boolean)
       .join(" ");
 
     let bodyHtml = "";
     if (isPractice) bodyHtml = renderPracticeView();
+    else if (isWritingLesson) bodyHtml = renderWritingLessonView();
+    else if (state.view === "reading-hub") bodyHtml = renderReadingHubView();
+    else if (state.view === "writing-hub") bodyHtml = renderWritingHubView();
     else if (state.view === "theory") bodyHtml = renderTheoryView();
     else if (state.view === "part-topics") bodyHtml = renderPartTopicsView();
     else if (state.view === "keyword-hub") bodyHtml = renderKeywordHubView();
@@ -2431,11 +3619,94 @@
     const nextL = document.querySelector(".left-pane");
     const nextR = document.querySelector(".right-pane");
     const nextS = document.querySelector(".ej-sidebar-nav");
-    if (nextL) nextL.scrollTop = savedL;
-    if (nextR) nextR.scrollTop = savedR;
+    if (scrollToWrPart && nextL) {
+      const targetPartEl = document.getElementById("wr-theory-part-" + scrollToWrPart);
+      if (targetPartEl) targetPartEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (nextR) nextR.scrollTop = 0;
+    } else {
+      if (nextL) nextL.scrollTop = savedL;
+      if (nextR) nextR.scrollTop = savedR;
+    }
     if (nextS) nextS.scrollTop = savedS;
 
     bindEvents();
+  }
+
+  function openWritingUnit(unitId, sectionKey) {
+    stopSpeech();
+    const target = WRITING_UNITS.find(u => u.id === unitId) || WRITING_UNITS[0];
+    if (!target) return;
+    state.currentWritingUnitId = target.id;
+    state.currentWritingSection = sectionKey && target.sections[sectionKey] ? sectionKey : "vocabulary";
+    const secObj = target.sections[state.currentWritingSection];
+    const partKeys = secObj && secObj.parts ? Object.keys(secObj.parts) : ["A"];
+    state.currentWritingPart = partKeys[0] || "A";
+    state.activeReorderKey = "";
+    state.mobileSidebarOpen = false;
+    state.notifOpen = false;
+    state.accountMenuOpen = false;
+    state.view = "writing-lesson";
+    renderApp(true);
+  }
+
+  function advanceWritingStep() {
+    const unit = getCurrentWritingUnit();
+    if (!unit) return;
+    const order = ["vocabulary", "phrases", "writing"];
+    const secObj = unit.sections[state.currentWritingSection];
+    const partKeys = secObj && secObj.parts ? Object.keys(secObj.parts) : [];
+    const curPartIdx = partKeys.indexOf(state.currentWritingPart);
+
+    if (curPartIdx >= 0 && curPartIdx < partKeys.length - 1 && !(secObj && secObj.allExercisesInOneList)) {
+      const nextPart = partKeys[curPartIdx + 1];
+      state.currentWritingPart = nextPart;
+      renderApp(false, nextPart);
+      return;
+    }
+
+    const secIdx = order.indexOf(state.currentWritingSection);
+    if (secIdx >= 0 && secIdx < order.length - 1) {
+      state.currentWritingSection = order[secIdx + 1];
+      const nextSec = unit.sections[state.currentWritingSection];
+      state.currentWritingPart = nextSec && nextSec.parts ? Object.keys(nextSec.parts)[0] || "A" : "A";
+      renderApp(true);
+      return;
+    }
+
+    // Last section of unit -> go to next unit or back to writing hub
+    const uIdx = WRITING_UNITS.findIndex(u => u.id === unit.id);
+    if (uIdx >= 0 && uIdx < WRITING_UNITS.length - 1) {
+      openWritingUnit(WRITING_UNITS[uIdx + 1].id, "vocabulary");
+    } else {
+      stopSpeech();
+      state.view = "writing-hub";
+      renderApp(true);
+    }
+  }
+
+  function previousWritingStep() {
+    const unit = getCurrentWritingUnit();
+    if (!unit) return;
+    const order = ["vocabulary", "phrases", "writing"];
+    const secObj = unit.sections[state.currentWritingSection];
+    const partKeys = secObj && secObj.parts ? Object.keys(secObj.parts) : [];
+    const curPartIdx = partKeys.indexOf(state.currentWritingPart);
+
+    if (curPartIdx > 0 && !(secObj && secObj.allExercisesInOneList)) {
+      const prevPart = partKeys[curPartIdx - 1];
+      state.currentWritingPart = prevPart;
+      renderApp(false, prevPart);
+      return;
+    }
+
+    const secIdx = order.indexOf(state.currentWritingSection);
+    if (secIdx > 0) {
+      state.currentWritingSection = order[secIdx - 1];
+      const prevSec = unit.sections[state.currentWritingSection];
+      const prevKeys = prevSec && prevSec.parts ? Object.keys(prevSec.parts) : ["A"];
+      state.currentWritingPart = prevKeys[prevKeys.length - 1] || "A";
+      renderApp(true);
+    }
   }
 
   function openExercise(exId) {
@@ -2641,6 +3912,23 @@
       };
     });
 
+    document.querySelectorAll("[data-open-writing-unit]").forEach(btn => {
+      btn.onclick = e => {
+        e.stopPropagation();
+        const notifId = btn.getAttribute("data-notif-id");
+        if (notifId) {
+          const found = stu.notifications.find(n => n.id === notifId);
+          if (found) {
+            found.read = true;
+            persist();
+          }
+        }
+        const unitId = btn.getAttribute("data-open-writing-unit");
+        const secKey = btn.getAttribute("data-open-writing-sec") || "vocabulary";
+        openWritingUnit(unitId, secKey);
+      };
+    });
+
     // Sidebar controls
     const btnSbCollapse = document.getElementById("ej-sidebar-collapse-btn");
     if (btnSbCollapse) {
@@ -2653,38 +3941,20 @@
       };
     }
 
-    const btnGapAcc = document.getElementById("btn-sb-gap-acc");
-    if (btnGapAcc) {
-      btnGapAcc.onclick = e => {
+    const btnReadingAcc = document.getElementById("btn-sb-reading-acc");
+    if (btnReadingAcc) {
+      btnReadingAcc.onclick = e => {
         e.stopPropagation();
-        state.sbGapCollapsed = !state.sbGapCollapsed;
+        state.sbReadingCollapsed = !state.sbReadingCollapsed;
         renderApp();
       };
     }
 
-    const btnMatchAcc = document.getElementById("btn-sb-match-acc");
-    if (btnMatchAcc) {
-      btnMatchAcc.onclick = e => {
+    const btnWritingAcc = document.getElementById("btn-sb-writing-acc");
+    if (btnWritingAcc) {
+      btnWritingAcc.onclick = e => {
         e.stopPropagation();
-        state.sbMatchCollapsed = !state.sbMatchCollapsed;
-        renderApp();
-      };
-    }
-
-    const btnMcqAcc = document.getElementById("btn-sb-mcq-acc");
-    if (btnMcqAcc) {
-      btnMcqAcc.onclick = e => {
-        e.stopPropagation();
-        state.sbMcqCollapsed = !state.sbMcqCollapsed;
-        renderApp();
-      };
-    }
-
-    const btnInfoAcc = document.getElementById("btn-sb-info-acc");
-    if (btnInfoAcc) {
-      btnInfoAcc.onclick = e => {
-        e.stopPropagation();
-        state.sbInfoCollapsed = !state.sbInfoCollapsed;
+        state.sbWritingCollapsed = !state.sbWritingCollapsed;
         renderApp();
       };
     }
@@ -3087,6 +4357,261 @@
       }
     }
 
+    // Writing Lesson Controls
+    if (state.view === "writing-lesson") {
+      const unit = getCurrentWritingUnit();
+      const prog = unit ? ensureWritingUnitProgress(unit.id) : null;
+
+      const btnBackWr = document.getElementById("btn-back-writing-hub");
+      if (btnBackWr) {
+        btnBackWr.onclick = () => {
+          stopSpeech();
+          state.view = "writing-hub";
+          renderApp(true);
+        };
+      }
+
+      document.querySelectorAll("[data-wr-section]").forEach(btn => {
+        btn.onclick = () => {
+          stopSpeech();
+          const nextSec = btn.getAttribute("data-wr-section") || "vocabulary";
+          state.currentWritingSection = nextSec;
+          const secObj = unit && unit.sections[nextSec];
+          state.currentWritingPart = secObj && secObj.parts ? Object.keys(secObj.parts)[0] || "A" : "A";
+          state.activeReorderKey = "";
+          renderApp(true);
+        };
+      });
+
+      document.querySelectorAll("[data-wr-part]").forEach(btn => {
+        btn.onclick = () => {
+          const targetPart = btn.getAttribute("data-wr-part") || "A";
+          state.currentWritingPart = targetPart;
+          renderApp(false, targetPart);
+        };
+      });
+
+      document.querySelectorAll("[data-wr-jump-theory]").forEach(btn => {
+        btn.onclick = () => {
+          const tag = btn.getAttribute("data-wr-jump-theory") || "";
+          const partLetter = tag.replace(/Part/i, "").trim() || state.currentWritingPart;
+          const secEl = document.getElementById("wr-theory-part-" + partLetter) || document.querySelector(".wr-theory-part");
+          if (secEl) {
+            secEl.scrollIntoView({ behavior: "smooth", block: "start" });
+            secEl.classList.remove("wr-flash-hl");
+            void secEl.offsetWidth;
+            secEl.classList.add("wr-flash-hl");
+          }
+        };
+      });
+
+      // 1. Matching Dropdowns
+      document.querySelectorAll("[data-wr-select]").forEach(sel => {
+        sel.onchange = e => {
+          if (!prog) return;
+          const ansKey = sel.getAttribute("data-wr-select");
+          const parentEx = sel.getAttribute("data-wr-parent");
+          prog.exerciseAnswers[ansKey] = e.target.value;
+          if (parentEx && prog.checkedExercises[parentEx]) delete prog.checkedExercises[parentEx];
+          persist();
+          renderApp();
+        };
+      });
+
+      // 2. MCQ & True/False Buttons
+      document.querySelectorAll("[data-wr-mcq-key]").forEach(btn => {
+        btn.onclick = () => {
+          if (!prog) return;
+          const ansKey = btn.getAttribute("data-wr-mcq-key");
+          const val = btn.getAttribute("data-wr-mcq-val");
+          const parentEx = btn.getAttribute("data-wr-parent");
+          prog.exerciseAnswers[ansKey] = val;
+          if (parentEx && prog.checkedExercises[parentEx]) delete prog.checkedExercises[parentEx];
+          persist();
+          renderApp();
+        };
+      });
+
+      // 3. Fill & Rewrite Inputs (live DOM update without losing focus)
+      document.querySelectorAll("[data-wr-fill-key]").forEach(inp => {
+        inp.oninput = e => {
+          if (!prog) return;
+          const ansKey = inp.getAttribute("data-wr-fill-key");
+          const parentEx = inp.getAttribute("data-wr-parent");
+          prog.exerciseAnswers[ansKey] = e.target.value;
+          if (parentEx && prog.checkedExercises[parentEx]) {
+            delete prog.checkedExercises[parentEx];
+            inp.classList.remove("correct", "wrong");
+          }
+          persist();
+
+          const badgeEl = document.getElementById("wr-badge-" + domSafeId(ansKey));
+          if (badgeEl) badgeEl.classList.toggle("filled", e.target.value.trim() !== "");
+
+          const card = inp.closest(".wr-ex-card");
+          if (card && parentEx) {
+            const total = parseInt(card.getAttribute("data-wr-total") || "0", 10);
+            let count = 0;
+            card.querySelectorAll("[data-wr-fill-key]").forEach(el => {
+              if (el.value.trim() !== "") count++;
+            });
+            const statusEl = document.getElementById("wr-status-" + domSafeId(parentEx));
+            if (statusEl) statusEl.textContent = `Đã làm ${count}/${total}`;
+            const checkBtn = document.getElementById("wr-check-" + domSafeId(parentEx));
+            if (checkBtn) checkBtn.classList.toggle("unanswered", count === 0);
+          }
+        };
+
+        inp.onkeydown = e => {
+          if (e.key === "Enter" && prog) {
+            const parentEx = inp.getAttribute("data-wr-parent");
+            if (parentEx) {
+              prog.checkedExercises[parentEx] = true;
+              if (!prog.completedSections.includes(state.currentWritingSection)) {
+                prog.completedSections.push(state.currentWritingSection);
+              }
+              persist();
+              renderApp();
+            }
+          }
+        };
+      });
+
+      // 4. Writing Essay Textarea (live word count without losing focus)
+      document.querySelectorAll("[data-wr-writing-key]").forEach(ta => {
+        ta.oninput = e => {
+          if (!prog) return;
+          const ansKey = ta.getAttribute("data-wr-writing-key");
+          const parentEx = ta.getAttribute("data-wr-parent");
+          const minW = parseInt(ta.getAttribute("data-wr-min-words") || "40", 10);
+          prog.exerciseAnswers[ansKey] = e.target.value;
+          if (parentEx && prog.checkedExercises[parentEx]) delete prog.checkedExercises[parentEx];
+          persist();
+
+          const wc = countWords(e.target.value);
+          const needed = Math.max(0, minW - wc);
+          const safeId = domSafeId(parentEx);
+          const wcEl = document.getElementById("wr-wc-" + safeId);
+          if (wcEl) wcEl.textContent = `${wc} từ`;
+          const statusEl = document.getElementById("wr-status-" + safeId);
+          if (statusEl) {
+            statusEl.textContent =
+              wc >= minW ? `${wc}/${minW} từ · Đủ điều kiện nộp bài` : `${wc}/${minW} từ · cần thêm ${needed} từ để nộp`;
+            statusEl.classList.toggle("ready", wc >= minW);
+          }
+          const checkBtn = document.getElementById("wr-check-" + safeId);
+          if (checkBtn) {
+            checkBtn.classList.toggle("unanswered", wc < minW);
+            checkBtn.disabled = wc < minW;
+          }
+        };
+      });
+
+      // 5. Reorder Tiles
+      document.querySelectorAll("[data-wr-reorder-row]").forEach(rowEl => {
+        rowEl.onclick = e => {
+          if (e.target.closest("[data-wr-add-tile]") || e.target.closest("[data-wr-remove-tile]")) return;
+          const rKey = rowEl.getAttribute("data-wr-reorder-row");
+          if (state.activeReorderKey !== rKey) {
+            state.activeReorderKey = rKey;
+            renderApp();
+          }
+        };
+      });
+
+      document.querySelectorAll("[data-wr-add-tile]").forEach(btn => {
+        btn.onclick = e => {
+          e.stopPropagation();
+          if (!prog) return;
+          const ansKey = btn.getAttribute("data-wr-add-tile");
+          const idx = parseInt(btn.getAttribute("data-wr-tile-idx"), 10);
+          const parentEx = btn.getAttribute("data-wr-parent");
+          state.activeReorderKey = ansKey;
+          if (parentEx && prog.checkedExercises[parentEx]) delete prog.checkedExercises[parentEx];
+          if (!Array.isArray(prog.exerciseAnswers[ansKey])) prog.exerciseAnswers[ansKey] = [];
+          if (!prog.exerciseAnswers[ansKey].includes(idx)) prog.exerciseAnswers[ansKey].push(idx);
+          persist();
+          renderApp();
+        };
+      });
+
+      document.querySelectorAll("[data-wr-remove-tile]").forEach(btn => {
+        btn.onclick = e => {
+          e.stopPropagation();
+          if (!prog) return;
+          const ansKey = btn.getAttribute("data-wr-remove-tile");
+          const pos = parseInt(btn.getAttribute("data-wr-tile-pos"), 10);
+          const parentEx = btn.getAttribute("data-wr-parent");
+          state.activeReorderKey = ansKey;
+          if (parentEx && prog.checkedExercises[parentEx]) delete prog.checkedExercises[parentEx];
+          if (Array.isArray(prog.exerciseAnswers[ansKey])) prog.exerciseAnswers[ansKey].splice(pos, 1);
+          persist();
+          renderApp();
+        };
+      });
+
+      // 6. Check / Submit & Reset Exercise
+      document.querySelectorAll("[data-wr-check]").forEach(btn => {
+        btn.onclick = () => {
+          if (!prog || !unit) return;
+          const exKey = btn.getAttribute("data-wr-check");
+          const isWritingTask = btn.getAttribute("data-wr-is-writing") === "1";
+          const exId = btn.getAttribute("data-wr-ex-id") || exKey;
+
+          if (isWritingTask) {
+            const ta = document.querySelector(`[data-wr-writing-key="${exKey}_1"]`);
+            const minW = ta ? parseInt(ta.getAttribute("data-wr-min-words") || "40", 10) : 40;
+            const text = ta ? ta.value : prog.exerciseAnswers[`${exKey}_1`] || "";
+            const wc = countWords(text);
+            if (wc < minW) return;
+
+            const nowIso = new Date().toISOString();
+            prog.submittedWritings[exId] = {
+              wordCount: wc,
+              text,
+              submittedAt: nowIso
+            };
+            stu.notifications.unshift({
+              id: "wr_" + Date.now(),
+              title: `Đã nộp Writing: Unit ${unit.number} — ${unit.titleEn}`,
+              sub: `Bài viết ${wc} từ đã được lưu. Bấm để xem lại bài mẫu tham khảo.`,
+              time: formatDateTime(nowIso),
+              read: false,
+              actionWritingUnitId: unit.id,
+              actionWritingSec: "writing"
+            });
+            if (stu.notifications.length > 20) stu.notifications = stu.notifications.slice(0, 20);
+          }
+
+          prog.checkedExercises[exKey] = true;
+          if (!prog.completedSections.includes(state.currentWritingSection)) {
+            prog.completedSections.push(state.currentWritingSection);
+          }
+          persist();
+          renderApp();
+        };
+      });
+
+      document.querySelectorAll("[data-wr-reset]").forEach(btn => {
+        btn.onclick = () => {
+          if (!prog) return;
+          const exKey = btn.getAttribute("data-wr-reset");
+          delete prog.checkedExercises[exKey];
+          Object.keys(prog.exerciseAnswers).forEach(k => {
+            if (k.startsWith(exKey + "_")) delete prog.exerciseAnswers[k];
+          });
+          persist();
+          renderApp();
+        };
+      });
+
+      // 7. Bottom Prev / Next Step
+      const btnWrPrev = document.getElementById("btn-wr-prev");
+      if (btnWrPrev) btnWrPrev.onclick = previousWritingStep;
+      const btnWrNext = document.getElementById("btn-wr-next");
+      if (btnWrNext) btnWrNext.onclick = advanceWritingStep;
+    }
+
     // Keyword Hub Controls
     const btnToggleKwFc = document.getElementById("btn-toggle-kwhub-flashcard");
     if (btnToggleKwFc) {
@@ -3151,7 +4676,8 @@
     document.querySelectorAll("[data-speak-word]").forEach(el => {
       el.onclick = e => {
         e.stopPropagation();
-        speakEnglishText(el.getAttribute("data-speak-word"), 0.9);
+        const accent = el.getAttribute("data-speak-accent") || "US";
+        speakEnglishText(el.getAttribute("data-speak-word"), 0.9, accent);
       };
     });
 
