@@ -12,14 +12,14 @@
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="./styles.css?v=20261126j" />
+  <link rel="stylesheet" href="./styles.css?v=20261126k" />
 </head>
 <body>
   <div id="teacher-app"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./supabase-config.js?v=20261126j"></script>
-  <script src="./supabase-client.js?v=20261126j"></script>
-  <script src="./writing-data.js?v=20261126j"></script>
+  <script src="./supabase-config.js?v=20261126k"></script>
+  <script src="./supabase-client.js?v=20261126k"></script>
+  <script src="./writing-data.js?v=20261126k"></script>
   <script>
     (function () {
       const CLOUD = window.ReadingCloud;
@@ -184,8 +184,8 @@
         if (!res.ok) {
           renderTeacherApp();
           alert(
-            "Không chạy được sửa bài AI: " +
-              (res.error || "Vui lòng kiểm tra đã deploy Edge Function grade-writing và cài GEMINI_API_KEY chưa.")
+            "Không tạo được bài sửa: " +
+              (res.error || "Vui lòng kiểm tra cấu hình Edge Function trên Supabase.")
           );
           return;
         }
@@ -406,11 +406,11 @@
                   <div class="teacher-stat-value">${totalSubmitted}</div>
                 </div>
                 <div class="teacher-stat-card">
-                  <div class="teacher-stat-label">Chờ tạo bài sửa AI</div>
+                  <div class="teacher-stat-label">Chờ tạo bài sửa</div>
                   <div class="teacher-stat-value" style="color:#B45309;">${pendingAiCount}</div>
                 </div>
                 <div class="teacher-stat-card">
-                  <div class="teacher-stat-label">Đã sửa · chờ trả (12h)</div>
+                  <div class="teacher-stat-label">Đã sửa · chờ trả (15 phút)</div>
                   <div class="teacher-stat-value" style="color:#0369A1;">${waitingReleaseCount}</div>
                 </div>
                 <div class="teacher-stat-card">
@@ -440,7 +440,7 @@
                   </select>
                   <select id="sel-filter-status" class="form-input" style="height:36px;width:auto;font-size:13px;font-weight:600;">
                     <option value="all" ${tState.filterStatus === "all" ? "selected" : ""}>Mọi trạng thái</option>
-                    <option value="waiting" ${tState.filterStatus === "waiting" ? "selected" : ""}>Chờ sửa / Chờ trả 12h</option>
+                    <option value="waiting" ${tState.filterStatus === "waiting" ? "selected" : ""}>Chờ sửa / Chờ trả 15 phút</option>
                     <option value="released" ${tState.filterStatus === "released" ? "selected" : ""}>Đã trả bài sửa</option>
                     <option value="no_feedback" ${tState.filterStatus === "no_feedback" ? "selected" : ""}>Chưa có nhận xét GV</option>
                   </select>
@@ -469,16 +469,16 @@
                             ? rev.review_json.corrections.length
                             : 0;
 
-                        let statusHtml = `<span style="font-size:12.5px;color:#52525B;">Chưa có bài sửa lỗi AI.</span>`;
+                        let statusHtml = `<span style="font-size:12.5px;color:#52525B;">Chưa có bài sửa lỗi.</span>`;
                         if (hasReadyReview && isWaiting12h) {
-                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#92400E;">⏳ Bài sửa AI đã sẵn sàng · Hẹn trả học viên lúc ${escapeHtml(CLOUD.formatDateTime(rev.release_at))} (còn ${escapeHtml(remain)})</span>`;
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#92400E;">⏳ Bài sửa đã sẵn sàng · Hẹn trả học viên lúc ${escapeHtml(CLOUD.formatDateTime(rev.release_at))} (còn ${escapeHtml(remain)})</span>`;
                         } else if (hasReadyReview) {
                           statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#166534;">✅ Đã trả bài sửa cho học viên (${escapeHtml(CLOUD.formatDateTime(rev.release_at))}) · ${rev.student_seen_at ? "Học viên đã xem" : "Học viên chưa xem"}</span>`;
                         } else if (rev && rev.status === "error") {
                           const tries = rev.retry_count || 1;
-                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#B45309;">🔄 AI tạm quá tải (lần thử ${tries}/20) — hệ thống sẽ tự động sửa lại mỗi 5 phút trước giờ trả bài.</span>`;
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#B45309;">🔄 Hàng đợi tạm bận (lần thử ${tries}/20) — sẽ tự xử lý lại mỗi 5 phút trước giờ trả bài.</span>`;
                         } else if (sub.aiStatus === "pending" || sub.aiStatus === "pending_retry") {
-                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#92400E;">⏳ Đang nằm trong hàng đợi tự động sửa lỗi (hẹn trả sau 12 tiếng).</span>`;
+                          statusHtml = `<span style="font-size:12.5px;font-weight:700;color:#92400E;">⏳ Đang chờ xử lý bài sửa (hẹn trả sau 15 phút).</span>`;
                         }
 
                         return `
@@ -519,7 +519,7 @@
                                     : ""
                                 }
                                 <button type="button" class="top-pill-btn" data-ai-grade="${escapeHtml(sub.submissionId)}" ${isGrading ? "disabled" : ""}>
-                                  ${isGrading ? "⏳ Đang sửa bài AI..." : hasReadyReview ? "↻ Sửa lại bằng AI" : "✨ Tạo bài sửa AI"}
+                                  ${isGrading ? "⏳ Đang tạo bài sửa..." : hasReadyReview ? "↻ Tạo lại bài sửa" : "✨ Tạo bài sửa"}
                                 </button>
                               </div>
                             </div>

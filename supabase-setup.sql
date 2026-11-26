@@ -128,7 +128,7 @@ create policy "Writing: student delete own or teacher delete"
   on public.writing_submissions for delete
   using (auth.uid() = user_id or public.is_teacher());
 
--- Bảo vệ nhận xét giáo viên và tự động đưa bài mới / bài nộp lại vào hàng đợi sửa 12 tiếng
+-- Bảo vệ nhận xét giáo viên và đưa bài mới / bài nộp lại vào hàng đợi sửa 15 phút
 create or replace function public.protect_writing_teacher_fields()
 returns trigger
 language plpgsql
@@ -140,13 +140,13 @@ begin
     if tg_op = 'INSERT' then
       new.teacher_feedback := '';
       new.ai_status := 'pending';
-      new.ai_release_at := coalesce(new.submitted_at, now()) + interval '12 hours';
+      new.ai_release_at := coalesce(new.submitted_at, now()) + interval '15 minutes';
     else
       new.teacher_feedback := old.teacher_feedback;
       if new.content is distinct from old.content
          or new.submitted_at is distinct from old.submitted_at then
         new.ai_status := 'pending';
-        new.ai_release_at := coalesce(new.submitted_at, now()) + interval '12 hours';
+        new.ai_release_at := coalesce(new.submitted_at, now()) + interval '15 minutes';
         update public.writing_ai_reviews
         set status = 'pending',
             retry_count = 0,
@@ -170,7 +170,7 @@ create trigger trg_protect_writing_teacher_fields
   before insert or update on public.writing_submissions
   for each row execute procedure public.protect_writing_teacher_fields();
 
--- 4. BẢNG BÀI SỬA LỖI CHI TIẾT & HẸN GIỜ TRẢ SAU 12 TIẾNG + THÔNG BÁO
+-- 4. BẢNG BÀI SỬA LỖI CHI TIẾT & HẸN GIỜ TRẢ SAU 15 PHÚT + THÔNG BÁO
 create table if not exists public.writing_ai_reviews (
   submission_id text primary key references public.writing_submissions(id) on delete cascade,
   user_id uuid not null references public.profiles(id) on delete cascade,
@@ -195,7 +195,7 @@ create index if not exists idx_writing_ai_reviews_user_release
 
 alter table public.writing_ai_reviews enable row level security;
 
--- Học viên CHỈ được đọc bài sửa khi đã tới hạn 12 tiếng (release_at <= now()); Giáo viên đọc được ngay
+-- Học viên CHỈ được đọc bài sửa khi đã tới hạn 15 phút (release_at <= now()); Giáo viên đọc được ngay
 drop policy if exists "AI Reviews: teacher read all or student read after release" on public.writing_ai_reviews;
 create policy "AI Reviews: teacher read all or student read after release"
   on public.writing_ai_reviews for select
@@ -231,7 +231,7 @@ begin
 end;
 $$;
 
--- Giáo viên có thể bấm trả bài sửa sớm hơn 12 tiếng bất cứ lúc nào
+-- Giáo viên có thể bấm trả bài sửa sớm hơn 15 phút bất cứ lúc nào
 create or replace function public.teacher_release_review_now(p_submission_id text)
 returns void
 language plpgsql

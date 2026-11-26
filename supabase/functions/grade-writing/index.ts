@@ -2,8 +2,8 @@
 // SUPABASE EDGE FUNCTION: grade-writing
 // Sửa bài viết tiếng Anh Sơ cấp (Units 01–10 · A1–A2 Foundation Writing):
 // - KHÔNG chấm điểm / KHÔNG ghi band điểm, chỉ tập trung sửa lỗi & gợi ý dễ hiểu
-// - Hẹn trả bài sửa cho học viên sau 12 tiếng (Giáo viên xem và trả sớm được ngay)
-// - Hỗ trợ hàng đợi tự động sửa lại (pg_cron mỗi 5 phút) khi AI quá tải (503 / 429)
+// - Hẹn trả bài sửa cho học viên sau 15 phút (Giáo viên xem và trả sớm được ngay)
+// - Hỗ trợ hàng đợi xử lý lại (pg_cron mỗi 5 phút) khi dịch vụ tạm bận (503 / 429)
 //
 // Triển khai trên Supabase Dashboard (project plqpsxcvdwhtclokwafy):
 // 1. Vào Edge Functions -> Secrets:
@@ -21,7 +21,7 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS"
 };
 
-const RELEASE_DELAY_HOURS = 12;
+const RELEASE_DELAY_MINUTES = 15;
 const MAX_STUDENT_GRADES_PER_LESSON = 5;
 const MAX_AUTO_RETRIES = 20;
 const RETRY_COOLDOWN_MS = 90 * 1000;
@@ -67,6 +67,7 @@ NGUYÊN TẮC SỬA BÀI BẮT BUỘC (VIẾT SƠ CẤP — KHÔNG CHẤM ĐIỂ
 5. Về phần gợi ý bổ sung ý ("idea_additions"):
    - Đối chiếu bài viết với đề bài gốc. Chỉ liệt kê (tối đa 2–3 mục) nếu học viên bỏ sót yêu cầu bắt buộc của đề bài hoặc viết quá cụt. Câu gợi ý tiếng Anh phải thật đơn giản ở mức A1–A2 để học viên dễ áp dụng. Nếu bài đã đủ ý tốt, trả về mảng rỗng [].
 6. Trường "revised_version": Giữ nguyên ý tưởng gốc của học viên, chỉ áp dụng các lỗi đã sửa và chỉnh câu tự nhiên ở mức sơ cấp A1–A2. Phân tách các đoạn bằng "\\n\\n".
+7. TUYỆT ĐỐI KHÔNG nhắc đến AI, trí tuệ nhân tạo, bot hay hệ thống chấm tự động trong bất kỳ phần nhận xét nào; hãy viết tự nhiên như giáo viên trực tiếp sửa bài cho học viên.
 
 TRẢ VỀ DUY NHẤT MỘT JSON HỢP LỆ (không thêm markdown hay văn bản ngoài JSON) theo đúng cấu trúc sau:
 {
@@ -148,7 +149,7 @@ async function correctSingleSubmission(
     return {
       ok: false,
       status: 429,
-      error: `Bạn đã dùng hết ${MAX_STUDENT_GRADES_PER_LESSON} lượt sửa bài tự động cho bài học này.`
+      error: `Bạn đã dùng hết ${MAX_STUDENT_GRADES_PER_LESSON} lượt gửi bài sửa cho bài học này.`
     };
   }
 
@@ -157,13 +158,15 @@ async function correctSingleSubmission(
   const submittedMs = new Date(sub.submitted_at || nowMs).getTime();
   const baseSubmitMs = isNaN(submittedMs) ? nowMs : submittedMs;
 
-  let releaseAtIso = new Date(baseSubmitMs + RELEASE_DELAY_HOURS * 60 * 60 * 1000).toISOString();
+  const targetReleaseMs = baseSubmitMs + RELEASE_DELAY_MINUTES * 60 * 1000;
+  let releaseAtIso = new Date(targetReleaseMs).toISOString();
   if (options.isTeacherOrCron && options.releaseNow) {
     releaseAtIso = nowIso;
   } else if (existingReview?.release_at) {
-    releaseAtIso = existingReview.release_at;
-  } else if (sub.ai_release_at) {
-    releaseAtIso = sub.ai_release_at;
+    const existingMs = new Date(existingReview.release_at).getTime();
+    if (!isNaN(existingMs) && existingMs <= targetReleaseMs) {
+      releaseAtIso = existingReview.release_at;
+    }
   }
 
   await admin
@@ -245,7 +248,7 @@ async function correctSingleSubmission(
     return {
       ok: false,
       status: 502,
-      error: `AI tạm quá tải (${summaryCodes}) — đã xếp hàng đợi tự sửa lại (lần ${nextRetry}/${MAX_AUTO_RETRIES}).`
+      error: `Hệ thống xử lý bài tạm bận (${summaryCodes}) — bài đã được xếp vào hàng chờ thử lại (lần ${nextRetry}/${MAX_AUTO_RETRIES}).`
     };
   }
 

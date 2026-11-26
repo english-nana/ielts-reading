@@ -170,7 +170,7 @@
       }
       return parsed;
     } catch (err) {
-      return { ok: false, error: err && err.message ? err.message : "Lỗi kết nối hệ thống sửa bài." };
+      return { ok: false, error: err && err.message ? err.message : "Không thể gửi yêu cầu sửa bài lúc này." };
     }
   }
 
@@ -212,7 +212,7 @@
       }
       return parsed;
     } catch (err) {
-      return { ok: false, error: err && err.message ? err.message : "Lỗi chạy hàng đợi sửa bài." };
+      return { ok: false, error: err && err.message ? err.message : "Không thể xử lý danh sách bài chờ lúc này." };
     }
   }
 

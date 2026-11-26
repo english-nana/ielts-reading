@@ -581,7 +581,7 @@
       if (currentAccount && document.visibilityState === "visible") {
         refreshCloudWritingReviews(false);
       }
-    }, 60000);
+    }, 30000);
   }
 
   async function submitWritingEssayToCloud(unit, ex, content, wordCount) {
@@ -591,7 +591,7 @@
     }
     const nowMs = Date.now();
     const nowIso = new Date(nowMs).toISOString();
-    const defaultReleaseIso = new Date(nowMs + 12 * 60 * 60 * 1000).toISOString();
+    const defaultReleaseIso = new Date(nowMs + 15 * 60 * 1000).toISOString();
     const rowId = `${currentAccount.id}__${unit.id}`;
     const existing = getCloudWritingSubmission(unit.id);
     const promptSummary = [ex.instruction, ex.promptBox].filter(Boolean).join("\n\n");
@@ -616,25 +616,29 @@
       .maybeSingle();
 
     if (error) {
-      return { ok: false, error: error.message || "Không thể lưu bài lên Supabase." };
+      return { ok: false, error: error.message || "Không thể gửi bài lên máy chủ." };
     }
 
     try {
       await client.from("profiles").update({ last_active_at: nowIso }).eq("id", currentAccount.id);
     } catch (e) {}
 
-    // Clear previous cached review on resubmission while awaiting the new 12h correction
+    // Clear previous cached review on resubmission while awaiting the new 15-minute correction
     delete cloudState.reviewsByLessonId[unit.id];
+
+    const serverRelMs = data && data.ai_release_at ? new Date(data.ai_release_at).getTime() : 0;
+    const effectiveReleaseIso =
+      serverRelMs && serverRelMs <= nowMs + 20 * 60 * 1000 ? data.ai_release_at : defaultReleaseIso;
 
     const savedRow = {
       ...(data || payload),
       teacher_feedback: (data && data.teacher_feedback) || (existing ? existing.teacher_feedback : ""),
       ai_status: "scheduled",
-      ai_release_at: (data && data.ai_release_at) || defaultReleaseIso
+      ai_release_at: effectiveReleaseIso
     };
     cloudState.submissionsByLessonId[unit.id] = savedRow;
 
-    // Trigger Edge Function in background to correct errors & schedule 12h return
+    // Trigger Edge Function in background to prepare correction & schedule 15-minute return
     if (CLOUD && typeof CLOUD.invokeGradeWriting === "function") {
       CLOUD.invokeGradeWriting(rowId)
         .then(gradeRes => {
@@ -1231,12 +1235,12 @@
                 <div class="notif-dropdown">
                   <div class="notif-dropdown-header">
                     <span>Thông báo bài sửa &amp; kết quả</span>
-                    <span class="notif-header-sub">Trả bài sau 12 tiếng</span>
+                    <span class="notif-header-sub">Trả bài sau 15 phút</span>
                   </div>
                   <div class="notif-dropdown-list">
                     ${
                       releasedReviews.length === 0 && stu.notifications.length === 0
-                        ? `<div class="notif-empty-state">Chưa có thông báo nào. Khi bài sửa Writing sẵn sàng (sau 12 tiếng kể từ lúc nộp), thông báo sẽ xuất hiện tại đây.</div>`
+                        ? `<div class="notif-empty-state">Chưa có thông báo nào. Khi giáo viên gửi bài sửa Writing (sau khoảng 15 phút kể từ lúc nộp), thông báo sẽ xuất hiện tại đây.</div>`
                         : `
                           ${releasedReviews
                             .map(rev => {
@@ -2167,7 +2171,7 @@
     const blocks = [];
 
     if (submitErr) {
-      blocks.push(`<div class="auth-msg-err" style="margin-top:10px;margin-bottom:0;">⚠️ Lỗi đồng bộ bài lên hệ thống: ${escapeHtml(submitErr)}</div>`);
+      blocks.push(`<div class="auth-msg-err" style="margin-top:10px;margin-bottom:0;">⚠️ Không thể gửi bài lúc này: ${escapeHtml(submitErr)}</div>`);
     }
 
     if (sub && sub.is_submitted) {
@@ -2191,7 +2195,7 @@
         blocks.push(`
           <div class="writing-teacher-feedback-box">
             <div class="writing-tf-head">
-              <span class="writing-tf-title">✅ Bài sửa chi tiết đã sẵn sàng${relTime ? ` · Trả lúc ${escapeHtml(relTime)}` : ""}</span>
+              <span class="writing-tf-title">✅ Bài sửa chi tiết từ Giáo viên${relTime ? ` · Trả lúc ${escapeHtml(relTime)}` : ""}</span>
               <span class="writing-tf-meta">${escapeHtml(String(sub.word_count || localWc || 0))} từ</span>
             </div>
           </div>
@@ -2200,7 +2204,7 @@
       } else {
         const releaseAt =
           sub.ai_release_at ||
-          (sub.submitted_at ? new Date(new Date(sub.submitted_at).getTime() + 12 * 60 * 60 * 1000).toISOString() : "");
+          (sub.submitted_at ? new Date(new Date(sub.submitted_at).getTime() + 15 * 60 * 1000).toISOString() : "");
         const remainText = CLOUD && releaseAt ? CLOUD.formatRemainingTime(releaseAt) : "";
         const releaseFormatted = releaseAt ? fmtTime(releaseAt) : "";
 
@@ -2208,11 +2212,11 @@
           blocks.push(`
             <div class="writing-schedule-box">
               <div class="writing-schedule-head">
-                <span class="writing-schedule-title">⏳ Đã nộp bài thành công${submittedTime ? ` lúc ${escapeHtml(submittedTime)}` : ""} · Đang chờ trả bài sửa</span>
+                <span class="writing-schedule-title">⏳ Đã nộp bài thành công${submittedTime ? ` lúc ${escapeHtml(submittedTime)}` : ""} · Đang chờ giáo viên sửa bài</span>
                 <span class="writing-schedule-pill">Còn ${escapeHtml(remainText)}</span>
               </div>
               <p class="writing-schedule-desc">
-                Bài sửa lỗi chi tiết (ngữ pháp, chính tả, dấu câu, từ vựng &amp; gợi ý ý) sẽ được gửi vào tài khoản của bạn sau <strong>12 tiếng</strong> — dự kiến lúc <strong>${escapeHtml(releaseFormatted)}</strong>. Bạn sẽ nhận được thông báo ở biểu tượng chuông 🔔 trên góc phải khi có bài sửa.
+                Bài viết của bạn đã được gửi tới giáo viên. Bài sửa lỗi chi tiết (ngữ pháp, chính tả, dấu câu, từ vựng &amp; gợi ý ý) sẽ được trả lại sau khoảng <strong>15 phút</strong> — dự kiến lúc <strong>${escapeHtml(releaseFormatted)}</strong>. Bạn sẽ nhận được thông báo ở biểu tượng chuông 🔔 trên góc phải khi có bài sửa.
               </p>
             </div>
           `);
@@ -2223,7 +2227,7 @@
                 <span class="writing-tf-title">✓ Đã gửi bài viết thành công${submittedTime ? ` lúc ${escapeHtml(submittedTime)}` : ""}</span>
                 <span class="writing-tf-meta">${escapeHtml(String(sub.word_count || localWc || 0))} từ</span>
               </div>
-              <p class="writing-tf-comment">Bài sửa lỗi chi tiết của bạn đang được hoàn tất. Thông báo sẽ tự động hiện ở biểu tượng chuông 🔔 trên góc phải ngay khi bài sửa sẵn sàng.</p>
+              <p class="writing-tf-comment">Giáo viên đang hoàn tất bài sửa lỗi chi tiết cho bạn. Thông báo sẽ hiện ở biểu tượng chuông 🔔 trên góc phải ngay khi bài sửa sẵn sàng.</p>
             </div>
           `);
         }
@@ -2235,7 +2239,7 @@
             <span class="writing-schedule-title">✓ Đã lưu bài viết (${localWc} từ)</span>
           </div>
           <p class="writing-schedule-desc">
-            Đăng nhập bằng tài khoản học viên để hệ thống tự động sửa lỗi chi tiết và trả bài sau 12 tiếng.
+            Đăng nhập bằng tài khoản học viên để gửi bài cho giáo viên sửa lỗi chi tiết và nhận lại bài sửa sau khoảng 15 phút.
           </p>
         </div>
       `);
