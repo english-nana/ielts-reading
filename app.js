@@ -297,6 +297,7 @@
     currentWritingSection: "vocabulary", // "vocabulary" | "phrases" | "writing"
     currentWritingPart: "A",
     activeReorderKey: "",
+    wrDetailsOpen: {},
     sidebarCollapsed: initialSidebarCollapsed,
     mobileSidebarOpen: false,
     sbTheoryCollapsed: true,
@@ -534,6 +535,10 @@
 
     cloudState.reviewsRefreshInFlight = true;
     try {
+      const prevSig = JSON.stringify({
+        s: cloudState.submissionsByLessonId,
+        r: cloudState.reviewsByLessonId
+      });
       const [subsRes, reviewsRes] = await Promise.all([
         client.from("writing_submissions").select("*").eq("user_id", currentAccount.id),
         client.from("writing_ai_reviews").select("*").eq("user_id", currentAccount.id)
@@ -554,7 +559,13 @@
         });
         cloudState.reviewsByLessonId = revMap;
       }
-      renderApp();
+      const nextSig = JSON.stringify({
+        s: cloudState.submissionsByLessonId,
+        r: cloudState.reviewsByLessonId
+      });
+      if (nextSig !== prevSig) {
+        renderApp();
+      }
     } catch (e) {} finally {
       cloudState.reviewsRefreshInFlight = false;
     }
@@ -1803,8 +1814,11 @@
 
         ${
           part.outlineGuide
-            ? `
-          <details class="wr-outline-accordion">
+            ? (() => {
+                const outlineKey = `outline__${unit.id}__${part.code}`;
+                const isOpen = Boolean(state.wrDetailsOpen[outlineKey]);
+                return `
+          <details class="wr-outline-accordion" data-wr-details-key="${escapeHtml(outlineKey)}" ${isOpen ? "open" : ""}>
             <summary class="wr-outline-summary">
               <span>📋 Gợi ý dàn bài &amp; từ vựng nên dùng</span>
             </summary>
@@ -1882,7 +1896,8 @@
               }
             </div>
           </details>
-        `
+        `;
+              })()
             : ""
         }
 
@@ -2228,8 +2243,10 @@
 
     if ((sub && sub.is_submitted) || isChecked) {
       if (ex.sampleAnswer) {
+        const sampleKey = `sample__${unit.id}__${ex.id}`;
+        const isSampleOpen = Boolean(state.wrDetailsOpen[sampleKey]);
         blocks.push(`
-          <details class="wr-sample-details">
+          <details class="wr-sample-details" data-wr-details-key="${escapeHtml(sampleKey)}" ${isSampleOpen ? "open" : ""}>
             <summary class="wr-sample-summary">📖 Xem bài mẫu tham khảo</summary>
             <div class="wr-sample-body">${escapeHtml(ex.sampleAnswer)}</div>
           </details>
@@ -3959,6 +3976,7 @@
     const savedL = !resetScrollPanes && leftPane ? leftPane.scrollTop : 0;
     const savedR = !resetScrollPanes && rightPane ? rightPane.scrollTop : 0;
     const savedS = sbNav ? sbNav.scrollTop : 0;
+    const revisedKey = `revised__${state.currentWritingUnitId}`;
 
     const isPractice = state.view === "practice";
     const isWritingLesson = state.view === "writing-lesson";
@@ -4006,6 +4024,21 @@
       if (nextR) nextR.scrollTop = savedR;
     }
     if (nextS) nextS.scrollTop = savedS;
+
+    const nextRevisedEl = document.querySelector(".ai-revised-details");
+    if (nextRevisedEl) {
+      if (state.wrDetailsOpen[revisedKey]) nextRevisedEl.open = true;
+      nextRevisedEl.addEventListener("toggle", () => {
+        state.wrDetailsOpen[revisedKey] = Boolean(nextRevisedEl.open);
+      });
+    }
+
+    document.querySelectorAll("[data-wr-details-key]").forEach(el => {
+      el.addEventListener("toggle", () => {
+        const k = el.getAttribute("data-wr-details-key");
+        if (k) state.wrDetailsOpen[k] = Boolean(el.open);
+      });
+    });
 
     bindEvents();
   }
