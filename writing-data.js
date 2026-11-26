@@ -1921,17 +1921,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "Vietnam",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "Japan",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
                     "prompt": "China",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -1968,7 +1968,7 @@ window.WRITING_UNITS = [
                         "text": "China"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -2014,7 +2014,7 @@ window.WRITING_UNITS = [
                         "text": "Chinese"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -2056,7 +2056,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"He is a Japan citizen\" is more natural than \"He is Japanese\".",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -2066,7 +2066,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Country and nationality names in English start with a lowercase letter.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -2350,7 +2350,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "France",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
@@ -2360,12 +2360,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "Britain",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
                     "prompt": "America",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -2397,7 +2397,7 @@ window.WRITING_UNITS = [
                         "text": "Spanish"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -2420,7 +2420,7 @@ window.WRITING_UNITS = [
                         "text": "Germany"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -2466,7 +2466,7 @@ window.WRITING_UNITS = [
                         "text": "America"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -2485,7 +2485,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "A person from Germany is called \"Germanish\".",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -2495,7 +2495,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Rome is the capital of France.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -2707,17 +2707,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "capital",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
                     "prompt": "flag",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
                     "prompt": "language",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -2777,7 +2777,7 @@ window.WRITING_UNITS = [
                         "text": "map"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -2842,7 +2842,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Language\" refers to the money used in a country.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -2852,7 +2852,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "\"Live\" and \"come from\" always mean the same place.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -3026,12 +3026,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "come from",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "live in",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -3041,7 +3041,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "capital city",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -3115,7 +3115,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "You can only \"live in\" the exact place where you were born.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -3267,17 +3267,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "native language",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
                     "prompt": "second language",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
                     "prompt": "around the world",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -3356,7 +3356,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "A \"foreign language\" is a language you grew up speaking at home.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -3392,7 +3392,7 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "She can speaks English very well.",
                     "after": "",
-                    "answer": ""
+                    "answer": "She can speak English very well."
                   }
                 ]
               }
@@ -3843,7 +3843,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "20",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -3853,12 +3853,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "50",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "100",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -3898,22 +3898,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "two"
-                      },
-                      {
-                        "key": "B",
                         "text": "second"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "third"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "three"
+                      },
+                      {
+                        "key": "D",
+                        "text": "two"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -3921,22 +3921,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "third"
-                      },
-                      {
-                        "key": "B",
-                        "text": "three"
-                      },
-                      {
-                        "key": "C",
                         "text": "four"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "two"
+                      },
+                      {
+                        "key": "C",
+                        "text": "third"
+                      },
+                      {
+                        "key": "D",
+                        "text": "three"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -3944,22 +3944,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "sixty"
+                        "text": "thirty"
                       },
                       {
                         "key": "B",
-                        "text": "fifty"
+                        "text": "sixty"
                       },
                       {
                         "key": "C",
-                        "text": "forty"
+                        "text": "fifty"
                       },
                       {
                         "key": "D",
-                        "text": "thirty"
+                        "text": "forty"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -3978,7 +3978,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"One hundred\" is written as 10.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -3988,7 +3988,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "\"Zero\" means the number 1.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -4269,7 +4269,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "Monday",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -4279,12 +4279,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "weekend",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "January",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -4339,7 +4339,7 @@ window.WRITING_UNITS = [
                         "text": "January"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -4404,7 +4404,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "Days of the week should begin with a lowercase letter in English.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -4414,7 +4414,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "July comes before June in the calendar.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -4618,7 +4618,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "seven o'clock",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -4628,12 +4628,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "quarter past seven",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "quarter to eight",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -4673,22 +4673,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "midnight"
-                      },
-                      {
-                        "key": "B",
                         "text": "noon"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "afternoon"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "evening"
+                      },
+                      {
+                        "key": "D",
+                        "text": "midnight"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -4696,22 +4696,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "late"
-                      },
-                      {
-                        "key": "B",
-                        "text": "early"
-                      },
-                      {
-                        "key": "C",
                         "text": "o'clock"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "prompt"
+                      },
+                      {
+                        "key": "C",
+                        "text": "late"
+                      },
+                      {
+                        "key": "D",
+                        "text": "early"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -4719,22 +4719,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "watch"
+                        "text": "second"
                       },
                       {
                         "key": "B",
-                        "text": "clock"
+                        "text": "watch"
                       },
                       {
                         "key": "C",
-                        "text": "minute"
+                        "text": "clock"
                       },
                       {
                         "key": "D",
-                        "text": "second"
+                        "text": "minute"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -4753,7 +4753,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Quarter to five\" means 5:15.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -4763,7 +4763,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "An hour has only 30 minutes.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -4778,19 +4778,19 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "9:00 → nine",
                     "after": "",
-                    "answer": ""
+                    "answer": "o'clock"
                   },
                   {
                     "num": 2,
                     "before": "9:30 →  past nine",
                     "after": "",
-                    "answer": ""
+                    "answer": "half"
                   },
                   {
                     "num": 3,
                     "before": "9:15 →  past nine",
                     "after": "",
-                    "answer": ""
+                    "answer": "quarter"
                   }
                 ]
               },
@@ -4911,7 +4911,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "ten o'clock",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -4921,12 +4921,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "half past ten",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "quarter to eleven",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -5000,7 +5000,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Half past seven\" means 7:15.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -5138,12 +5138,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "on time",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
                     "prompt": "at the weekend",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -5153,7 +5153,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "phone number",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -5222,7 +5222,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "Being \"on time\" means you are twenty minutes late.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 2,
@@ -5684,7 +5684,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "grandfather",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -5694,12 +5694,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "niece",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "nephew",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -5716,22 +5716,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "uncle"
-                      },
-                      {
-                        "key": "B",
                         "text": "aunt"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "nephew"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "cousin"
+                      },
+                      {
+                        "key": "D",
+                        "text": "uncle"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
@@ -5739,22 +5739,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "aunt"
-                      },
-                      {
-                        "key": "B",
-                        "text": "uncle"
-                      },
-                      {
-                        "key": "C",
                         "text": "niece"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "nephew"
+                      },
+                      {
+                        "key": "C",
+                        "text": "aunt"
+                      },
+                      {
+                        "key": "D",
+                        "text": "uncle"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -5762,22 +5762,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "brother"
+                        "text": "uncle"
                       },
                       {
                         "key": "B",
-                        "text": "sister"
+                        "text": "brother"
                       },
                       {
                         "key": "C",
-                        "text": "daughter"
+                        "text": "sister"
                       },
                       {
                         "key": "D",
-                        "text": "uncle"
+                        "text": "daughter"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -5819,7 +5819,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "Your father is a female parent.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -5829,7 +5829,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Your cousin is the father of your grandmother.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -6045,7 +6045,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "married",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -6055,12 +6055,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "neighbour",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "colleague",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -6077,22 +6077,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "classmate"
-                      },
-                      {
-                        "key": "B",
                         "text": "husband"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "aunt"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "colleague"
+                      },
+                      {
+                        "key": "D",
+                        "text": "classmate"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
@@ -6100,22 +6100,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "single"
-                      },
-                      {
-                        "key": "B",
-                        "text": "married"
-                      },
-                      {
-                        "key": "C",
                         "text": "children"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "divorced"
+                      },
+                      {
+                        "key": "C",
+                        "text": "single"
+                      },
+                      {
+                        "key": "D",
+                        "text": "married"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -6123,22 +6123,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "married"
+                        "text": "divorced"
                       },
                       {
                         "key": "B",
-                        "text": "single"
+                        "text": "married"
                       },
                       {
                         "key": "C",
-                        "text": "colleagues"
+                        "text": "single"
                       },
                       {
                         "key": "D",
-                        "text": "divorced"
+                        "text": "colleagues"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -6180,7 +6180,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "A \"single\" person is currently married with children.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -6190,7 +6190,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "A \"neighbour\" lives in another distant country.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -6353,7 +6353,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "family tree",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -6363,12 +6363,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "look after",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "extended family",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -6442,7 +6442,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Grow up\" means to become smaller like a baby.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -6580,7 +6580,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "get married",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -6590,12 +6590,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "live together",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "spend time",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -6664,7 +6664,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "\"Spend time with friends\" means to pay money to your friends.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 2,
@@ -7087,12 +7087,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "tall",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "slim",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -7102,7 +7102,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "chubby",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -7119,22 +7119,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "tall"
-                      },
-                      {
-                        "key": "B",
-                        "text": "short"
-                      },
-                      {
-                        "key": "C",
                         "text": "bald"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "slim"
+                      },
+                      {
+                        "key": "C",
+                        "text": "tall"
+                      },
+                      {
+                        "key": "D",
+                        "text": "short"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -7142,22 +7142,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "well-built"
+                        "text": "thin"
                       },
                       {
                         "key": "B",
-                        "text": "bald"
+                        "text": "well-built"
                       },
                       {
                         "key": "C",
-                        "text": "curly"
+                        "text": "bald"
                       },
                       {
                         "key": "D",
-                        "text": "thin"
+                        "text": "curly"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -7188,22 +7188,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "old"
-                      },
-                      {
-                        "key": "B",
                         "text": "young"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "slim"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "tall"
+                      },
+                      {
+                        "key": "D",
+                        "text": "old"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   }
                 ]
               },
@@ -7222,7 +7222,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Tall\" describes someone of very low height.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -7486,17 +7486,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "curly",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "bald",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
                     "prompt": "beard",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -7518,22 +7518,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "bald"
-                      },
-                      {
-                        "key": "B",
-                        "text": "curly"
-                      },
-                      {
-                        "key": "C",
                         "text": "blonde"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "dark"
+                      },
+                      {
+                        "key": "C",
+                        "text": "bald"
+                      },
+                      {
+                        "key": "D",
+                        "text": "curly"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -7541,22 +7541,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "moustache"
+                        "text": "freckle"
                       },
                       {
                         "key": "B",
-                        "text": "beard"
+                        "text": "moustache"
                       },
                       {
                         "key": "C",
-                        "text": "glasses"
+                        "text": "beard"
                       },
                       {
                         "key": "D",
-                        "text": "freckle"
+                        "text": "glasses"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -7587,22 +7587,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "wavy"
-                      },
-                      {
-                        "key": "B",
                         "text": "bald"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "tall"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "straight"
+                      },
+                      {
+                        "key": "D",
+                        "text": "wavy"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   }
                 ]
               },
@@ -7621,7 +7621,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Bald\" means having extremely long hair down to your waist.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -7631,7 +7631,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Eyes can only be black, never blue or green.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -7794,7 +7794,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "long hair",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -7804,12 +7804,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "brown eyes",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "blue eyes",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -7883,7 +7883,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Brown eyes\" refers to the color of someone's hair.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -8013,7 +8013,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "medium height",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -8023,12 +8023,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "look like",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
                     "prompt": "dark hair",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -8097,7 +8097,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "\"What does he look like?\" asks about his personality, not his physical looks.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 2,
@@ -8541,17 +8541,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "happy",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "sad",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
                     "prompt": "angry",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -8573,22 +8573,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "nervous"
+                        "text": "excited"
                       },
                       {
                         "key": "B",
-                        "text": "bored"
+                        "text": "nervous"
                       },
                       {
                         "key": "C",
-                        "text": "sleepy"
+                        "text": "bored"
                       },
                       {
                         "key": "D",
-                        "text": "excited"
+                        "text": "sleepy"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -8619,22 +8619,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "bored"
-                      },
-                      {
-                        "key": "B",
                         "text": "excited"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "proud"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "scared"
+                      },
+                      {
+                        "key": "D",
+                        "text": "bored"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
@@ -8642,22 +8642,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "proud"
-                      },
-                      {
-                        "key": "B",
-                        "text": "angry"
-                      },
-                      {
-                        "key": "C",
                         "text": "scared"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "worried"
+                      },
+                      {
+                        "key": "C",
+                        "text": "proud"
+                      },
+                      {
+                        "key": "D",
+                        "text": "angry"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -8676,7 +8676,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Calm\" means shouting and throwing things in anger.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -8686,7 +8686,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "\"Cry\" means smiling happily.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -8865,12 +8865,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "thirsty",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "hungry",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -8880,7 +8880,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "sick",
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -8897,22 +8897,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "thirsty"
+                        "text": "hungry"
                       },
                       {
                         "key": "B",
-                        "text": "cold"
+                        "text": "thirsty"
                       },
                       {
                         "key": "C",
-                        "text": "bored"
+                        "text": "cold"
                       },
                       {
                         "key": "D",
-                        "text": "hungry"
+                        "text": "bored"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -8943,22 +8943,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "cold"
-                      },
-                      {
-                        "key": "B",
                         "text": "fine"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "hot"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "warm"
+                      },
+                      {
+                        "key": "D",
+                        "text": "cold"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
@@ -8966,22 +8966,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "sick"
-                      },
-                      {
-                        "key": "B",
-                        "text": "fine"
-                      },
-                      {
-                        "key": "C",
                         "text": "calm"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "happy"
+                      },
+                      {
+                        "key": "C",
+                        "text": "sick"
+                      },
+                      {
+                        "key": "D",
+                        "text": "fine"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -8995,7 +8995,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "\"Hungry\" means you want a glass of cold water.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 2,
@@ -9176,58 +9176,48 @@ window.WRITING_UNITS = [
             "exercises": [
               {
                 "id": "2.1",
-                "type": "fill",
+                "type": "matching",
                 "title": "Match adjectives with prepositions",
-                "instruction": "Match each adjective with its preposition.",
+                "instruction": "Match each adjective with its correct preposition and usage.",
                 "partTag": "Part A",
                 "items": [
                   {
                     "num": 1,
-                    "before": "proud",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 1,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "proud",
+                    "answer": "C"
                   },
                   {
                     "num": 2,
-                    "before": "scared",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 2,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "scared",
+                    "answer": "D"
                   },
                   {
                     "num": 3,
-                    "before": "worried",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 3,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "worried",
+                    "answer": "A"
                   },
                   {
                     "num": 4,
-                    "before": "angry (someone)",
-                    "after": "",
-                    "answer": "someone"
+                    "prompt": "angry",
+                    "answer": "B"
+                  }
+                ],
+                "options": [
+                  {
+                    "key": "A",
+                    "text": "about (a problem or situation)"
                   },
                   {
-                    "num": 4,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "key": "B",
+                    "text": "with (a person)"
+                  },
+                  {
+                    "key": "C",
+                    "text": "of (an achievement)"
+                  },
+                  {
+                    "key": "D",
+                    "text": "of (something frightening)"
                   }
                 ]
               },
@@ -9244,22 +9234,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "of"
+                        "text": "for"
                       },
                       {
                         "key": "B",
-                        "text": "about"
+                        "text": "of"
                       },
                       {
                         "key": "C",
-                        "text": "with"
+                        "text": "about"
                       },
                       {
                         "key": "D",
-                        "text": "for"
+                        "text": "with"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -9290,22 +9280,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "of"
-                      },
-                      {
-                        "key": "B",
                         "text": "with"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "at"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "in"
+                      },
+                      {
+                        "key": "D",
+                        "text": "of"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
@@ -9313,22 +9303,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "with"
-                      },
-                      {
-                        "key": "B",
-                        "text": "about"
-                      },
-                      {
-                        "key": "C",
                         "text": "of"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "at"
+                      },
+                      {
+                        "key": "C",
+                        "text": "with"
+                      },
+                      {
+                        "key": "D",
+                        "text": "about"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -9347,7 +9337,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "We normally say \"scared with spiders\" in standard English.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -9503,46 +9493,39 @@ window.WRITING_UNITS = [
             "exercises": [
               {
                 "id": "2.6",
-                "type": "fill",
-                "title": "Match mood idioms",
-                "instruction": "Match each idiom with its meaning.",
+                "type": "matching",
+                "title": "Match mood expressions with meanings",
+                "instruction": "Match each expression with its meaning.",
                 "partTag": "Part B",
                 "items": [
                   {
                     "num": 1,
-                    "before": "in a good mood",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 1,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "in a good mood",
+                    "answer": "C"
                   },
                   {
                     "num": 2,
-                    "before": "in a bad mood",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 2,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "in a bad mood",
+                    "answer": "A"
                   },
                   {
                     "num": 3,
-                    "before": "smile at",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "smile at",
+                    "answer": "B"
+                  }
+                ],
+                "options": [
+                  {
+                    "key": "A",
+                    "text": "feeling unhappy or easily annoyed"
                   },
                   {
-                    "num": 3,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "key": "B",
+                    "text": "to look happy towards someone"
+                  },
+                  {
+                    "key": "C",
+                    "text": "feeling cheerful and positive"
                   }
                 ]
               },
@@ -9559,22 +9542,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "mood"
+                        "text": "temper"
                       },
                       {
                         "key": "B",
-                        "text": "feeling"
+                        "text": "mood"
                       },
                       {
                         "key": "C",
-                        "text": "emotion"
+                        "text": "feeling"
                       },
                       {
                         "key": "D",
-                        "text": "temper"
+                        "text": "emotion"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -9605,22 +9588,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "calm"
-                      },
-                      {
-                        "key": "B",
                         "text": "hungry"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "sleepy"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "angry"
+                      },
+                      {
+                        "key": "D",
+                        "text": "calm"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   }
                 ]
               },
@@ -9634,7 +9617,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "\"In a bad mood\" means you are feeling joyful.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 2,
@@ -9644,7 +9627,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 3,
                     "prompt": "We say \"smile to someone\" or \"smile at someone\".",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -10078,17 +10061,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "pilot",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "doctor",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
                     "prompt": "chef",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
@@ -10133,22 +10116,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "accountant"
-                      },
-                      {
-                        "key": "B",
                         "text": "driver"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "farmer"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "dentist"
+                      },
+                      {
+                        "key": "D",
+                        "text": "accountant"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -10156,22 +10139,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "waitress"
-                      },
-                      {
-                        "key": "B",
-                        "text": "nurse"
-                      },
-                      {
-                        "key": "C",
                         "text": "manager"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "waiter"
+                      },
+                      {
+                        "key": "C",
+                        "text": "waitress"
+                      },
+                      {
+                        "key": "D",
+                        "text": "nurse"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -10179,22 +10162,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "farmer"
+                        "text": "actor"
                       },
                       {
                         "key": "B",
-                        "text": "pilot"
+                        "text": "farmer"
                       },
                       {
                         "key": "C",
-                        "text": "teacher"
+                        "text": "pilot"
                       },
                       {
                         "key": "D",
-                        "text": "actor"
+                        "text": "teacher"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -10213,7 +10196,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "A \"driver\" flies airplanes through the sky.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -10223,7 +10206,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "A \"student\" is a person who teaches a class.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -10449,17 +10432,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "doctor and nurse",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
                     "prompt": "teacher",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
                     "prompt": "chef",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -10504,22 +10487,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "build"
-                      },
-                      {
-                        "key": "B",
                         "text": "cook"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "teach"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "paint"
+                      },
+                      {
+                        "key": "D",
+                        "text": "build"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -10527,22 +10510,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "drive"
-                      },
-                      {
-                        "key": "B",
-                        "text": "teach"
-                      },
-                      {
-                        "key": "C",
                         "text": "help"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "repair"
+                      },
+                      {
+                        "key": "C",
+                        "text": "drive"
+                      },
+                      {
+                        "key": "D",
+                        "text": "teach"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -10550,22 +10533,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "hotel"
+                        "text": "hospital"
                       },
                       {
                         "key": "B",
-                        "text": "factory"
+                        "text": "hotel"
                       },
                       {
                         "key": "C",
-                        "text": "school"
+                        "text": "factory"
                       },
                       {
                         "key": "D",
-                        "text": "hospital"
+                        "text": "school"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -10584,7 +10567,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "Chefs prepare meals inside a bank.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -10594,7 +10577,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Teachers instruct students inside an office only.",
-                    "answer": "True"
+                    "answer": "False"
                   }
                 ]
               },
@@ -10752,17 +10735,17 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "full-time job",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 2,
                     "prompt": "part-time job",
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
                     "prompt": "look for a job",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -10807,22 +10790,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "part-time job"
-                      },
-                      {
-                        "key": "B",
                         "text": "full-time job"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "factory"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "looking for a job"
+                      },
+                      {
+                        "key": "D",
+                        "text": "part-time job"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -10830,22 +10813,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "apply for a job"
-                      },
-                      {
-                        "key": "B",
-                        "text": "teach students"
-                      },
-                      {
-                        "key": "C",
                         "text": "drive a car"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "looking for a job"
+                      },
+                      {
+                        "key": "C",
+                        "text": "apply for a job"
+                      },
+                      {
+                        "key": "D",
+                        "text": "teach students"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -10864,7 +10847,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "\"Apply for a job\" means resigning from your position.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
@@ -10989,46 +10972,39 @@ window.WRITING_UNITS = [
             "exercises": [
               {
                 "id": "2.6",
-                "type": "fill",
-                "title": "Match workplace prepositions",
+                "type": "matching",
+                "title": "Match workplace phrases with complements",
                 "instruction": "Match each verb phrase with its typical complement.",
                 "partTag": "Part B",
                 "items": [
                   {
                     "num": 1,
-                    "before": "work for",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 1,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "work for",
+                    "answer": "B"
                   },
                   {
                     "num": 2,
-                    "before": "take care of",
-                    "after": "",
-                    "answer": ""
-                  },
-                  {
-                    "num": 2,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "take care of",
+                    "answer": "C"
                   },
                   {
                     "num": 3,
-                    "before": "work in",
-                    "after": "",
-                    "answer": ""
+                    "prompt": "work in",
+                    "answer": "A"
+                  }
+                ],
+                "options": [
+                  {
+                    "key": "A",
+                    "text": "a workplace or building (e.g. a hospital, an office)"
                   },
                   {
-                    "num": 3,
-                    "before": "A",
-                    "after": "",
-                    "answer": ""
+                    "key": "B",
+                    "text": "a company or employer (e.g. a bank, a tech firm)"
+                  },
+                  {
+                    "key": "C",
+                    "text": "patients, children, or customers"
                   }
                 ]
               },
@@ -11068,22 +11044,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "of"
-                      },
-                      {
-                        "key": "B",
                         "text": "with"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "at"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "looking for a job"
+                      },
+                      {
+                        "key": "D",
+                        "text": "of"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -11091,22 +11067,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "at"
-                      },
-                      {
-                        "key": "B",
-                        "text": "of"
-                      },
-                      {
-                        "key": "C",
                         "text": "about"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "looking for a job"
+                      },
+                      {
+                        "key": "C",
+                        "text": "at"
+                      },
+                      {
+                        "key": "D",
+                        "text": "of"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -11509,12 +11485,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "My alarm rings, and I ___ from sleep.",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "I use a toothbrush to ___ my teeth.",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -11524,7 +11500,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "I ___ under running water after the gym.",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -11556,7 +11532,7 @@ window.WRITING_UNITS = [
                         "text": "drink"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -11579,7 +11555,7 @@ window.WRITING_UNITS = [
                         "text": "wash"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -11625,7 +11601,7 @@ window.WRITING_UNITS = [
                         "text": "get"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -11644,12 +11620,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "start means to wash under sprayed water.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "finish means to clean with water.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -11669,25 +11645,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "Lena  her last work task at six. (finish)",
                     "after": "",
-                    "answer": "finish"
+                    "answer": "finishes"
                   },
                   {
                     "num": 2,
                     "before": "The baby  at night and wakes in the morning. (sleep)",
                     "after": "",
-                    "answer": "sleep"
+                    "answer": "sleeps"
                   },
                   {
                     "num": 3,
                     "before": "After a busy morning, we  for ten minutes.",
                     "after": "",
-                    "answer": ""
+                    "answer": "rest"
                   },
                   {
                     "num": 4,
                     "before": "My brother  English with his class notes. (study)",
                     "after": "",
-                    "answer": "study"
+                    "answer": "studies"
                   }
                 ]
               },
@@ -11885,12 +11861,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "My first meal after waking is ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "At midday, we stop work and have ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -11900,7 +11876,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "I have a small ___ between lunch and dinner.",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -11932,7 +11908,7 @@ window.WRITING_UNITS = [
                         "text": "get"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -12001,7 +11977,7 @@ window.WRITING_UNITS = [
                         "text": "get"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -12020,12 +11996,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "weekend means a small amount between meals.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "routine means the early part of the day.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -12045,25 +12021,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "Saturday and Sunday form the .",
                     "after": "",
-                    "answer": ""
+                    "answer": "weekend"
                   },
                   {
                     "num": 2,
                     "before": "The activities I repeat each day form my .",
                     "after": "",
-                    "answer": ""
+                    "answer": "routine"
                   },
                   {
                     "num": 3,
                     "before": "I write each activity and time in my .",
                     "after": "",
-                    "answer": ""
+                    "answer": "schedule"
                   },
                   {
                     "num": 4,
                     "before": "Two  ring at seven, one on each phone. (alarm)",
                     "after": "",
-                    "answer": "alarm"
+                    "answer": "alarms"
                   }
                 ]
               },
@@ -12263,12 +12239,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "The tasks I do for my job are my ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "After work, I return to the place I live: ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -12278,7 +12254,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Children attend lessons at ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -12333,7 +12309,7 @@ window.WRITING_UNITS = [
                         "text": "get"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -12356,7 +12332,7 @@ window.WRITING_UNITS = [
                         "text": "get"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -12398,12 +12374,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "read means a place for lessons and learning.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "relax means a large road vehicle for passengers.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -12423,25 +12399,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "She  a book after her evening meal. (read)",
                     "after": "",
-                    "answer": "read"
+                    "answer": "reads"
                   },
                   {
                     "num": 2,
                     "before": "After a busy day, he  with quiet music. (relax)",
                     "after": "",
-                    "answer": "relax"
+                    "answer": "relaxes"
                   },
                   {
                     "num": 3,
                     "before": "The lesson is at nine; I arrive at eight forty-five, so I am .",
                     "after": "",
-                    "answer": ""
+                    "answer": "early"
                   },
                   {
                     "num": 4,
                     "before": "The meeting is at ten; I arrive at ten fifteen, so I am .",
                     "after": "",
-                    "answer": ""
+                    "answer": "late"
                   }
                 ]
               },
@@ -12609,12 +12585,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "When sleep ends, I ___ at six.",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "After waking, I leave my bed: I ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -12624,7 +12600,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "My clothes are on the bed; I put them on to ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -12679,7 +12655,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -12702,7 +12678,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -12725,7 +12701,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -12744,12 +12720,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "get up means put your clothes on.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "brush your teeth means eat the first daily meal.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -12769,25 +12745,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "At six forty-five, we eat our first meal: we .",
                     "after": "",
-                    "answer": ""
+                    "answer": "have breakfast"
                   },
                   {
                     "num": 2,
                     "before": "Which expression means go out of your house? I  at seven.",
                     "after": "",
-                    "answer": ""
+                    "answer": "leave home"
                   },
                   {
                     "num": 3,
                     "before": "Which expression means travel to your workplace? I  by train.",
                     "after": "",
-                    "answer": ""
+                    "answer": "go to work"
                   },
                   {
                     "num": 4,
                     "before": "After arriving, we begin our job tasks: we  at nine.",
                     "after": "",
-                    "answer": ""
+                    "answer": "start work"
                   }
                 ]
               },
@@ -12950,12 +12926,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "After sport, I wash under running water and ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "Use water to ___ , then dry it with a towel.",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -12965,7 +12941,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "At midday I stop for food and ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -12997,7 +12973,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -13020,7 +12996,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -13043,7 +13019,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -13066,7 +13042,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -13085,12 +13061,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "wash your face means eat a midday meal.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "brush your hair means stop work briefly to rest.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -13110,25 +13086,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "We stop briefly to rest between two tasks: we .",
                     "after": "",
-                    "answer": ""
+                    "answer": "take a break"
                   },
                   {
                     "num": 2,
                     "before": "At the end of our working day, we  at five.",
                     "after": "",
-                    "answer": ""
+                    "answer": "finish work"
                   },
                   {
                     "num": 3,
                     "before": "Our journey ends when we reach where we live: we .",
                     "after": "",
-                    "answer": ""
+                    "answer": "get home"
                   },
                   {
                     "num": 4,
                     "before": "Our evening meal is at six thirty; we  together.",
                     "after": "",
-                    "answer": ""
+                    "answer": "have dinner"
                   }
                 ]
               },
@@ -13294,12 +13270,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "I complete my school exercises when I ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "Before sitting down all evening, I ___ to keep active.",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -13309,7 +13285,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "I open a novel and ___ before bed.",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -13326,22 +13302,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "fall asleep"
-                      },
-                      {
-                        "key": "B",
                         "text": "go to bed"
                       },
                       {
-                        "key": "C",
+                        "key": "B",
                         "text": "relax after work"
                       },
                       {
-                        "key": "D",
+                        "key": "C",
                         "text": "have breakfast"
+                      },
+                      {
+                        "key": "D",
+                        "text": "fall asleep"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -13349,19 +13325,19 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "set the alarm"
-                      },
-                      {
-                        "key": "B",
-                        "text": "fall asleep"
-                      },
-                      {
-                        "key": "C",
                         "text": "go to bed"
                       },
                       {
-                        "key": "D",
+                        "key": "B",
                         "text": "have breakfast"
+                      },
+                      {
+                        "key": "C",
+                        "text": "set the alarm"
+                      },
+                      {
+                        "key": "D",
+                        "text": "fall asleep"
                       }
                     ],
                     "answer": "A"
@@ -13372,22 +13348,22 @@ window.WRITING_UNITS = [
                     "choices": [
                       {
                         "key": "A",
-                        "text": "set the alarm"
+                        "text": "have breakfast"
                       },
                       {
                         "key": "B",
-                        "text": "do homework"
+                        "text": "set the alarm"
                       },
                       {
                         "key": "C",
-                        "text": "fall asleep"
+                        "text": "do homework"
                       },
                       {
                         "key": "D",
-                        "text": "have breakfast"
+                        "text": "fall asleep"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 4,
@@ -13410,7 +13386,7 @@ window.WRITING_UNITS = [
                         "text": "have breakfast"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -13429,12 +13405,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "do some exercise means look through written pages for meaning.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "cook dinner means rest following your working day.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -13454,25 +13430,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "After my job ends, I rest and listen to music to .",
                     "after": "",
-                    "answer": ""
+                    "answer": "relax after work"
                   },
                   {
                     "num": 2,
                     "before": "I get into bed ready to sleep when I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "go to bed"
                   },
                   {
                     "num": 3,
                     "before": "At last I stop being awake and .",
                     "after": "",
-                    "answer": ""
+                    "answer": "fall asleep"
                   },
                   {
                     "num": 4,
                     "before": "Before sleeping, I choose tomorrow’s wake-up time: I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "set the alarm"
                   }
                 ]
               },
@@ -13494,7 +13470,7 @@ window.WRITING_UNITS = [
                       "before",
                       "meal."
                     ],
-                    "answer": "We do our homework before evening meal."
+                    "answer": "We do homework before our evening meal."
                   },
                   {
                     "num": 2,
@@ -13520,7 +13496,7 @@ window.WRITING_UNITS = [
                       "They",
                       "kitchen."
                     ],
-                    "answer": "They cook family dinner in the kitchen."
+                    "answer": "They cook dinner in the family kitchen."
                   },
                   {
                     "num": 4,
@@ -13985,12 +13961,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "The general word for a whole residential building is ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "Our home is one set of rooms in a big building: a ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -14000,7 +13976,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "The small rural house beside the farm is a ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -14032,7 +14008,7 @@ window.WRITING_UNITS = [
                         "text": "room"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -14078,7 +14054,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -14101,7 +14077,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -14120,12 +14096,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "kitchen means a small house in the countryside.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "bedroom means a house on one main level.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -14145,25 +14121,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "This room has a bed; it is my .",
                     "after": "",
-                    "answer": ""
+                    "answer": "bedroom"
                   },
                   {
                     "num": 2,
                     "before": "The shower is in the .",
                     "after": "",
-                    "answer": ""
+                    "answer": "bathroom"
                   },
                   {
                     "num": 3,
                     "before": "Our family eats at a table in the .",
                     "after": "",
-                    "answer": ""
+                    "answer": "dining room"
                   },
                   {
                     "num": 4,
                     "before": "Our house has two entrance passages, or . (hallway)",
                     "after": "",
-                    "answer": "hallway"
+                    "answer": "hallways"
                   }
                 ]
               },
@@ -14363,12 +14339,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "We step outside from the upstairs room onto the ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "We keep the car in the covered ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -14378,7 +14354,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "The children play in the open paved ___ behind the house.",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -14433,7 +14409,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -14479,7 +14455,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -14498,12 +14474,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "floor means an outside area beside a building.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "stairs means a movable entrance to a room.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -14523,25 +14499,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "Our feet are on the room's .",
                     "after": "",
-                    "answer": ""
+                    "answer": "floor"
                   },
                   {
                     "num": 2,
                     "before": "We use the  to walk to the next level.",
                     "after": "",
-                    "answer": ""
+                    "answer": "stairs"
                   },
                   {
                     "num": 3,
                     "before": "Instead of walking up steps, we take the .",
                     "after": "",
-                    "answer": ""
+                    "answer": "lift"
                   },
                   {
                     "num": 4,
                     "before": "Both buildings have wide . (entrance)",
                     "after": "",
-                    "answer": "entrance"
+                    "answer": "entrances"
                   }
                 ]
               },
@@ -14741,12 +14717,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "The main door faces the street at the ___ of the house.",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "The garden is behind the house, at the ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -14756,7 +14732,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "With left on one side, the opposite side is the ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -14788,7 +14764,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -14811,7 +14787,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -14834,7 +14810,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -14857,7 +14833,7 @@ window.WRITING_UNITS = [
                         "text": "building"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -14876,12 +14852,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "small means the side opposite left.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "quiet means on a higher floor inside.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -14901,25 +14877,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "This tiny kitchen is very .",
                     "after": "",
-                    "answer": ""
+                    "answer": "small"
                   },
                   {
                     "num": 2,
                     "before": "There is almost no noise outside, so the street is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "quiet"
                   },
                   {
                     "num": 3,
                     "before": "Many cars make loud sounds; the road is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "noisy"
                   },
                   {
                     "num": 4,
                     "before": "We can put another bed here because there is some .",
                     "after": "",
-                    "answer": ""
+                    "answer": "space"
                   }
                 ]
               },
@@ -14966,7 +14942,7 @@ window.WRITING_UNITS = [
                       "room",
                       "three"
                     ],
-                    "answer": "This large bright room has three windows."
+                    "answer": "This bright room has three large windows."
                   },
                   {
                     "num": 4,
@@ -15088,12 +15064,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "My home is part of a large building; I ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "The home has two levels; it is ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -15103,7 +15079,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "We want our own building and outdoor plants: ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -15135,7 +15111,7 @@ window.WRITING_UNITS = [
                         "text": "a private garage"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -15158,7 +15134,7 @@ window.WRITING_UNITS = [
                         "text": "a quiet street"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -15204,7 +15180,7 @@ window.WRITING_UNITS = [
                         "text": "a living room"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -15223,12 +15199,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "a two-storey house means a separate home with planted land.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "a small villa means a room for relaxing with people.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -15248,25 +15224,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "The room where we relax together is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a living room"
                   },
                   {
                     "num": 2,
                     "before": "Our eating room is separate from the cooking room: .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a separate dining room"
                   },
                   {
                     "num": 3,
                     "before": "The washing room used by both flatmates is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a shared bathroom"
                   },
                   {
                     "num": 4,
                     "before": "The extra sleeping room for guests is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a spare bedroom"
                   }
                 ]
               },
@@ -15435,12 +15411,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "The room is at street level, ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "The sleeping rooms above us are the ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -15450,7 +15426,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "The bedroom opens onto a little outdoor platform, ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -15505,7 +15481,7 @@ window.WRITING_UNITS = [
                         "text": "a shared bathroom"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -15528,7 +15504,7 @@ window.WRITING_UNITS = [
                         "text": "a shared bathroom"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -15570,12 +15546,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "upstairs bedrooms means a compact outdoor platform above ground.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "a downstairs kitchen means a vehicle store used by one home.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -15595,25 +15571,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "Only we use this enclosed parking room: .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a private garage"
                   },
                   {
                     "num": 2,
                     "before": "Our plants grow outside; they are .",
                     "after": "",
-                    "answer": ""
+                    "answer": "in the garden"
                   },
                   {
                     "num": 3,
                     "before": "Meet me beside the street-facing entrance, .",
                     "after": "",
-                    "answer": ""
+                    "answer": "by the front door"
                   },
                   {
                     "num": 4,
                     "before": "The principal way into the building is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "the main entrance"
                   }
                 ]
               },
@@ -15780,12 +15756,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "The room faces the street, ___ of the house.",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "The yard is behind the building, ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -15795,7 +15771,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "The bathroom is not on the left; it is ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -15850,7 +15826,7 @@ window.WRITING_UNITS = [
                         "text": "a lot of space"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -15873,7 +15849,7 @@ window.WRITING_UNITS = [
                         "text": "a bright room"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -15896,7 +15872,7 @@ window.WRITING_UNITS = [
                         "text": "a quiet street"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -15915,12 +15891,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "at the back means on the side opposite left.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "on the left means plenty of room available.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -15940,25 +15916,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "There is plenty of room for another desk: .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a lot of space"
                   },
                   {
                     "num": 2,
                     "before": "The sunny bedroom has lots of natural light; it is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a bright room"
                   },
                   {
                     "num": 3,
                     "before": "Our road has almost no traffic noise; it is .",
                     "after": "",
-                    "answer": ""
+                    "answer": "a quiet street"
                   },
                   {
                     "num": 4,
                     "before": "The higher level contains bedrooms: there are .",
                     "after": "",
-                    "answer": ""
+                    "answer": "rooms upstairs"
                   }
                 ]
               },
@@ -16502,12 +16478,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "Three people can sit on this padded ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "I hang my clothes inside the tall ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -16517,7 +16493,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "This appliance washes our dirty clothes: the ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -16549,7 +16525,7 @@ window.WRITING_UNITS = [
                         "text": "wardrobe"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
@@ -16595,7 +16571,7 @@ window.WRITING_UNITS = [
                         "text": "curtain"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -16618,7 +16594,7 @@ window.WRITING_UNITS = [
                         "text": "wardrobe"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -16637,12 +16613,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "television means a machine cleaning clothes.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "armchair means an appliance heating food with microwaves.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -16662,25 +16638,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "One person sits comfortably in this chair with arms: an .",
                     "after": "",
-                    "answer": ""
+                    "answer": "armchair"
                   },
                   {
                     "num": 2,
                     "before": "We put plates on the dining .",
                     "after": "",
-                    "answer": ""
+                    "answer": "table"
                   },
                   {
                     "num": 3,
                     "before": "Two guests need two extra . (chair)",
                     "after": "",
-                    "answer": "chair"
+                    "answer": "chairs"
                   },
                   {
                     "num": 4,
                     "before": "Her brother studies at his  each evening.",
                     "after": "",
-                    "answer": ""
+                    "answer": "desk"
                   }
                 ]
               },
@@ -16775,12 +16751,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "a machine washing plates and other dishes",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "an appliance keeping items frozen",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -16790,7 +16766,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "a fixed device giving heat to a room",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -16805,25 +16781,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "The  washes our dirty plates after dinner.",
                     "after": "",
-                    "answer": ""
+                    "answer": "dishwasher"
                   },
                   {
                     "num": 2,
                     "before": "Keep the ice cream in the  so it stays frozen.",
                     "after": "",
-                    "answer": ""
+                    "answer": "freezer"
                   },
                   {
                     "num": 3,
                     "before": "We use the  to boil water and fry eggs.",
                     "after": "",
-                    "answer": ""
+                    "answer": "cooker"
                   },
                   {
                     "num": 4,
                     "before": "The  under the window heats this room.",
                     "after": "",
-                    "answer": ""
+                    "answer": "radiator"
                   }
                 ]
               }
@@ -16991,12 +16967,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "I sleep on my ___ at night.",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "This reading ___ gives light beside my chair.",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -17006,7 +16982,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "I put a soft ___ behind my back on the sofa.",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -17061,7 +17037,7 @@ window.WRITING_UNITS = [
                         "text": "carpet"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -17084,7 +17060,7 @@ window.WRITING_UNITS = [
                         "text": "drawer"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -17126,12 +17102,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "bookcase means a soft pad placed on a seat.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "clock means a loose floor covering.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -17151,25 +17127,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "A tall  has several shelves for books.",
                     "after": "",
-                    "answer": ""
+                    "answer": "bookcase"
                   },
                   {
                     "num": 2,
                     "before": "I read the time on the wall .",
                     "after": "",
-                    "answer": ""
+                    "answer": "clock"
                   },
                   {
                     "num": 3,
                     "before": "The  moves air with its turning blades.",
                     "after": "",
-                    "answer": ""
+                    "answer": "fan"
                   },
                   {
                     "num": 4,
                     "before": "Two  are on the kitchen shelf. (kettle)",
                     "after": "",
-                    "answer": "kettle"
+                    "answer": "kettles"
                   }
                 ]
               },
@@ -17231,7 +17207,7 @@ window.WRITING_UNITS = [
                       "is",
                       "drawer"
                     ],
-                    "answer": "The school drawer is full of pens."
+                    "answer": "The drawer is full of school pens."
                   }
                 ]
               },
@@ -17263,12 +17239,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "the soft thick part of a bed supporting your body",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "a soft support for the head in bed",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -17278,7 +17254,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "a seat without a back or arms",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -17293,25 +17269,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "A soft  lies on top of the bed frame.",
                     "after": "",
-                    "answer": ""
+                    "answer": "mattress"
                   },
                   {
                     "num": 2,
                     "before": "Put your head on this  when you lie down.",
                     "after": "",
-                    "answer": ""
+                    "answer": "pillow"
                   },
                   {
                     "num": 3,
                     "before": "I need an extra  over me because the night is cold.",
                     "after": "",
-                    "answer": ""
+                    "answer": "blanket"
                   },
                   {
                     "num": 4,
                     "before": "Sit on the small ; it has no back.",
                     "after": "",
-                    "answer": ""
+                    "answer": "stool"
                   }
                 ]
               }
@@ -17479,12 +17455,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "I open the door lock with this ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "I carry my books in a ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -17494,7 +17470,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "I wear a ___ inside each shoe.",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -17526,7 +17502,7 @@ window.WRITING_UNITS = [
                         "text": "lamp"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -17549,7 +17525,7 @@ window.WRITING_UNITS = [
                         "text": "laptop"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 3,
@@ -17572,7 +17548,7 @@ window.WRITING_UNITS = [
                         "text": "lamp"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -17614,12 +17590,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "picture means fabric clothing covering a foot.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "basket means a written work with pages.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -17639,25 +17615,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "There are three  hanging on the wall. (picture)",
                     "after": "",
-                    "answer": "picture"
+                    "answer": "pictures"
                   },
                   {
                     "num": 2,
                     "before": "Two  hold the clean towels. (basket)",
                     "after": "",
-                    "answer": "basket"
+                    "answer": "baskets"
                   },
                   {
                     "num": 3,
                     "before": "There are four cardboard  under the desk. (box)",
                     "after": "",
-                    "answer": "box"
+                    "answer": "boxes"
                   },
                   {
                     "num": 4,
                     "before": "The room's  opens into the hallway.",
                     "after": "",
-                    "answer": ""
+                    "answer": "door"
                   }
                 ]
               },
@@ -17679,7 +17655,7 @@ window.WRITING_UNITS = [
                       "the",
                       "beside"
                     ],
-                    "answer": "My reading book is beside the lamp."
+                    "answer": "My book is beside the reading lamp."
                   },
                   {
                     "num": 2,
@@ -17750,12 +17726,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "a point where a plug connects to power",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "the part at the end of a cable that connects to a power socket",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -17765,7 +17741,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "an object holding clothes inside a wardrobe",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -17780,25 +17756,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "The wall  has a place for the charger’s plug.",
                     "after": "",
-                    "answer": ""
+                    "answer": "socket"
                   },
                   {
                     "num": 2,
                     "before": "The  is the part at the end of this power cable.",
                     "after": "",
-                    "answer": ""
+                    "answer": "plug"
                   },
                   {
                     "num": 3,
                     "before": "Use the wall  to turn the light on.",
                     "after": "",
-                    "answer": ""
+                    "answer": "switch"
                   },
                   {
                     "num": 4,
                     "before": "Hang your jacket on a  inside the wardrobe.",
                     "after": "",
-                    "answer": ""
+                    "answer": "hanger"
                   }
                 ]
               }
@@ -17907,12 +17883,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "Three friends share the long seat; they ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "I put my shirts on hangers when I ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -17922,7 +17898,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "We put dirty clothes into the appliance when we ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -17954,7 +17930,7 @@ window.WRITING_UNITS = [
                         "text": "wash dishes in the sink"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -17977,7 +17953,7 @@ window.WRITING_UNITS = [
                         "text": "turn off the television"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -18000,7 +17976,7 @@ window.WRITING_UNITS = [
                         "text": "look in the mirror"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 4,
@@ -18023,7 +17999,7 @@ window.WRITING_UNITS = [
                         "text": "look in the mirror"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -18042,12 +18018,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "hang clothes in the wardrobe means put clothes into the clothes washer.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "keep food in the fridge means warm a meal using the microwave.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -18067,25 +18043,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "I warm yesterday’s lunch using this appliance: I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "heat food in the microwave"
                   },
                   {
                     "num": 2,
                     "before": "To see my own reflection, I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "look in the mirror"
                   },
                   {
                     "num": 3,
                     "before": "I step across the fitted floor covering when I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "walk on the carpet"
                   },
                   {
                     "num": 4,
                     "before": "I return the novels to their shelf: I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "put books on the bookshelf"
                   }
                 ]
               },
@@ -18253,12 +18229,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "We start the machine that cools the room when we ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "We follow the evening programme when we ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -18268,7 +18244,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "We put plates and cups out before dinner when we ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -18323,7 +18299,7 @@ window.WRITING_UNITS = [
                         "text": "look in the mirror"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 3,
@@ -18346,7 +18322,7 @@ window.WRITING_UNITS = [
                         "text": "open the drawer"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 4,
@@ -18369,7 +18345,7 @@ window.WRITING_UNITS = [
                         "text": "look in the mirror"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -18388,12 +18364,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "watch television means put dishes in place for a meal.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "sit in an armchair means take a seat by a work table.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -18413,25 +18389,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "I take a seat at the table where I write: I .",
                     "after": "",
-                    "answer": ""
+                    "answer": "sit at a desk"
                   },
                   {
                     "num": 2,
                     "before": "To see inside the sliding storage compartment, .",
                     "after": "",
-                    "answer": ""
+                    "answer": "open the drawer"
                   },
                   {
                     "num": 3,
                     "before": "To shut the storage unit’s doors, .",
                     "after": "",
-                    "answer": ""
+                    "answer": "close the cupboard"
                   },
                   {
                     "num": 4,
                     "before": "To turn on the reading light, .",
                     "after": "",
-                    "answer": ""
+                    "answer": "switch on the lamp"
                   }
                 ]
               },
@@ -18601,12 +18577,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 1,
                     "prompt": "Your door keys are missing; you ___ .",
-                    "answer": "A"
+                    "answer": "B"
                   },
                   {
                     "num": 2,
                     "prompt": "I take my books in a container with handles; I ___ .",
-                    "answer": "A"
+                    "answer": "D"
                   },
                   {
                     "num": 3,
@@ -18616,7 +18592,7 @@ window.WRITING_UNITS = [
                   {
                     "num": 4,
                     "prompt": "Two matching fabric items for my feet make ___ .",
-                    "answer": "A"
+                    "answer": "C"
                   }
                 ]
               },
@@ -18648,7 +18624,7 @@ window.WRITING_UNITS = [
                         "text": "make the bed"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "C"
                   },
                   {
                     "num": 2,
@@ -18717,7 +18693,7 @@ window.WRITING_UNITS = [
                         "text": "water the plant"
                       }
                     ],
-                    "answer": "A"
+                    "answer": "B"
                   }
                 ]
               },
@@ -18736,12 +18712,12 @@ window.WRITING_UNITS = [
                   {
                     "num": 2,
                     "prompt": "carry a bag means two matching fabric foot coverings.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 3,
                     "prompt": "put away your shoes means respond to an incoming call.",
-                    "answer": "True"
+                    "answer": "False"
                   },
                   {
                     "num": 4,
@@ -18761,25 +18737,25 @@ window.WRITING_UNITS = [
                     "num": 1,
                     "before": "When a call comes in, please .",
                     "after": "",
-                    "answer": ""
+                    "answer": "answer the phone"
                   },
                   {
                     "num": 2,
                     "before": "To change the television channel, first .",
                     "after": "",
-                    "answer": ""
+                    "answer": "find the remote control"
                   },
                   {
                     "num": 3,
                     "before": "The potted flower is dry; please .",
                     "after": "",
-                    "answer": ""
+                    "answer": "water the plant"
                   },
                   {
                     "num": 4,
                     "before": "Arrange the cut flowers in their container: .",
                     "after": "",
-                    "answer": ""
+                    "answer": "put flowers in a vase"
                   }
                 ]
               },
