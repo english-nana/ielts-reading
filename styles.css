@@ -4957,6 +4957,338 @@ button, input, select, textarea {
   background: #27272A;
 }
 
+/* Streamlined Teacher Layout (VSTEP Speaking Style) */
+.teacher-clean-topbar {
+  background: #F4F1EA;
+}
+
+.teacher-compact-container {
+  max-width: 1040px;
+  padding-top: 24px;
+}
+
+.teacher-stats-3col {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.teacher-stats-3col .teacher-stat-card {
+  border-radius: 10px;
+  padding: 13px 16px;
+}
+
+.teacher-filter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.teacher-reset-filter-btn {
+  border: 1.5px solid #18181B;
+  background: #FAF8F3;
+  color: #18181B;
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.teacher-reset-filter-btn:hover {
+  background: var(--accent-yellow-bright);
+}
+
+.teacher-filter-3col {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.teacher-filter-2col {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.teacher-filter-item {
+  height: 36px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.teacher-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.review-read-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.review-read-pill.neutral {
+  background: #F4F4F5;
+  color: #71717A;
+  border: 1px solid #E4E4E7;
+}
+
+.review-read-pill.waiting {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+.review-read-pill.read {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #86EFAC;
+}
+
+.review-read-pill.unread {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
+.review-read-pill.partial {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #F59E0B;
+}
+
+.student-name-with-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.student-name-text {
+  font-weight: 800;
+  font-size: 14px;
+  color: #18181B;
+}
+
+.student-info-icon-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1.5px solid #D4D4D8;
+  background: #FAFAFA;
+  color: #52525B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.12s ease;
+}
+
+.student-info-icon-btn:hover {
+  background: var(--accent-yellow-bright);
+  border-color: #18181B;
+  color: #18181B;
+}
+
+.td-actions-right {
+  text-align: right;
+}
+
+.student-view-subs-btn {
+  height: 32px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.student-drilldown-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: #FFFFFF;
+  border: 2px solid #18181B;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #18181B;
+}
+
+.student-drilldown-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.teacher-ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.grade-fb-input {
+  height: 36px;
+  font-size: 13px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.student-info-modal-panel {
+  max-width: 460px;
+}
+
+.student-info-list {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid #E4E4E7;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.student-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid #F4F4F5;
+  font-size: 13.5px;
+}
+
+.student-info-row:last-child {
+  border-bottom: none;
+}
+
+.student-info-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #71717A;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.student-info-value {
+  color: #18181B;
+  text-align: right;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .teacher-clean-topbar {
+    height: auto !important;
+  }
+
+  .teacher-clean-topbar .dt-topbar-inner {
+    flex-wrap: wrap !important;
+    padding: 8px 12px !important;
+    gap: 8px;
+  }
+
+  .teacher-topbar-right {
+    margin-left: auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .teacher-stats-3col {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px;
+  }
+
+  .teacher-stats-3col .teacher-stat-card {
+    padding: 10px 10px;
+  }
+
+  .teacher-stats-3col .teacher-stat-label {
+    font-size: 10.5px;
+    line-height: 1.3;
+  }
+
+  .teacher-stats-3col .teacher-stat-value {
+    font-size: 20px;
+  }
+
+  .teacher-filter-3col,
+  .teacher-filter-2col {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-students-table,
+  .teacher-students-table tbody {
+    display: block;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .teacher-students-table thead {
+    display: none;
+  }
+
+  .teacher-students-table tr {
+    display: block;
+    background: #FFFFFF;
+    border: 2px solid #18181B;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0px #18181B;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+  }
+
+  .teacher-students-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 2px;
+    border-bottom: 1px solid #F4F4F5;
+  }
+
+  .teacher-students-table td:last-child {
+    border-bottom: none;
+    padding-top: 10px;
+  }
+
+  .teacher-students-table td::before {
+    content: attr(data-label);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #71717A;
+    text-transform: uppercase;
+  }
+
+  .teacher-students-table td[data-label="Thao tác"]::before {
+    display: none;
+  }
+
+  .student-view-subs-btn {
+    width: 100%;
+    justify-content: center;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .student-info-value {
+    text-align: left;
+  }
+}
+
 /* ==========================================================================
    7. RESPONSIVE RULES
    ========================================================================== */
