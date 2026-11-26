@@ -181,12 +181,13 @@ async function correctSingleSubmission(
   });
 
   const fallbackModels = Array.from(
-    new Set([geminiModel, "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"])
+    new Set([geminiModel, "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-flash-latest", "gemini-flash-lite-latest"])
   );
 
   let geminiRes: Response | null = null;
   let lastStatus = 500;
   let lastErrText = "";
+  const modelErrors: string[] = [];
 
   for (const modelName of fallbackModels) {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
@@ -209,9 +210,10 @@ async function correctSingleSubmission(
       lastStatus = res.status;
       lastErrText = await res.text().catch(() => "");
       if ((res.status === 503 || res.status === 429 || res.status === 500) && attempt === 0) {
-        await new Promise(r => setTimeout(r, 1200));
+        await new Promise(r => setTimeout(r, 1800));
         continue;
       }
+      modelErrors.push(`${modelName}:${res.status}`);
       break;
     }
     if (geminiRes) break;
@@ -219,6 +221,7 @@ async function correctSingleSubmission(
 
   if (!geminiRes) {
     const nextRetry = prevRetry + 1;
+    const summaryCodes = modelErrors.join(", ") || String(lastStatus);
     await admin.from("writing_ai_reviews").upsert(
       {
         submission_id: sub.id,
@@ -227,7 +230,7 @@ async function correctSingleSubmission(
         lesson_title: sub.lesson_title || sub.lesson_id,
         status: "error",
         release_at: releaseAtIso,
-        error_message: `Gemini API lỗi (${lastStatus}): ${lastErrText.slice(0, 220)}`,
+        error_message: `Gemini API lỗi (${summaryCodes}): ${lastErrText.slice(0, 220)}`,
         grade_count: prevCount,
         retry_count: nextRetry,
         updated_at: nowIso
@@ -242,7 +245,7 @@ async function correctSingleSubmission(
     return {
       ok: false,
       status: 502,
-      error: `AI tạm quá tải (${lastStatus}) — đã xếp hàng đợi tự sửa lại (lần ${nextRetry}/${MAX_AUTO_RETRIES}).`
+      error: `AI tạm quá tải (${summaryCodes}) — đã xếp hàng đợi tự sửa lại (lần ${nextRetry}/${MAX_AUTO_RETRIES}).`
     };
   }
 
