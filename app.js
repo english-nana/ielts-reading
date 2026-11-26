@@ -119,7 +119,7 @@
         : [
             {
               word: "cost less to produce ↔ cheaper to manufacture",
-              ipa: "/ˌmænjuˈfæktʃər/",
+              ipa: "/ˌmænjuˈfæktʃə(r)/",
               pos: "paraphrase",
               meaning: "chi phí sản xuất rẻ hơn",
               example: "Plastic caps are cheaper to manufacture than cork.",

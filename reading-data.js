@@ -94,8 +94,8 @@ window.READING_THEORY = {
     }
   ],
   introKeywordExamples: [
-    { q: "international", p: "global", vi: "quốc tế / toàn cầu", ipa: "/ˌɪntərˈnæʃnəl/" },
-    { q: "buy", p: "purchase", vi: "mua", ipa: "/ˈpɜːrtʃəs/" },
+    { q: "international", p: "global", vi: "quốc tế / toàn cầu", ipa: "/ˌɪntəˈnæʃnəl/" },
+    { q: "buy", p: "purchase", vi: "mua", ipa: "/ˈpɜːtʃəs/" },
     { q: "psychological impact", p: "mental and behavioural effects", vi: "tác động tâm lý", ipa: "/ˌsaɪkəˈlɒdʒɪkl ˈɪmpækt/" }
   ],
   comparisonRows: [
@@ -249,10 +249,10 @@ window.READING_GUIDES = {
       ]
     },
     masterKeywords: [
-      { q: "cost less to produce", p: "cheaper to manufacture", vi: "chi phí sản xuất rẻ hơn", ipa: "/ˌmænjuˈfæktʃər/" },
-      { q: "sweet dishes", p: "traditional desserts", vi: "món tráng miệng / món ngọt", ipa: "/dɪˈzɜːrts/" },
+      { q: "cost less to produce", p: "cheaper to manufacture", vi: "chi phí sản xuất rẻ hơn", ipa: "/ˌmænjuˈfæktʃə(r)/" },
+      { q: "sweet dishes", p: "traditional desserts", vi: "món tráng miệng / món ngọt", ipa: "/dɪˈzɜːts/" },
       { q: "resistant to seawater", p: "do not rot in seawater", vi: "không bị mục trong nước biển", ipa: "/rɪˈzɪstənt/" },
-      { q: "becomes scarcer", p: "continues to shrink", vi: "ngày càng thu hẹp / khan hiếm", ipa: "/ˈskersər/" },
+      { q: "becomes scarcer", p: "continues to shrink", vi: "ngày càng thu hẹp / khan hiếm", ipa: "/ˈskeəsə(r)/" },
       { q: "in isolation", p: "completely alone", vi: "ở một mình / tách biệt", ipa: "/ˌaɪsəˈleɪʃn/" },
       { q: "distinguish A from B", p: "detect the difference between A and B", vi: "phân biệt A với B", ipa: "/dɪˈstɪŋɡwɪʃ/" }
     ]
@@ -327,11 +327,11 @@ window.READING_GUIDES = {
     },
     masterKeywords: [
       { q: "make-believe games with peers", p: "pretend play with classmates", vi: "chơi đóng vai cùng bạn bè", ipa: "/prɪˈtend pleɪ/" },
-      { q: "career advancement", p: "promoted", vi: "thăng tiến trong sự nghiệp", ipa: "/prəˈmoʊtɪd/" },
-      { q: "offices without partitions", p: "open-plan offices / removing walls", vi: "văn phòng mở không vách ngăn", ipa: "/pɑːrˈtɪʃnz/" },
-      { q: "lose their sense of direction", p: "became disoriented", vi: "bị mất phương hướng", ipa: "/dɪsˈɔːrientɪd/" },
+      { q: "career advancement", p: "promoted", vi: "thăng tiến trong sự nghiệp", ipa: "/prəˈməʊtɪd/" },
+      { q: "offices without partitions", p: "open-plan offices / removing walls", vi: "văn phòng mở không vách ngăn", ipa: "/pɑːˈtɪʃnz/" },
+      { q: "lose their sense of direction", p: "became disoriented", vi: "bị mất phương hướng", ipa: "/dɪsˈɔːriəntɪd/" },
       { q: "pull attention away from", p: "distract ... from", vi: "làm xao nhãng khỏi", ipa: "/dɪˈstrækt/" },
-      { q: "authentic objects", p: "real historical artefacts", vi: "các hiện vật lịch sử thật", ipa: "/ˈɑːrtɪfækts/" }
+      { q: "authentic objects", p: "real historical artefacts", vi: "các hiện vật lịch sử thật", ipa: "/ˈɑːtɪfækts/" }
     ]
   },
 
@@ -392,12 +392,12 @@ window.READING_GUIDES = {
       ]
     },
     masterKeywords: [
-      { q: "raise money for environmental projects", p: "provide funds for ecological conservation", vi: "gây quỹ cho các dự án bảo tồn môi trường", ipa: "/ˌkɑːnsərˈveɪʃn/" },
-      { q: "extra facilities and amenities", p: "additional infrastructure", vi: "cơ sở hạ tầng và tiện ích bổ sung", ipa: "/ˈɪnfrəstrʌktʃər/" },
+      { q: "raise money for environmental projects", p: "provide funds for ecological conservation", vi: "gây quỹ cho các dự án bảo tồn môi trường", ipa: "/ˌkɒnsəˈveɪʃn/" },
+      { q: "extra facilities and amenities", p: "additional infrastructure", vi: "cơ sở hạ tầng và tiện ích bổ sung", ipa: "/ˈɪnfrəstrʌktʃə(r)/" },
       { q: "a means of rating intelligence tests", p: "a method of scoring children's intelligence tests", vi: "phương pháp chấm điểm bài kiểm tra trí thông minh", ipa: "/ˈreɪtɪŋ/" },
-      { q: "may do more harm than good", p: "far from resolving ... often exacerbate them", vi: "có thể gây hại nhiều hơn lợi / làm trầm trọng thêm", ipa: "/ɪɡˈzæsərbeɪt/" },
+      { q: "may do more harm than good", p: "far from resolving ... often exacerbate them", vi: "có thể gây hại nhiều hơn lợi / làm trầm trọng thêm", ipa: "/ɪɡˈzæsəbeɪt/" },
       { q: "more expensive than predicted", p: "building costs far exceeding initial estimates", vi: "chi phí cao hơn dự kiến ban đầu", ipa: "/ˈestɪməts/" },
-      { q: "not always realise", p: "may not necessarily be aware of", vi: "không phải lúc nào cũng nhận thức được", ipa: "/əˈwer/" }
+      { q: "not always realise", p: "may not necessarily be aware of", vi: "không phải lúc nào cũng nhận thức được", ipa: "/əˈweə(r)/" }
     ]
   },
 
@@ -457,10 +457,10 @@ window.READING_GUIDES = {
       ]
     },
     masterKeywords: [
-      { q: "still a key part of the education system", p: "the cornerstone of Oxford education, retains its prestige", vi: "vẫn là nền tảng quan trọng của hệ thống giáo dục", ipa: "/ˈkɔːrnərstoʊn/" },
+      { q: "still a key part of the education system", p: "the cornerstone of Oxford education, retains its prestige", vi: "vẫn là nền tảng quan trọng của hệ thống giáo dục", ipa: "/ˈkɔːnəstəʊn/" },
       { q: "encourages students to learn independently", p: "helping us to learn and think for ourselves", vi: "khuyến khích học sinh tự học và tự tư duy", ipa: "/ˌɪndɪˈpendəntli/" },
-      { q: "features in university marketing", p: "as the present university website states", vi: "xuất hiện trong nội dung giới thiệu / quảng bá của trường", ipa: "/ˈmɑːrkɪtɪŋ/" },
-      { q: "more than just an academic role", p: "both pastoral as well as academic", vi: "không chỉ có vai trò học thuật mà còn chăm lo đời sống", ipa: "/ˈpæstərəl/" }
+      { q: "features in university marketing", p: "as the present university website states", vi: "xuất hiện trong nội dung giới thiệu / quảng bá của trường", ipa: "/ˈmɑːkɪtɪŋ/" },
+      { q: "more than just an academic role", p: "both pastoral as well as academic", vi: "không chỉ có vai trò học thuật mà còn chăm lo đời sống", ipa: "/ˈpɑːstərəl/" }
     ]
   }
 };
@@ -603,17 +603,17 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "bark", ipa: "/bɑːrk/", pos: "n.", meaning: "vỏ cây", example: "Cork is the thick <strong>bark</strong> of the cork oak tree." },
+      { word: "bark", ipa: "/bɑːk/", pos: "n.", meaning: "vỏ cây", example: "Cork is the thick <strong>bark</strong> of the cork oak tree." },
       { word: "elastic", ipa: "/ɪˈlæstɪk/", pos: "adj.", meaning: "đàn hồi", example: "Cork is light, <strong>elastic</strong>, and fire-resistant." },
       { word: "strip / remove", ipa: "/strɪp/", pos: "v.", meaning: "bóc tách", example: "Workers <strong>strip</strong> the bark safely by hand." },
-      { word: "closures / caps", ipa: "/ˈkloʊʒərz/", pos: "n.", meaning: "nắp đậy chai", example: "Traditional cork bottle <strong>closures</strong> compete with plastic caps." },
+      { word: "closures / caps", ipa: "/ˈkləʊʒəz/", pos: "n.", meaning: "nắp đậy chai", example: "Traditional cork bottle <strong>closures</strong> compete with plastic caps." },
       { word: "recyclable", ipa: "/ˌriːˈsaɪkləbl/", pos: "adj.", meaning: "có thể tái chế", example: "The bark itself is completely <strong>recyclable</strong>." }
     ],
     keywordTable: [
       { q: "footwear", p: "sandals", vi: "giày dép / xăng-đan", ipa: "/ˈsændlz/" },
       { q: "low rainfall", p: "little rainfall", vi: "lượng mưa ít", ipa: "/ˈreɪnfɔːl/" },
       { q: "about a decade", p: "roughly a decade", vi: "khoảng một thập kỷ (10 năm)", ipa: "/ˈdekeɪd/" },
-      { q: "cost less to produce", p: "cheaper to manufacture", vi: "chi phí sản xuất rẻ hơn", ipa: "/ˌmænjuˈfæktʃər/" }
+      { q: "cost less to produce", p: "cheaper to manufacture", vi: "chi phí sản xuất rẻ hơn", ipa: "/ˌmænjuˈfæktʃə(r)/" }
     ]
   },
 
@@ -749,15 +749,15 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "tolerate", ipa: "/ˈtɑːləreɪt/", pos: "v.", meaning: "chịu đựng được", example: "The tree can <strong>tolerate</strong> sandy soil and salty winds." },
-      { word: "woven", ipa: "/ˈwoʊvn/", pos: "v. (p.p.)", meaning: "đan / bện", example: "Long green leaves are <strong>woven</strong> together to make baskets." },
+      { word: "tolerate", ipa: "/ˈtɒləreɪt/", pos: "v.", meaning: "chịu đựng được", example: "The tree can <strong>tolerate</strong> sandy soil and salty winds." },
+      { word: "woven", ipa: "/ˈwəʊvn/", pos: "v. (p.p.)", meaning: "đan / bện", example: "Long green leaves are <strong>woven</strong> together to make baskets." },
       { word: "stems", ipa: "/stemz/", pos: "n.", meaning: "cuống hoa", example: "Workers cut the <strong>stems</strong> of unopened flowers." },
       { word: "extract", ipa: "/ɪkˈstrækt/", pos: "v.", meaning: "ép / chiết xuất", example: "Copra is pressed to <strong>extract</strong> coconut oil." },
-      { word: "rot", ipa: "/rɑːt/", pos: "v.", meaning: "mục nát", example: "Coir ropes do not <strong>rot</strong> in seawater." }
+      { word: "rot", ipa: "/rɒt/", pos: "v.", meaning: "mục nát", example: "Coir ropes do not <strong>rot</strong> in seawater." }
     ],
     keywordTable: [
-      { q: "strong timber", p: "durable timber", vi: "gỗ xây dựng bền chắc", ipa: "/ˈdʊrəbl ˈtɪmbər/" },
-      { q: "sweet dishes", p: "traditional desserts", vi: "món ngọt / món tráng miệng", ipa: "/dɪˈzɜːrts/" },
+      { q: "strong timber", p: "durable timber", vi: "gỗ xây dựng bền chắc", ipa: "/ˈdjʊərəbl ˈtɪmbə(r)/" },
+      { q: "sweet dishes", p: "traditional desserts", vi: "món ngọt / món tráng miệng", ipa: "/dɪˈzɜːts/" },
       { q: "resistant to seawater", p: "do not rot in seawater", vi: "không bị mục trong nước biển", ipa: "/rɪˈzɪstənt/" },
       { q: "a maximum of ... per year", p: "yield up to ... annually", vi: "cho tối đa ... mỗi năm", ipa: "/ˈænjuəli/" }
     ]
@@ -888,14 +888,14 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "urban centres", ipa: "/ˈɜːrbən ˈsentərz/", pos: "n. phr.", meaning: "trung tâm đô thị", example: "80% of people will live in <strong>urban centres</strong>." },
+      { word: "urban centres", ipa: "/ˈɜːbən ˈsentəz/", pos: "n. phr.", meaning: "trung tâm đô thị", example: "80% of people will live in <strong>urban centres</strong>." },
       { word: "shrink", ipa: "/ʃrɪŋk/", pos: "v.", meaning: "thu hẹp lại", example: "Fertile farmland continues to <strong>shrink</strong>." },
-      { word: "stacked layers", ipa: "/stækt ˈleɪərz/", pos: "n. phr.", meaning: "các tầng xếp chồng", example: "Crops are grown in <strong>stacked layers</strong> indoors." },
+      { word: "stacked layers", ipa: "/stækt ˈleɪəz/", pos: "n. phr.", meaning: "các tầng xếp chồng", example: "Crops are grown in <strong>stacked layers</strong> indoors." },
       { word: "sealed", ipa: "/siːld/", pos: "adj.", meaning: "khép kín", example: "Insects cannot easily enter the <strong>sealed</strong> rooms." },
-      { word: "obstacle", ipa: "/ˈɑːbstəkl/", pos: "n.", meaning: "rào cản / trở ngại", example: "High electricity bills remain a significant <strong>obstacle</strong>." }
+      { word: "obstacle", ipa: "/ˈɒbstəkl/", pos: "n.", meaning: "rào cản / trở ngại", example: "High electricity bills remain a significant <strong>obstacle</strong>." }
     ],
     keywordTable: [
-      { q: "becomes scarcer", p: "continues to shrink", vi: "ngày càng khan hiếm / thu hẹp", ipa: "/ˈskersər/" },
+      { q: "becomes scarcer", p: "continues to shrink", vi: "ngày càng khan hiếm / thu hẹp", ipa: "/ˈskeəsə(r)/" },
       { q: "protected from", p: "never ruined by", vi: "được bảo vệ khỏi / không bị hủy hoại", ipa: "/ˈruːɪnd/" },
       { q: "eliminating the use of", p: "have no need for", vi: "loại bỏ nhu cầu dùng", ipa: "/ɪˈlɪmɪneɪt/" },
       { q: "suitable for cultivating", p: "works best for", vi: "phù hợp nhất để trồng", ipa: "/ˈkʌltɪveɪt/" }
@@ -1040,14 +1040,14 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "assume", ipa: "/əˈsuːm/", pos: "v.", meaning: "cho rằng / giả định", example: "Most people <strong>assume</strong> laughter is just about jokes." },
-      { word: "remarks", ipa: "/rɪˈmɑːrks/", pos: "n.", meaning: "câu nói thường ngày", example: "People laughed after ordinary <strong>remarks</strong> like 'See you later'." },
-      { word: "ancestors", ipa: "/ˈænsestərz/", pos: "n.", meaning: "tổ tiên", example: "Our <strong>ancestors</strong> used laughter to signal safety." },
+      { word: "assume", ipa: "/əˈsjuːm/", pos: "v.", meaning: "cho rằng / giả định", example: "Most people <strong>assume</strong> laughter is just about jokes." },
+      { word: "remarks", ipa: "/rɪˈmɑːks/", pos: "n.", meaning: "câu nói thường ngày", example: "People laughed after ordinary <strong>remarks</strong> like 'See you later'." },
+      { word: "ancestors", ipa: "/ˈænsestəz/", pos: "n.", meaning: "tổ tiên", example: "Our <strong>ancestors</strong> used laughter to signal safety." },
       { word: "tension", ipa: "/ˈtenʃn/", pos: "n.", meaning: "sự căng thẳng", example: "Shared laughter reduces <strong>tension</strong> and builds trust." },
-      { word: "spontaneous", ipa: "/spɑːnˈteɪniəs/", pos: "adj.", meaning: "tự nhiên / bộc phát", example: "Brains tell apart <strong>spontaneous</strong> laughter and fake chuckles." }
+      { word: "spontaneous", ipa: "/spɒnˈteɪniəs/", pos: "adj.", meaning: "tự nhiên / bộc phát", example: "Brains tell apart <strong>spontaneous</strong> laughter and fake chuckles." }
     ],
     keywordTable: [
-      { q: "rarely triggered by humour", p: "Less than 20% followed anything humorous", vi: "hiếm khi do sự hài hước", ipa: "/ˈhjuːmər/" },
+      { q: "rarely triggered by humour", p: "Less than 20% followed anything humorous", vi: "hiếm khi do sự hài hước", ipa: "/ˈhjuːmə(r)/" },
       { q: "in isolation", p: "completely alone", vi: "ở một mình / tách biệt", ipa: "/ˌaɪsəˈleɪʃn/" },
       { q: "human health", p: "physical benefits / lowers stress", vi: "sức khỏe con người", ipa: "/ˈfɪzɪkl ˈbenɪfɪts/" },
       { q: "distinguish A from B", p: "detect the difference between A and B", vi: "phân biệt A với B", ipa: "/dɪˈstɪŋɡwɪʃ/" }
@@ -1164,16 +1164,16 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "unstructured play", ipa: "/ʌnˈstrʌktʃərd pleɪ/", pos: "n. phr.", meaning: "vui chơi tự do", example: "<strong>Unstructured play</strong> helps children control emotions." },
+      { word: "unstructured play", ipa: "/ˌʌnˈstrʌktʃəd pleɪ/", pos: "n. phr.", meaning: "vui chơi tự do", example: "<strong>Unstructured play</strong> helps children control emotions." },
       { word: "pretend play", ipa: "/prɪˈtend pleɪ/", pos: "n. phr.", meaning: "chơi đóng vai", example: "<strong>Pretend play</strong> with classmates builds vocabulary." },
       { word: "decline", ipa: "/dɪˈklaɪn/", pos: "n.", meaning: "sự sụt giảm", example: "The sharp <strong>decline</strong> in outdoor play links to anxiety." },
       { word: "paediatrician", ipa: "/ˌpiːdiəˈtrɪʃn/", pos: "n.", meaning: "bác sĩ nhi khoa", example: "<strong>Paediatrician</strong> Dr Ginsburg emphasises family play." }
     ],
     keywordTable: [
       { q: "make-believe games with peers", p: "pretend play with classmates", vi: "chơi đóng vai cùng bạn bè", ipa: "/prɪˈtend pleɪ/" },
-      { q: "language abilities", p: "vocabulary and storytelling skills", vi: "khả năng ngôn ngữ", ipa: "/vəˈkæbjəleri/" },
+      { q: "language abilities", p: "vocabulary and storytelling skills", vi: "khả năng ngôn ngữ", ipa: "/vəˈkæbjələri/" },
       { q: "poorer mental wellbeing", p: "rising anxiety", vi: "sức khỏe tinh thần kém đi / lo âu tăng", ipa: "/æŋˈzaɪəti/" },
-      { q: "strengthen relationship", p: "build deeper emotional closeness", vi: "củng cố mối quan hệ gắn kết", ipa: "/ˈkloʊsnəs/" }
+      { q: "strengthen relationship", p: "build deeper emotional closeness", vi: "củng cố mối quan hệ gắn kết", ipa: "/ˈkləʊsnəs/" }
     ]
   },
 
@@ -1289,14 +1289,14 @@ window.READING_EXERCISES = [
     supportVocab: [
       { word: "commuting", ipa: "/kəˈmjuːtɪŋ/", pos: "n.", meaning: "đi lại tới chỗ làm", example: "Home workers are free from <strong>commuting</strong> stress." },
       { word: "graduates", ipa: "/ˈɡrædʒuəts/", pos: "n.", meaning: "sinh viên mới ra trường", example: "Newly hired <strong>graduates</strong> learn by watching colleagues." },
-      { word: "promoted", ipa: "/prəˈmoʊtɪd/", pos: "v. (p.p.)", meaning: "được thăng chức", example: "Remote staff were <strong>promoted</strong> less often." },
-      { word: "open-plan office", ipa: "/ˌoʊpən ˈplæn ˈɔːfɪs/", pos: "n.", meaning: "văn phòng không vách ngăn", example: "Bernstein studied <strong>open-plan offices</strong>." },
+      { word: "promoted", ipa: "/prəˈməʊtɪd/", pos: "v. (p.p.)", meaning: "được thăng chức", example: "Remote staff were <strong>promoted</strong> less often." },
+      { word: "open-plan office", ipa: "/ˌəʊpən ˈplæn ˈɒfɪs/", pos: "n.", meaning: "văn phòng không vách ngăn", example: "Bernstein studied <strong>open-plan offices</strong>." },
       { word: "boundary", ipa: "/ˈbaʊndri/", pos: "n.", meaning: "ranh giới", example: "Working at home blurs the <strong>boundary</strong> with family rest." }
     ],
     keywordTable: [
-      { q: "junior employees", p: "newly hired graduates", vi: "nhân viên trẻ / mới vào nghề", ipa: "/ˈdʒuːniər/" },
-      { q: "career advancement", p: "promoted", vi: "thăng tiến trong sự nghiệp", ipa: "/prəˈmoʊtɪd/" },
-      { q: "offices without partitions", p: "open-plan offices / removing interior walls", vi: "văn phòng không vách ngăn", ipa: "/pɑːrˈtɪʃnz/" },
+      { q: "junior employees", p: "newly hired graduates", vi: "nhân viên trẻ / mới vào nghề", ipa: "/ˈdʒuːniə(r)/" },
+      { q: "career advancement", p: "promoted", vi: "thăng tiến trong sự nghiệp", ipa: "/prəˈməʊtɪd/" },
+      { q: "offices without partitions", p: "open-plan offices / removing interior walls", vi: "văn phòng không vách ngăn", ipa: "/pɑːˈtɪʃnz/" },
       { q: "separate job from personal time", p: "boundary between duties and family rest", vi: "ranh giới công việc và thời gian cá nhân", ipa: "/ˈbaʊndri/" }
     ]
   },
@@ -1421,16 +1421,16 @@ window.READING_EXERCISES = [
     ],
     supportVocab: [
       { word: "navigate / steer", ipa: "/ˈnævɪɡeɪt/", pos: "v.", meaning: "định hướng / dẫn đường", example: "Nocturnal migrants <strong>steer</strong> using star patterns." },
-      { word: "overcast", ipa: "/ˌoʊvərˈkæst/", pos: "adj.", meaning: "nhiều mây mù", example: "On heavily <strong>overcast</strong> days, birds lost their way." },
-      { word: "disoriented", ipa: "/dɪsˈɔːrientɪd/", pos: "adj.", meaning: "mất phương hướng", example: "Birds became <strong>disoriented</strong> without sunlight." },
-      { word: "nocturnal", ipa: "/nɑːkˈtɜːrnl/", pos: "adj.", meaning: "hoạt động về đêm", example: "Many <strong>nocturnal</strong> birds migrate at night." },
-      { word: "odours", ipa: "/ˈoʊdərz/", pos: "n.", meaning: "mùi hương", example: "Airborne <strong>odours</strong> create a smell map." }
+      { word: "overcast", ipa: "/ˌəʊvəˈkɑːst/", pos: "adj.", meaning: "nhiều mây mù", example: "On heavily <strong>overcast</strong> days, birds lost their way." },
+      { word: "disoriented", ipa: "/dɪsˈɔːriəntɪd/", pos: "adj.", meaning: "mất phương hướng", example: "Birds became <strong>disoriented</strong> without sunlight." },
+      { word: "nocturnal", ipa: "/nɒkˈtɜːnl/", pos: "adj.", meaning: "hoạt động về đêm", example: "Many <strong>nocturnal</strong> birds migrate at night." },
+      { word: "odours", ipa: "/ˈəʊdəz/", pos: "n.", meaning: "mùi hương", example: "Airborne <strong>odours</strong> create a smell map." }
     ],
     keywordTable: [
-      { q: "electromagnetic signals", p: "weak radio waves", vi: "tín hiệu điện từ / sóng vô tuyến", ipa: "/ɪˌlektroʊmæɡˈnetɪk/" },
-      { q: "night-flying birds", p: "nocturnal migrants", vi: "chim di cư bay ban đêm", ipa: "/nɑːkˈtɜːrnl/" },
-      { q: "scents in the atmosphere", p: "airborne odours", vi: "mùi hương trong không khí", ipa: "/ˈerˌbɔːrn ˈoʊdərz/" },
-      { q: "lose their sense of direction", p: "became disoriented", vi: "bị mất phương hướng", ipa: "/dɪsˈɔːrientɪd/" }
+      { q: "electromagnetic signals", p: "weak radio waves", vi: "tín hiệu điện từ / sóng vô tuyến", ipa: "/ɪˌlektrəʊmæɡˈnetɪk/" },
+      { q: "night-flying birds", p: "nocturnal migrants", vi: "chim di cư bay ban đêm", ipa: "/nɒkˈtɜːnl/" },
+      { q: "scents in the atmosphere", p: "airborne odours", vi: "mùi hương trong không khí", ipa: "/ˈeəbɔːn ˈəʊdəz/" },
+      { q: "lose their sense of direction", p: "became disoriented", vi: "bị mất phương hướng", ipa: "/dɪsˈɔːriəntɪd/" }
     ]
   },
 
@@ -1566,14 +1566,14 @@ window.READING_EXERCISES = [
       { word: "thrive", ipa: "/θraɪv/", pos: "v.", meaning: "phát triển mạnh", example: "Museums <strong>thrive</strong> when visitors participate." },
       { word: "advocates", ipa: "/ˈædvəkeɪts/", pos: "v.", meaning: "ủng hộ / đề xướng", example: "Marcus Chen <strong>advocates</strong> installing VR headsets." },
       { word: "rejects", ipa: "/rɪˈdʒekts/", pos: "v.", meaning: "bác bỏ / phản đối", example: "Julian Vance strongly <strong>rejects</strong> digital screens." },
-      { word: "artefacts", ipa: "/ˈɑːrtɪfækts/", pos: "n.", meaning: "hiện vật lịch sử", example: "Visitors should examine real historical <strong>artefacts</strong>." },
-      { word: "abolishing entrance fees", ipa: "/əˈbɑːlɪʃɪŋ ˈentrəns fiːz/", pos: "v. phr.", meaning: "bỏ thu vé vào cửa", example: "<strong>Abolishing entrance fees</strong> boosts attendance." },
-      { word: "rotating displays", ipa: "/roʊˈteɪtɪŋ dɪˈspleɪz/", pos: "n. phr.", meaning: "luân phiên trưng bày", example: "<strong>Rotating displays</strong> lets the public see more items." }
+      { word: "artefacts", ipa: "/ˈɑːtɪfækts/", pos: "n.", meaning: "hiện vật lịch sử", example: "Visitors should examine real historical <strong>artefacts</strong>." },
+      { word: "abolishing entrance fees", ipa: "/əˈbɒlɪʃɪŋ ˈentrəns fiːz/", pos: "v. phr.", meaning: "bỏ thu vé vào cửa", example: "<strong>Abolishing entrance fees</strong> boosts attendance." },
+      { word: "rotating displays", ipa: "/rəʊˈteɪtɪŋ dɪˈspleɪz/", pos: "n. phr.", meaning: "luân phiên trưng bày", example: "<strong>Rotating displays</strong> lets the public see more items." }
     ],
     keywordTable: [
       { q: "pull attention away from", p: "distract ... from", vi: "làm xao nhãng khỏi", ipa: "/dɪˈstrækt/" },
-      { q: "authentic objects", p: "real historical artefacts", vi: "các hiện vật lịch sử thật", ipa: "/ˈɑːrtɪfækts/" },
-      { q: "removing ticket charges", p: "abolishing entrance fees", vi: "bỏ thu vé vào cửa", ipa: "/əˈbɑːlɪʃ/" },
+      { q: "authentic objects", p: "real historical artefacts", vi: "các hiện vật lịch sử thật", ipa: "/ˈɑːtɪfækts/" },
+      { q: "removing ticket charges", p: "abolishing entrance fees", vi: "bỏ thu vé vào cửa", ipa: "/əˈbɒlɪʃ/" },
       { q: "kept out of sight", p: "locked in underground storage rooms", vi: "cất kín khuất tầm mắt / trong kho", ipa: "/ˈstɔːrɪdʒ/" },
       { q: "intimidating buildings", p: "grand, formal architecture", vi: "tòa nhà đồ sộ gây e ngại", ipa: "/ɪnˈtɪmɪdeɪtɪŋ/" }
     ]
@@ -1647,15 +1647,15 @@ window.READING_EXERCISES = [
     ],
     supportVocab: [
       { word: "pristine", ipa: "/ˈprɪstiːn/", pos: "adj.", meaning: "nguyên sơ, tinh khôi", example: "Tourists visit fragile, <strong>pristine</strong> natural areas." },
-      { word: "conservation", ipa: "/ˌkɑːnsərˈveɪʃn/", pos: "n.", meaning: "sự bảo tồn", example: "It aims to provide funds for ecological <strong>conservation</strong>." },
+      { word: "conservation", ipa: "/ˌkɒnsəˈveɪʃn/", pos: "n.", meaning: "sự bảo tồn", example: "It aims to provide funds for ecological <strong>conservation</strong>." },
       { word: "necessitate", ipa: "/nəˈsesɪteɪt/", pos: "v.", meaning: "đòi hỏi, làm cho cần thiết", example: "Population growth <strong>necessitates</strong> additional infrastructure." },
-      { word: "infrastructure", ipa: "/ˈɪnfrəstrʌktʃər/", pos: "n.", meaning: "cơ sở hạ tầng", example: "Local communities may fail to meet <strong>infrastructure</strong> demands." },
+      { word: "infrastructure", ipa: "/ˈɪnfrəstrʌktʃə(r)/", pos: "n.", meaning: "cơ sở hạ tầng", example: "Local communities may fail to meet <strong>infrastructure</strong> demands." },
       { word: "exploitation", ipa: "/ˌeksplɔɪˈteɪʃn/", pos: "n.", meaning: "sự khai thác", example: "Building lodges comes with the <strong>exploitation</strong> of energy sources." }
     ],
     keywordTable: [
-      { q: "raise money for environmental projects", p: "provide funds for ecological conservation", vi: "gây quỹ cho dự án bảo tồn môi trường", ipa: "/ˌkɑːnsərˈveɪʃn/" },
-      { q: "extra facilities and amenities", p: "additional infrastructure", vi: "cơ sở vật chất & hạ tầng bổ sung", ipa: "/ˈɪnfrəstrʌktʃər/" },
-      { q: "one aim", p: "its purpose", vi: "mục đích / mục tiêu", ipa: "/ˈpɜːrpəs/" }
+      { q: "raise money for environmental projects", p: "provide funds for ecological conservation", vi: "gây quỹ cho dự án bảo tồn môi trường", ipa: "/ˌkɒnsəˈveɪʃn/" },
+      { q: "extra facilities and amenities", p: "additional infrastructure", vi: "cơ sở vật chất & hạ tầng bổ sung", ipa: "/ˈɪnfrəstrʌktʃə(r)/" },
+      { q: "one aim", p: "its purpose", vi: "mục đích / mục tiêu", ipa: "/ˈpɜːpəs/" }
     ]
   },
 
@@ -1726,12 +1726,12 @@ window.READING_EXERCISES = [
     ],
     supportVocab: [
       { word: "simulated", ipa: "/ˈsɪmjuleɪtɪd/", pos: "adj.", meaning: "mô phỏng, giả lập", example: "A placebo is a sham or <strong>simulated</strong> medical intervention." },
-      { word: "perceived", ipa: "/pərˈsiːvd/", pos: "adj.", meaning: "cảm nhận được", example: "Patients may experience a <strong>perceived</strong> improvement." },
+      { word: "perceived", ipa: "/pəˈsiːvd/", pos: "adj.", meaning: "cảm nhận được", example: "Patients may experience a <strong>perceived</strong> improvement." },
       { word: "prescribe", ipa: "/prɪˈskraɪb/", pos: "v.", meaning: "kê đơn thuốc", example: "48% of Danish doctors had <strong>prescribed</strong> a placebo." },
       { word: "fatigue", ipa: "/fəˈtiːɡ/", pos: "n.", meaning: "sự mệt mỏi", example: "Vitamins were frequently prescribed for <strong>fatigue</strong>." }
     ],
     keywordTable: [
-      { q: "a simulated medical treatment", p: "a sham or simulated medical intervention", vi: "biện pháp điều trị y tế mô phỏng", ipa: "/ˌɪntərˈvenʃn/" },
+      { q: "a simulated medical treatment", p: "a sham or simulated medical intervention", vi: "biện pháp điều trị y tế mô phỏng", ipa: "/ˌɪntəˈvenʃn/" },
       { q: "fatigued patients", p: "for fatigue", vi: "bệnh nhân bị mệt mỏi", ipa: "/fəˈtiːɡ/" },
       { q: "those suffering with viruses", p: "for viral infections", vi: "người bị nhiễm virus", ipa: "/ˈvaɪrəl/" }
     ]
@@ -1809,13 +1809,13 @@ window.READING_EXERCISES = [
     supportVocab: [
       { word: "habitable", ipa: "/ˈhæbɪtəbl/", pos: "adj.", meaning: "có thể sinh sống được", example: "It orbits within the star's <strong>habitable</strong> zone." },
       { word: "sustain", ipa: "/səˈsteɪn/", pos: "v.", meaning: "duy trì", example: "Temperatures are suitable to <strong>sustain</strong> life." },
-      { word: "orbit", ipa: "/ˈɔːrbɪt/", pos: "n./v.", meaning: "quỹ đạo / quay theo quỹ đạo", example: "The planet lies in an <strong>orbit</strong> comparable to Earth." },
-      { word: "comparable", ipa: "/ˈkɑːmpərəbl/", pos: "adj.", meaning: "tương đương, có thể so sánh", example: "Its orbit is <strong>comparable</strong> to that of Earth." },
-      { word: "constellation", ipa: "/ˌkɑːnstəˈleɪʃn/", pos: "n.", meaning: "chòm sao", example: "HD 40307 lies in the <strong>constellation</strong> Pictor." }
+      { word: "orbit", ipa: "/ˈɔːbɪt/", pos: "n./v.", meaning: "quỹ đạo / quay theo quỹ đạo", example: "The planet lies in an <strong>orbit</strong> comparable to Earth." },
+      { word: "comparable", ipa: "/ˈkɒmpərəbl/", pos: "adj.", meaning: "tương đương, có thể so sánh", example: "Its orbit is <strong>comparable</strong> to that of Earth." },
+      { word: "constellation", ipa: "/ˌkɒnstəˈleɪʃn/", pos: "n.", meaning: "chòm sao", example: "HD 40307 lies in the <strong>constellation</strong> Pictor." }
     ],
     keywordTable: [
       { q: "at the perfect distance", p: "at exactly the right distance", vi: "ở đúng khoảng cách lý tưởng", ipa: "/ˈdɪstəns/" },
-      { q: "orbit region comparable to the Earth's", p: "lie in an orbit comparable to Earth", vi: "vùng quỹ đạo tương đương Trái Đất", ipa: "/ˈɔːrbɪt/" },
+      { q: "orbit region comparable to the Earth's", p: "lie in an orbit comparable to Earth", vi: "vùng quỹ đạo tương đương Trái Đất", ipa: "/ˈɔːbɪt/" },
       { q: "support life", p: "sustain life", vi: "duy trì / hỗ trợ sự sống", ipa: "/səˈsteɪn/" }
     ]
   },
@@ -1881,8 +1881,8 @@ window.READING_EXERCISES = [
     ],
     supportVocab: [
       { word: "coin (a term)", ipa: "/kɔɪn/", pos: "v.", meaning: "đặt ra, sáng tạo (thuật ngữ)", example: "The term IQ was <strong>coined</strong> by William Stern in 1912." },
-      { word: "phenomenon", ipa: "/fəˈnɑːmɪnən/", pos: "n.", meaning: "hiện tượng", example: "The <strong>phenomenon</strong> of rising score performance was named the Flynn effect." },
-      { word: "constant", ipa: "/ˈkɑːnstənt/", pos: "adj.", meaning: "cố định, không đổi", example: "Test-takers are scored by a <strong>constant</strong> standard rule." },
+      { word: "phenomenon", ipa: "/fəˈnɒmɪnən/", pos: "n.", meaning: "hiện tượng", example: "The <strong>phenomenon</strong> of rising score performance was named the Flynn effect." },
+      { word: "constant", ipa: "/ˈkɒnstənt/", pos: "adj.", meaning: "cố định, không đổi", example: "Test-takers are scored by a <strong>constant</strong> standard rule." },
       { word: "decade", ipa: "/ˈdekeɪd/", pos: "n.", meaning: "thập kỷ (10 năm)", example: "Scores rose by around three points per <strong>decade</strong>." }
     ],
     keywordTable: [
@@ -1958,9 +1958,9 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "proponents", ipa: "/prəˈpoʊnənts/", pos: "n.", meaning: "những người ủng hộ", example: "<strong>Proponents</strong> say teachers should adapt classroom methods." },
+      { word: "proponents", ipa: "/prəˈpəʊnənts/", pos: "n.", meaning: "những người ủng hộ", example: "<strong>Proponents</strong> say teachers should adapt classroom methods." },
       { word: "efficacy", ipa: "/ˈefɪkəsi/", pos: "n.", meaning: "tính hiệu quả", example: "The basis and <strong>efficacy</strong> of these proposals are criticised." },
-      { word: "hypothesis", ipa: "/haɪˈpɑːθəsɪs/", pos: "n.", meaning: "giả thuyết", example: "There is evidence that the <strong>hypothesis</strong> may be invalid." },
+      { word: "hypothesis", ipa: "/haɪˈpɒθəsɪs/", pos: "n.", meaning: "giả thuyết", example: "There is evidence that the <strong>hypothesis</strong> may be invalid." },
       { word: "invalid", ipa: "/ɪnˈvælɪd/", pos: "adj.", meaning: "không có giá trị / không đúng", example: "The learning-styles hypothesis may be <strong>invalid</strong>." }
     ],
     keywordTable: [
@@ -2027,13 +2027,13 @@ window.READING_EXERCISES = [
     ],
     supportVocab: [
       { word: "innate", ipa: "/ɪˈneɪt/", pos: "adj.", meaning: "bẩm sinh", example: "Some believe success is based on <strong>innate</strong> ability." },
-      { word: "doggedness", ipa: "/ˈdɔːɡɪdnəs/", pos: "n.", meaning: "sự kiên trì bền bỉ", example: "Growth mindset involves hard work, training and <strong>doggedness</strong>." },
-      { word: "discern", ipa: "/dɪˈsɜːrn/", pos: "v.", meaning: "nhận ra, phân biệt", example: "A person's mindset can be <strong>discerned</strong> from their behaviour." },
+      { word: "doggedness", ipa: "/ˈdɒɡɪdnəs/", pos: "n.", meaning: "sự kiên trì bền bỉ", example: "Growth mindset involves hard work, training and <strong>doggedness</strong>." },
+      { word: "discern", ipa: "/dɪˈsɜːn/", pos: "v.", meaning: "nhận ra, phân biệt", example: "A person's mindset can be <strong>discerned</strong> from their behaviour." },
       { word: "dread", ipa: "/dred/", pos: "v.", meaning: "rất sợ hãi, lo sợ", example: "Fixed-mindset individuals <strong>dread</strong> failure." }
     ],
     keywordTable: [
       { q: "classifies people according to their beliefs", p: "individuals can be placed on a continuum according to their implicit views", vi: "phân loại mọi người theo quan điểm của họ", ipa: "/kənˈtɪnjuəm/" },
-      { q: "do not always realise", p: "may not necessarily be aware of", vi: "không phải lúc nào cũng nhận ra", ipa: "/əˈwer/" },
+      { q: "do not always realise", p: "may not necessarily be aware of", vi: "không phải lúc nào cũng nhận ra", ipa: "/əˈweə(r)/" },
       { q: "inherited intelligence", p: "innate ability", vi: "trí thông minh / năng lực bẩm sinh", ipa: "/ɪˈneɪt/" }
     ]
   },
@@ -2103,14 +2103,14 @@ window.READING_EXERCISES = [
     supportVocab: [
       { word: "navigable", ipa: "/ˈnævɪɡəbl/", pos: "adj.", meaning: "có thể cho tàu thuyền đi lại", example: "It was built underneath a <strong>navigable</strong> river." },
       { word: "exceed", ipa: "/ɪkˈsiːd/", pos: "v.", meaning: "vượt quá", example: "Building costs far <strong>exceeded</strong> initial estimates." },
-      { word: "accommodate", ipa: "/əˈkɑːmədeɪt/", pos: "v.", meaning: "chứa được, đáp ứng được", example: "Proposals to <strong>accommodate</strong> wheeled vehicles failed." },
+      { word: "accommodate", ipa: "/əˈkɒmədeɪt/", pos: "v.", meaning: "chứa được, đáp ứng được", example: "Proposals to <strong>accommodate</strong> wheeled vehicles failed." },
       { word: "pedestrians", ipa: "/pəˈdestriənz/", pos: "n.", meaning: "người đi bộ", example: "The tunnel was used only by <strong>pedestrians</strong>." },
       { word: "scepticism", ipa: "/ˈskeptɪsɪzəm/", pos: "n.", meaning: "sự hoài nghi", example: "It succeeded despite the previous <strong>scepticism</strong> of engineers." }
     ],
     keywordTable: [
       { q: "more expensive than predicted", p: "building costs far exceeding initial estimates", vi: "tốn kém hơn dự tính ban đầu", ipa: "/ˈestɪməts/" },
-      { q: "plans to allow vehicles", p: "proposals to accommodate wheeled vehicles", vi: "kế hoạch / đề xuất cho xe cộ đi qua", ipa: "/prəˈpoʊzlz/" },
-      { q: "significant work of architecture", p: "listed Grade II* in recognition of its architectural importance", vi: "công trình có giá trị kiến trúc quan trọng", ipa: "/ˌɑːrkɪˈtektʃərəl/" }
+      { q: "plans to allow vehicles", p: "proposals to accommodate wheeled vehicles", vi: "kế hoạch / đề xuất cho xe cộ đi qua", ipa: "/prəˈpəʊzlz/" },
+      { q: "significant work of architecture", p: "listed Grade II* in recognition of its architectural importance", vi: "công trình có giá trị kiến trúc quan trọng", ipa: "/ˌɑːkɪˈtektʃərəl/" }
     ]
   },
 
@@ -2168,12 +2168,12 @@ window.READING_EXERCISES = [
     supportVocab: [
       { word: "expulsion", ipa: "/ɪkˈspʌlʃn/", pos: "n.", meaning: "sự đuổi học", example: "Schools recorded 130,000 <strong>expulsions</strong> in one year." },
       { word: "suspension", ipa: "/səˈspenʃn/", pos: "n.", meaning: "sự đình chỉ học", example: "There were roughly 7 million <strong>suspensions</strong> among students." },
-      { word: "corporal punishment", ipa: "/ˌkɔːrpərəl ˈpʌnɪʃmənt/", pos: "n. phr.", meaning: "trừng phạt thể xác", example: "Instances of <strong>corporal punishment</strong> still occur in US schools." },
-      { word: "exacerbate", ipa: "/ɪɡˈzæsərbeɪt/", pos: "v.", meaning: "làm trầm trọng thêm", example: "Standard disciplinary methods often <strong>exacerbate</strong> behaviour problems." }
+      { word: "corporal punishment", ipa: "/ˌkɔːpərəl ˈpʌnɪʃmənt/", pos: "n. phr.", meaning: "trừng phạt thể xác", example: "Instances of <strong>corporal punishment</strong> still occur in US schools." },
+      { word: "exacerbate", ipa: "/ɪɡˈzæsəbeɪt/", pos: "v.", meaning: "làm trầm trọng thêm", example: "Standard disciplinary methods often <strong>exacerbate</strong> behaviour problems." }
     ],
     keywordTable: [
-      { q: "do more harm than good", p: "far from resolving ... often exacerbate them", vi: "lợi bất cập hại / làm vấn đề tệ hơn", ipa: "/ɪɡˈzæsərbeɪt/" },
-      { q: "behaviour management", p: "standard disciplinary methods", vi: "phương pháp kỷ luật / quản lý hành vi", ipa: "/ˈdɪsəpləneri/" }
+      { q: "do more harm than good", p: "far from resolving ... often exacerbate them", vi: "lợi bất cập hại / làm vấn đề tệ hơn", ipa: "/ɪɡˈzæsəbeɪt/" },
+      { q: "behaviour management", p: "standard disciplinary methods", vi: "phương pháp kỷ luật / quản lý hành vi", ipa: "/ˌdɪsəˈplɪnəri/" }
     ]
   },
 
@@ -2265,16 +2265,16 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "pastoral", ipa: "/ˈpæstərəl/", pos: "adj.", meaning: "thuộc về chăm lo đời sống, tinh thần học sinh", example: "The early role of the tutor was both <strong>pastoral</strong> and academic." },
+      { word: "pastoral", ipa: "/ˈpɑːstərəl/", pos: "adj.", meaning: "thuộc về chăm lo đời sống, tinh thần học sinh", example: "The early role of the tutor was both <strong>pastoral</strong> and academic." },
       { word: "dialectic", ipa: "/ˌdaɪəˈlektɪk/", pos: "n.", meaning: "phép biện chứng / thảo luận hỏi đáp", example: "Oxford's foundation is the <strong>dialectic</strong> of discussion-based tutorials." },
-      { word: "cornerstone", ipa: "/ˈkɔːrnərstoʊn/", pos: "n.", meaning: "nền tảng cốt lõi", example: "The tutorial was established as the <strong>cornerstone</strong> of Oxford education." },
+      { word: "cornerstone", ipa: "/ˈkɔːnəstəʊn/", pos: "n.", meaning: "nền tảng cốt lõi", example: "The tutorial was established as the <strong>cornerstone</strong> of Oxford education." },
       { word: "prestige", ipa: "/preˈstiːʒ/", pos: "n.", meaning: "uy tín, danh tiếng", example: "The tutorial method retains its <strong>prestige</strong> and effectiveness." }
     ],
     keywordTable: [
-      { q: "still a key part of the Oxford education system", p: "the cornerstone of Oxford education, retains its prestige", vi: "vẫn là nền tảng chủ chốt của giáo dục Oxford", ipa: "/ˈkɔːrnərstoʊn/" },
+      { q: "still a key part of the Oxford education system", p: "the cornerstone of Oxford education, retains its prestige", vi: "vẫn là nền tảng chủ chốt của giáo dục Oxford", ipa: "/ˈkɔːnəstəʊn/" },
       { q: "learn independently", p: "learn and think for ourselves", vi: "tự học và tự tư duy độc lập", ipa: "/ˌɪndɪˈpendəntli/" },
-      { q: "Oxford University marketing", p: "the present university website states", vi: "kênh giới thiệu / quảng bá của trường", ipa: "/ˈmɑːrkɪtɪŋ/" },
-      { q: "more than just an academic role", p: "both pastoral as well as academic", vi: "vừa mang vai trò học thuật vừa chăm lo đời sống", ipa: "/ˈpæstərəl/" }
+      { q: "Oxford University marketing", p: "the present university website states", vi: "kênh giới thiệu / quảng bá của trường", ipa: "/ˈmɑːkɪtɪŋ/" },
+      { q: "more than just an academic role", p: "both pastoral as well as academic", vi: "vừa mang vai trò học thuật vừa chăm lo đời sống", ipa: "/ˈpɑːstərəl/" }
     ]
   },
 
@@ -2372,14 +2372,14 @@ window.READING_EXERCISES = [
     ],
     supportVocab: [
       { word: "philanthropist", ipa: "/fɪˈlænθrəpɪst/", pos: "n.", meaning: "nhà từ thiện", example: "<strong>Philanthropist</strong> Andrew Carnegie funded over 2,500 libraries." },
-      { word: "obsolete", ipa: "/ˌɑːbsəˈliːt/", pos: "adj.", meaning: "lỗi thời, không còn được dùng", example: "Some predicted libraries would become <strong>obsolete</strong>." },
+      { word: "obsolete", ipa: "/ˌɒbsəˈliːt/", pos: "adj.", meaning: "lỗi thời, không còn được dùng", example: "Some predicted libraries would become <strong>obsolete</strong>." },
       { word: "reinvent", ipa: "/ˌriːɪnˈvent/", pos: "v.", meaning: "tự đổi mới", example: "Public libraries <strong>reinvented</strong> themselves as digital centres." },
-      { word: "combat loneliness", ipa: "/ˈkɑːmbæt ˈloʊnlinəs/", pos: "v. phr.", meaning: "chống lại / giảm bớt sự cô đơn", example: "Libraries act as hubs that help <strong>combat loneliness</strong>." }
+      { word: "combat loneliness", ipa: "/ˈkɒmbæt ˈləʊnlinəs/", pos: "v. phr.", meaning: "chống lại / giảm bớt sự cô đơn", example: "Libraries act as hubs that help <strong>combat loneliness</strong>." }
     ],
     keywordTable: [
-      { q: "cause physical libraries to disappear", p: "physical libraries would soon become obsolete", vi: "khiến thư viện truyền thống biến mất / lỗi thời", ipa: "/ˌɑːbsəˈliːt/" },
-      { q: "ordinary workers", p: "working-class people", vi: "tầng lớp lao động", ipa: "/ˈwɜːrkɪŋ klæs/" },
-      { q: "help seniors navigate online services", p: "beginner computer classes to help older residents use online banking and email", vi: "hỗ trợ người lớn tuổi dùng dịch vụ trực tuyến", ipa: "/ˈsiːniərz/" },
+      { q: "cause physical libraries to disappear", p: "physical libraries would soon become obsolete", vi: "khiến thư viện truyền thống biến mất / lỗi thời", ipa: "/ˌɒbsəˈliːt/" },
+      { q: "ordinary workers", p: "working-class people", vi: "tầng lớp lao động", ipa: "/ˌwɜːkɪŋ ˈklɑːs/" },
+      { q: "help seniors navigate online services", p: "beginner computer classes to help older residents use online banking and email", vi: "hỗ trợ người lớn tuổi dùng dịch vụ trực tuyến", ipa: "/ˈsiːniəz/" },
       { q: "help isolated people", p: "combat loneliness among elderly visitors and newcomers", vi: "giảm bớt sự cô đơn cho người ít kết nối", ipa: "/ˈaɪsəleɪtɪd/" }
     ]
   },
@@ -2489,15 +2489,15 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "insulate", ipa: "/ˈɪnsəleɪt/", pos: "v.", meaning: "cách nhiệt", example: "Turf roofs were used to <strong>insulate</strong> wooden homes in winter." },
+      { word: "insulate", ipa: "/ˈɪnsjuleɪt/", pos: "v.", meaning: "cách nhiệt", example: "Turf roofs were used to <strong>insulate</strong> wooden homes in winter." },
       { word: "evaporation", ipa: "/ɪˌvæpəˈreɪʃn/", pos: "n.", meaning: "sự bay hơi", example: "Plants cool buildings through shade and moisture <strong>evaporation</strong>." },
       { word: "drainage pipes", ipa: "/ˈdreɪnɪdʒ paɪps/", pos: "n. phr.", meaning: "đường ống thoát nước", example: "Heavy rainstorms often overwhelm underground <strong>drainage pipes</strong>." },
-      { word: "reinforcement", ipa: "/ˌriːɪnˈfɔːrsmənt/", pos: "n.", meaning: "sự gia cố kết cấu", example: "Older roofs may need costly <strong>reinforcement</strong> to hold wet soil." },
+      { word: "reinforcement", ipa: "/ˌriːɪnˈfɔːsmənt/", pos: "n.", meaning: "sự gia cố kết cấu", example: "Older roofs may need costly <strong>reinforcement</strong> to hold wet soil." },
       { word: "bylaws", ipa: "/ˈbaɪlɔːz/", pos: "n.", meaning: "quy định / luật địa phương", example: "Toronto introduced <strong>bylaws</strong> requiring green roofs on new buildings." }
     ],
     keywordTable: [
       { q: "legal rule for newly built properties", p: "bylaws requiring green roofs on newly constructed buildings", vi: "quy định bắt buộc đối với công trình xây mới", ipa: "/ˈbaɪlɔːz/" },
-      { q: "keep houses warm", p: "insulate wooden homes against freezing temperatures", vi: "giữ ấm / cách nhiệt cho nhà ở", ipa: "/ˈɪnsəleɪt/" },
+      { q: "keep houses warm", p: "insulate wooden homes against freezing temperatures", vi: "giữ ấm / cách nhiệt cho nhà ở", ipa: "/ˈɪnsjuleɪt/" },
       { q: "spending on cooling", p: "summer air-conditioning bills", vi: "chi phí làm mát / tiền điện điều hòa", ipa: "/ˈkuːlɪŋ/" },
       { q: "physical limitation", p: "lack the structural strength", vi: "hạn chế về kết cấu chịu lực", ipa: "/ˈstrʌktʃərəl/" }
     ]
@@ -2606,14 +2606,14 @@ window.READING_EXERCISES = [
       }
     ],
     supportVocab: [
-      { word: "overturn", ipa: "/ˌoʊvərˈtɜːrn/", pos: "v.", meaning: "đảo ngược, bác bỏ (quan điểm)", example: "Brain scans have <strong>overturned</strong> the old view of sleep." },
-      { word: "counterproductive", ipa: "/ˌkaʊntərprəˈdʌktɪv/", pos: "adj.", meaning: "phản tác dụng", example: "Staying awake all night before an exam is <strong>counterproductive</strong>." },
-      { word: "impair", ipa: "/ɪmˈper/", pos: "v.", meaning: "làm suy giảm", example: "Lack of sleep can <strong>impair</strong> concentration the next day." },
+      { word: "overturn", ipa: "/ˌəʊvəˈtɜːn/", pos: "v.", meaning: "đảo ngược, bác bỏ (quan điểm)", example: "Brain scans have <strong>overturned</strong> the old view of sleep." },
+      { word: "counterproductive", ipa: "/ˌkaʊntəprəˈdʌktɪv/", pos: "adj.", meaning: "phản tác dụng", example: "Staying awake all night before an exam is <strong>counterproductive</strong>." },
+      { word: "impair", ipa: "/ɪmˈpeə(r)/", pos: "v.", meaning: "làm suy giảm", example: "Lack of sleep can <strong>impair</strong> concentration the next day." },
       { word: "drowsiness", ipa: "/ˈdraʊzinəs/", pos: "n.", meaning: "cảm giác buồn ngủ, uể oải", example: "A 20-minute nap refreshes alertness without <strong>drowsiness</strong>." }
     ],
     keywordTable: [
       { q: "outdated belief", p: "commonly assumed ... overturned this view", vi: "quan điểm cũ đã bị bác bỏ", ipa: "/ˌaʊtˈdeɪtɪd/" },
-      { q: "lasting memory storage", p: "long-term memory networks", vi: "kho trí nhớ dài hạn", ipa: "/ˈlɑːŋ tɜːrm/" },
+      { q: "lasting memory storage", p: "long-term memory networks", vi: "kho trí nhớ dài hạn", ipa: "/ˌlɒŋ ˈtɜːm/" },
       { q: "sleep-deprived students", p: "students who pulled an all-nighter", vi: "sinh viên thiếu ngủ / thức trắng đêm", ipa: "/dɪˈpraɪvd/" },
       { q: "avoiding electronic screens", p: "switch off bright smartphone screens", vi: "tránh màn hình thiết bị điện tử", ipa: "/skriːnz/" }
     ]

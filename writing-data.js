@@ -83,14 +83,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "night",
-                "ipa": "/ˈnaɪ̯t/",
+                "ipa": "/naɪt/",
                 "meaning": "đêm, buổi tối muộn",
                 "exampleEn": "Good night, sleep well.",
                 "exampleVi": "Chúc ngủ ngon, ngủ ngon nhé."
               },
               {
                 "word": "goodbye",
-                "ipa": "/ɡʊdˈbaɪ/",
+                "ipa": "/ˌɡʊdˈbaɪ/",
                 "meaning": "tạm biệt",
                 "exampleEn": "Goodbye, see you tomorrow.",
                 "exampleVi": "Tạm biệt, hẹn gặp lại bạn vào ngày mai."
@@ -111,7 +111,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "welcome",
-                "ipa": "/ˈwɛlkəm/",
+                "ipa": "/ˈwelkəm/",
                 "meaning": "chào mừng",
                 "exampleEn": "Welcome to our English class.",
                 "exampleVi": "Chào mừng bạn đến với lớp tiếng Anh của chúng tôi."
@@ -399,35 +399,35 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "fine",
-                "ipa": "/ˈfaɪ̯n/",
+                "ipa": "/faɪn/",
                 "meaning": "khỏe, ổn",
                 "exampleEn": "I am fine, thank you.",
                 "exampleVi": "Tôi khỏe, cảm ơn bạn."
               },
               {
                 "word": "great",
-                "ipa": "/ˈɡɹeɪt/",
+                "ipa": "/ɡreɪt/",
                 "meaning": "rất tốt, tuyệt vời",
                 "exampleEn": "Everything is great today!",
                 "exampleVi": "Mọi thứ hôm nay thật tuyệt vời!"
               },
               {
                 "word": "good",
-                "ipa": "/ɡɵd/",
+                "ipa": "/ɡʊd/",
                 "meaning": "tốt, khỏe",
                 "exampleEn": "I feel good this morning.",
                 "exampleVi": "Sáng nay tôi cảm thấy rất khỏe."
               },
               {
                 "word": "tired",
-                "ipa": "/ˈtaɪ̯əd/",
+                "ipa": "/ˈtaɪəd/",
                 "meaning": "mệt mỏi",
                 "exampleEn": "He is tired after work.",
                 "exampleVi": "Anh ấy mệt mỏi sau giờ làm việc."
               },
               {
                 "word": "well",
-                "ipa": "/ˈwɛʊ̯/",
+                "ipa": "/wel/",
                 "meaning": "khỏe mạnh",
                 "exampleEn": "She is very well today.",
                 "exampleVi": "Hôm nay cô ấy rất khỏe mạnh."
@@ -448,7 +448,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "thank",
-                "ipa": "/ˈθæŋk/",
+                "ipa": "/θæŋk/",
                 "meaning": "cảm ơn",
                 "exampleEn": "Thank you for your warm help.",
                 "exampleVi": "Cảm ơn bạn vì sự giúp đỡ nhiệt tình."
@@ -462,7 +462,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "today",
-                "ipa": "/tʊˈdeɪ/",
+                "ipa": "/təˈdeɪ/",
                 "meaning": "hôm nay",
                 "exampleEn": "How are you feeling today?",
                 "exampleVi": "Hôm nay bạn cảm thấy thế nào?"
@@ -787,14 +787,14 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "alphabet",
-                "ipa": "/ˈælfəˌbɛt/",
+                "ipa": "/ˈælfəbet/",
                 "meaning": "bảng chữ cái",
                 "exampleEn": "The English alphabet has 26 letters.",
                 "exampleVi": "Bảng chữ cái tiếng Anh có 26 chữ cái."
               },
               {
                 "word": "letter",
-                "ipa": "/ˈlɛtə/",
+                "ipa": "/ˈletə(r)/",
                 "meaning": "chữ cái",
                 "exampleEn": "The first letter of my name is M.",
                 "exampleVi": "Chữ cái đầu tiên trong tên tôi là M."
@@ -815,7 +815,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "surname",
-                "ipa": "/ˈsɜːˌneɪm/",
+                "ipa": "/ˈsɜːneɪm/",
                 "meaning": "họ",
                 "exampleEn": "His surname is Miller.",
                 "exampleVi": "Họ của anh ấy là Miller."
@@ -829,7 +829,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "spell",
-                "ipa": "/spɛl/",
+                "ipa": "/spel/",
                 "meaning": "đánh vần",
                 "exampleEn": "How do you spell your surname?",
                 "exampleVi": "Bạn đánh vần họ của mình như thế nào?"
@@ -843,14 +843,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "repeat",
-                "ipa": "/ɹɪˈpiːt/",
+                "ipa": "/rɪˈpiːt/",
                 "meaning": "lặp lại",
                 "exampleEn": "Please repeat the letters.",
                 "exampleVi": "Làm ơn hãy lặp lại các chữ cái."
               },
               {
                 "word": "write",
-                "ipa": "/ɹaɪt/",
+                "ipa": "/raɪt/",
                 "meaning": "viết",
                 "exampleEn": "Write your full name here.",
                 "exampleVi": "Hãy viết tên đầy đủ của bạn ở đây."
@@ -1809,21 +1809,21 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "vietnam",
-                "ipa": "/ˌviːətˈnɑːm/",
+                "ipa": "/ˌvjetˈnæm/",
                 "meaning": "Việt Nam",
                 "exampleEn": "Mai comes from Vietnam.",
                 "exampleVi": "Mai đến từ Việt Nam."
               },
               {
                 "word": "vietnamese",
-                "ipa": "/ˌviːətnəˈmiːz/",
+                "ipa": "/ˌvjetnəˈmiːz/",
                 "meaning": "người Việt Nam, tiếng Việt",
                 "exampleEn": "She is Vietnamese and speaks Vietnamese fluently.",
                 "exampleVi": "Cô ấy là người Việt Nam và nói tiếng Việt trôi chảy."
               },
               {
                 "word": "japan",
-                "ipa": "/d͡ʒəˈpæn/",
+                "ipa": "/dʒəˈpæn/",
                 "meaning": "Nhật Bản",
                 "exampleEn": "Tokyo is the capital of Japan.",
                 "exampleVi": "Tokyo là thủ đô của Nhật Bản."
@@ -1837,14 +1837,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "china",
-                "ipa": "/ˈt͡ʃaɪnə/",
+                "ipa": "/ˈtʃaɪnə/",
                 "meaning": "Trung Quốc",
                 "exampleEn": "Beijing is a famous city in China.",
                 "exampleVi": "Bắc Kinh là một thành phố nổi tiếng ở Trung Quốc."
               },
               {
                 "word": "chinese",
-                "ipa": "/t͡ʃaɪˈniːz/",
+                "ipa": "/ˌtʃaɪˈniːz/",
                 "meaning": "người Trung Quốc, tiếng Trung",
                 "exampleEn": "He can speak Chinese and English.",
                 "exampleVi": "Anh ấy có thể nói tiếng Trung và tiếng Anh."
@@ -1865,21 +1865,21 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "korea",
-                "ipa": "/kəˈɹiːə/",
+                "ipa": "/kəˈrɪə/",
                 "meaning": "Hàn Quốc",
                 "exampleEn": "Seoul is the capital of Korea.",
                 "exampleVi": "Seoul là thủ đô của Hàn Quốc."
               },
               {
                 "word": "korean",
-                "ipa": "/kəˈɹiːən/",
+                "ipa": "/kəˈrɪən/",
                 "meaning": "người Hàn Quốc, tiếng Hàn",
                 "exampleEn": "Min-jun is Korean.",
                 "exampleVi": "Min-jun là người Hàn Quốc."
               },
               {
                 "word": "singapore",
-                "ipa": "/ˈsɪŋəpɔː/",
+                "ipa": "/ˌsɪŋəˈpɔː(r)/",
                 "meaning": "Singapore",
                 "exampleEn": "Singapore is a clean and modern country.",
                 "exampleVi": "Singapore là một quốc gia hiện đại và sạch đẹp."
@@ -2208,28 +2208,28 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "france",
-                "ipa": "/fɹɑːns/",
+                "ipa": "/frɑːns/",
                 "meaning": "nước Pháp",
                 "exampleEn": "Paris is the capital of France.",
                 "exampleVi": "Paris là thủ đô của nước Pháp."
               },
               {
                 "word": "french",
-                "ipa": "/fɹɛnt͡ʃ/",
+                "ipa": "/frentʃ/",
                 "meaning": "người Pháp, tiếng Pháp",
                 "exampleEn": "Claire is French and speaks French at home.",
                 "exampleVi": "Claire là người Pháp và nói tiếng Pháp ở nhà."
               },
               {
                 "word": "germany",
-                "ipa": "/ˈd͡ʒɜːməni/",
+                "ipa": "/ˈdʒɜːməni/",
                 "meaning": "nước Đức",
                 "exampleEn": "Berlin is the capital of Germany.",
                 "exampleVi": "Berlin là thủ đô của nước Đức."
               },
               {
                 "word": "german",
-                "ipa": "/ˈd͡ʒɜːmən/",
+                "ipa": "/ˈdʒɜːmən/",
                 "meaning": "người Đức, tiếng Đức",
                 "exampleEn": "Lukas is German.",
                 "exampleVi": "Lukas là người Đức."
@@ -2250,49 +2250,49 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "italy",
-                "ipa": "/ˈɪtəlɪj/",
+                "ipa": "/ˈɪtəli/",
                 "meaning": "nước Ý",
                 "exampleEn": "Rome is the historic capital of Italy.",
                 "exampleVi": "Rome là thủ đô lịch sử của nước Ý."
               },
               {
                 "word": "italian",
-                "ipa": "/aɪˈtæljən/",
+                "ipa": "/ɪˈtæliən/",
                 "meaning": "người Ý, tiếng Ý",
                 "exampleEn": "Marco is Italian and cooks authentic pasta.",
                 "exampleVi": "Marco là người Ý và nấu mì Ý truyền thống rất ngon."
               },
               {
                 "word": "britain",
-                "ipa": "/ˈbɹɪtən/",
+                "ipa": "/ˈbrɪtn/",
                 "meaning": "nước Anh (Đại Anh)",
                 "exampleEn": "London is the largest city in Britain.",
                 "exampleVi": "London là thành phố lớn nhất ở nước Anh."
               },
               {
                 "word": "british",
-                "ipa": "/ˈbɹɪtɪʃ/",
+                "ipa": "/ˈbrɪtɪʃ/",
                 "meaning": "người Anh, thuộc nước Anh",
                 "exampleEn": "George is British and carries a British passport.",
                 "exampleVi": "George là người Anh và mang hộ chiếu Anh."
               },
               {
                 "word": "america",
-                "ipa": "/əˈmɛɹɪkə/",
+                "ipa": "/əˈmerɪkə/",
                 "meaning": "nước Mỹ",
                 "exampleEn": "New York is a famous city in America.",
                 "exampleVi": "New York là một thành phố nổi tiếng ở nước Mỹ."
               },
               {
                 "word": "american",
-                "ipa": "/əˈmɛɹɪkən/",
+                "ipa": "/əˈmerɪkən/",
                 "meaning": "người Mỹ, thuộc nước Mỹ",
                 "exampleEn": "John is American.",
                 "exampleVi": "John là người Mỹ."
               },
               {
                 "word": "canada",
-                "ipa": "/kəˈnɑːdə/",
+                "ipa": "/ˈkænədə/",
                 "meaning": "Canada",
                 "exampleEn": "Canada has two official languages.",
                 "exampleVi": "Canada có hai ngôn ngữ chính thức."
@@ -2306,14 +2306,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "australia",
-                "ipa": "/ɒˈstɹeɪliːə/",
+                "ipa": "/ɒˈstreɪliə/",
                 "meaning": "nước Úc",
                 "exampleEn": "Sydney is a big harbour city in Australia.",
                 "exampleVi": "Sydney là thành phố cảng lớn ở nước Úc."
               },
               {
                 "word": "australian",
-                "ipa": "/ɒsˈtɹeɪliːən/",
+                "ipa": "/ɒˈstreɪliən/",
                 "meaning": "người Úc, thuộc nước Úc",
                 "exampleEn": "Liam is Australian.",
                 "exampleVi": "Liam là người Úc."
@@ -2594,35 +2594,35 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "country",
-                "ipa": "/ˈkʌntɹɪj/",
+                "ipa": "/ˈkʌntri/",
                 "meaning": "quốc gia, đất nước",
                 "exampleEn": "Which country are you from?",
                 "exampleVi": "Bạn đến từ quốc gia nào?"
               },
               {
                 "word": "nationality",
-                "ipa": "/ˌnæʃəˈnælɪti/",
+                "ipa": "/ˌnæʃəˈnæləti/",
                 "meaning": "quốc tịch",
                 "exampleEn": "What is your nationality on your passport?",
                 "exampleVi": "Quốc tịch trên hộ chiếu của bạn là gì?"
               },
               {
                 "word": "language",
-                "ipa": "/ˈlæŋɡwɪd͡ʒ/",
+                "ipa": "/ˈlæŋɡwɪdʒ/",
                 "meaning": "ngôn ngữ, tiếng",
                 "exampleEn": "English is an international language.",
                 "exampleVi": "Tiếng Anh là một ngôn ngữ quốc tế."
               },
               {
                 "word": "city",
-                "ipa": "/ˈsɪtʰiː/",
+                "ipa": "/ˈsɪti/",
                 "meaning": "thành phố",
                 "exampleEn": "Tokyo is a very crowded city.",
                 "exampleVi": "Tokyo là một thành phố rất đông đúc."
               },
               {
                 "word": "capital",
-                "ipa": "/ˈkæpɪtəl/",
+                "ipa": "/ˈkæpɪtl/",
                 "meaning": "thủ đô",
                 "exampleEn": "Hanoi is the capital of Vietnam.",
                 "exampleVi": "Hà Nội là thủ đô của Việt Nam."
@@ -2636,7 +2636,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "world",
-                "ipa": "/wɝld/",
+                "ipa": "/wɜːld/",
                 "meaning": "thế giới",
                 "exampleEn": "There are nearly 200 countries in the world.",
                 "exampleVi": "Có gần 200 quốc gia trên thế giới."
@@ -2650,7 +2650,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "live",
-                "ipa": "/ˈlaɪ̯v/",
+                "ipa": "/lɪv/",
                 "meaning": "sống, sinh sống",
                 "exampleEn": "They live in London.",
                 "exampleVi": "Họ sống ở Luân Đôn."
@@ -3654,42 +3654,42 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "zero",
-                "ipa": "/ˈzɪəɹəʊ/",
+                "ipa": "/ˈzɪərəʊ/",
                 "meaning": "số không",
                 "exampleEn": "The score was two to zero.",
                 "exampleVi": "Tỉ số là hai không."
               },
               {
                 "word": "one",
-                "ipa": "/ɔːn/",
+                "ipa": "/wʌn/",
                 "meaning": "số một",
                 "exampleEn": "I have one sister.",
                 "exampleVi": "Tôi có một người chị gái."
               },
               {
                 "word": "two",
-                "ipa": "/tu/",
+                "ipa": "/tuː/",
                 "meaning": "số hai",
                 "exampleEn": "There are two chairs here.",
                 "exampleVi": "Có hai chiếc ghế ở đây."
               },
               {
                 "word": "three",
-                "ipa": "/θɹɪj/",
+                "ipa": "/θriː/",
                 "meaning": "số ba",
                 "exampleEn": "Our flight is in three hours.",
                 "exampleVi": "Chuyến bay của chúng tôi sẽ khởi hành trong ba giờ nữa."
               },
               {
                 "word": "four",
-                "ipa": "/fɔː/",
+                "ipa": "/fɔː(r)/",
                 "meaning": "số bốn",
                 "exampleEn": "A car has four wheels.",
                 "exampleVi": "Một chiếc ô tô có bốn bánh."
               },
               {
                 "word": "five",
-                "ipa": "/ˈfaɪ̯v/",
+                "ipa": "/faɪv/",
                 "meaning": "số năm",
                 "exampleEn": "The train arrives at five o'clock.",
                 "exampleVi": "Tàu đến lúc năm giờ."
@@ -3703,7 +3703,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "seven",
-                "ipa": "/ˈsɛbm̩/",
+                "ipa": "/ˈsevn/",
                 "meaning": "số bảy",
                 "exampleEn": "There are seven days in a week.",
                 "exampleVi": "Có bảy ngày trong một tuần."
@@ -3724,14 +3724,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "ten",
-                "ipa": "/tɛn/",
+                "ipa": "/ten/",
                 "meaning": "số mười",
                 "exampleEn": "There are ten students in the group.",
                 "exampleVi": "Có mười học viên trong nhóm."
               },
               {
                 "word": "twenty",
-                "ipa": "/ˈtwɛnti/",
+                "ipa": "/ˈtwenti/",
                 "meaning": "số hai mươi",
                 "exampleEn": "He is twenty years old.",
                 "exampleVi": "Anh ấy hai mươi tuổi."
@@ -3759,7 +3759,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "hundred",
-                "ipa": "/ˈhʌndɹəd/",
+                "ipa": "/ˈhʌndrəd/",
                 "meaning": "một trăm",
                 "exampleEn": "One hundred percent of students passed.",
                 "exampleVi": "Một trăm phần trăm học sinh đã thi đỗ."
@@ -3773,14 +3773,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "second",
-                "ipa": "/ˈsɛkənd/",
+                "ipa": "/ˈsekənd/",
                 "meaning": "thứ hai, giây",
                 "exampleEn": "Wait one second, please.",
                 "exampleVi": "Làm ơn đợi một giây."
               },
               {
                 "word": "third",
-                "ipa": "/θɚd/",
+                "ipa": "/θɜːd/",
                 "meaning": "thứ ba, ngày mùng 3",
                 "exampleEn": "Our flat is on the third floor.",
                 "exampleVi": "Căn hộ của chúng tôi ở tầng ba."
@@ -3801,7 +3801,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "number",
-                "ipa": "/ˈnʌmə/",
+                "ipa": "/ˈnʌmbə(r)/",
                 "meaning": "con số, số lượng",
                 "exampleEn": "What is your telephone number?",
                 "exampleVi": "Số điện thoại của bạn là gì?"
@@ -4069,14 +4069,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "tuesday",
-                "ipa": "/ˈtuzdeɪ/",
+                "ipa": "/ˈtjuːzdeɪ/",
                 "meaning": "thứ Ba",
                 "exampleEn": "I have a meeting on Tuesday.",
                 "exampleVi": "Tôi có cuộc họp vào thứ Ba."
               },
               {
                 "word": "wednesday",
-                "ipa": "/ˈwɛnzdeɪ/",
+                "ipa": "/ˈwenzdeɪ/",
                 "meaning": "thứ Tư",
                 "exampleEn": "Wednesday afternoon is free.",
                 "exampleVi": "Chiều thứ Tư tôi rảnh."
@@ -4090,7 +4090,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "friday",
-                "ipa": "/ˈfɹaɪdeɪ/",
+                "ipa": "/ˈfraɪdeɪ/",
                 "meaning": "thứ Sáu",
                 "exampleEn": "See you on Friday evening!",
                 "exampleVi": "Hẹn gặp bạn vào tối thứ Sáu!"
@@ -4111,14 +4111,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "january",
-                "ipa": "/ˈd͡ʒænjʊəɹi/",
+                "ipa": "/ˈdʒænjuəri/",
                 "meaning": "tháng Một",
                 "exampleEn": "New Year Day is in January.",
                 "exampleVi": "Ngày đầu năm mới rơi vào tháng Một."
               },
               {
                 "word": "february",
-                "ipa": "/ˈfɛbɹʊəɹi/",
+                "ipa": "/ˈfebruəri/",
                 "meaning": "tháng Hai",
                 "exampleEn": "February has 28 or 29 days.",
                 "exampleVi": "Tháng Hai có 28 hoặc 29 ngày."
@@ -4132,7 +4132,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "april",
-                "ipa": "/ˈeɪpɹɪl/",
+                "ipa": "/ˈeɪprəl/",
                 "meaning": "tháng Tư",
                 "exampleEn": "My birthday is in April.",
                 "exampleVi": "Sinh nhật tôi vào tháng Tư."
@@ -4146,56 +4146,56 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "june",
-                "ipa": "/d͡ʒuːn/",
+                "ipa": "/dʒuːn/",
                 "meaning": "tháng Sáu",
                 "exampleEn": "School ends in June for summer break.",
                 "exampleVi": "Trường học kết thúc vào tháng Sáu để nghỉ hè."
               },
               {
                 "word": "july",
-                "ipa": "/d͡ʒʊˈlaɪ/",
+                "ipa": "/dʒuˈlaɪ/",
                 "meaning": "tháng Bảy",
                 "exampleEn": "Summer camp starts in July.",
                 "exampleVi": "Trại hè bắt đầu vào tháng Bảy."
               },
               {
                 "word": "august",
-                "ipa": "/ɔːˈɡʌst/",
+                "ipa": "/ˈɔːɡəst/",
                 "meaning": "tháng Tám",
                 "exampleEn": "August is very warm and sunny.",
                 "exampleVi": "Tháng Tám rất ấm áp và nhiều nắng."
               },
               {
                 "word": "september",
-                "ipa": "/sɛpˈtɛmbə/",
+                "ipa": "/sepˈtembə(r)/",
                 "meaning": "tháng Chín",
                 "exampleEn": "The new school year opens in September.",
                 "exampleVi": "Năm học mới khai giảng vào tháng Chín."
               },
               {
                 "word": "october",
-                "ipa": "/ɒkˈtəʊbə/",
+                "ipa": "/ɒkˈtəʊbə(r)/",
                 "meaning": "tháng Mười",
                 "exampleEn": "Autumn leaves fall in October.",
                 "exampleVi": "Lá mùa thu rụng vào tháng Mười."
               },
               {
                 "word": "november",
-                "ipa": "/nəʊˈvɛmbə/",
+                "ipa": "/nəʊˈvembə(r)/",
                 "meaning": "tháng Mười Một",
                 "exampleEn": "November brings cooler weather.",
                 "exampleVi": "Tháng Mười Một mang đến tiết trời mát mẻ hơn."
               },
               {
                 "word": "december",
-                "ipa": "/dɪˈsɛmbə/",
+                "ipa": "/dɪˈsembə(r)/",
                 "meaning": "tháng Mười Hai",
                 "exampleEn": "Christmas is celebrated in December.",
                 "exampleVi": "Giáng sinh được tổ chức vào tháng Mười Hai."
               },
               {
                 "word": "week",
-                "ipa": "/ˈwɪi̯k/",
+                "ipa": "/wiːk/",
                 "meaning": "tuần lễ",
                 "exampleEn": "There are 52 weeks in a year.",
                 "exampleVi": "Có 52 tuần trong một năm."
@@ -4209,14 +4209,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "year",
-                "ipa": "/jɪə/",
+                "ipa": "/jɪə(r)/",
                 "meaning": "năm",
                 "exampleEn": "Happy New Year to all of you!",
                 "exampleVi": "Chúc mừng năm mới tới tất cả các bạn!"
               },
               {
                 "word": "weekend",
-                "ipa": "/wiːˈkɛnd/",
+                "ipa": "/ˌwiːkˈend/",
                 "meaning": "dịp cuối tuần (thứ Bảy và Chủ Nhật)",
                 "exampleEn": "What are your plans for the weekend?",
                 "exampleVi": "Kế hoạch cuối tuần của bạn là gì?"
@@ -4539,14 +4539,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "hour",
-                "ipa": "/aʊə/",
+                "ipa": "/ˈaʊə(r)/",
                 "meaning": "giờ, tiếng đồng hồ",
                 "exampleEn": "The journey takes two hours.",
                 "exampleVi": "Chuyến đi mất hai tiếng."
               },
               {
                 "word": "minute",
-                "ipa": "/maɪ̯ˈnjuːt/",
+                "ipa": "/ˈmɪnɪt/",
                 "meaning": "phút",
                 "exampleEn": "Please wait five minutes.",
                 "exampleVi": "Vui lòng đợi năm phút."
@@ -4560,14 +4560,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "midnight",
-                "ipa": "/ˈmɪd̚naɪt/",
+                "ipa": "/ˈmɪdnaɪt/",
                 "meaning": "nửa đêm (12 giờ đêm)",
                 "exampleEn": "The train arrives just before midnight.",
                 "exampleVi": "Chuyến tàu đến ngay trước nửa đêm."
               },
               {
                 "word": "watch",
-                "ipa": "/ˈwɒt͡ʃ/",
+                "ipa": "/wɒtʃ/",
                 "meaning": "đồng hồ đeo tay",
                 "exampleEn": "My watch is very accurate.",
                 "exampleVi": "Đồng hồ đeo tay của tôi chạy rất chính xác."
@@ -5516,21 +5516,21 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "father",
-                "ipa": "/ˈfɑːðə/",
+                "ipa": "/ˈfɑːðə(r)/",
                 "meaning": "người cha, bố",
                 "exampleEn": "My father is a teacher.",
                 "exampleVi": "Bố tôi là một giáo viên."
               },
               {
                 "word": "mother",
-                "ipa": "/ˈmʌðə/",
+                "ipa": "/ˈmʌðə(r)/",
                 "meaning": "người mẹ",
                 "exampleEn": "Her mother cooks delicious meals.",
                 "exampleVi": "Mẹ cô ấy nấu những bữa ăn rất ngon."
               },
               {
                 "word": "parent",
-                "ipa": "/ˈpɛəɹənt/",
+                "ipa": "/ˈpeərənt/",
                 "meaning": "cha hoặc mẹ (phụ huynh)",
                 "exampleEn": "Each parent has an important role.",
                 "exampleVi": "Mỗi bậc cha mẹ đều có vai trò quan trọng."
@@ -5544,21 +5544,21 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "daughter",
-                "ipa": "/ˈdɔːtə/",
+                "ipa": "/ˈdɔːtə(r)/",
                 "meaning": "con gái",
                 "exampleEn": "Their daughter is five years old.",
                 "exampleVi": "Con gái của họ được năm tuổi."
               },
               {
                 "word": "brother",
-                "ipa": "/ˈbɹʌðə/",
+                "ipa": "/ˈbrʌðə(r)/",
                 "meaning": "anh trai, em trai",
                 "exampleEn": "My older brother is an engineer.",
                 "exampleVi": "Anh trai tôi là một kỹ sư."
               },
               {
                 "word": "sister",
-                "ipa": "/ˈsɪstɚ/",
+                "ipa": "/ˈsɪstə(r)/",
                 "meaning": "chị gái, em gái",
                 "exampleEn": "She lives with her younger sister.",
                 "exampleVi": "Cô ấy sống cùng em gái."
@@ -5579,28 +5579,28 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "wife",
-                "ipa": "/wæf/",
+                "ipa": "/waɪf/",
                 "meaning": "người vợ",
                 "exampleEn": "His wife is a doctor.",
                 "exampleVi": "Vợ của anh ấy là bác sĩ."
               },
               {
                 "word": "grandfather",
-                "ipa": "/ˈɡɹæn(d)ˌfɑðɚ/",
+                "ipa": "/ˈɡrænfɑːðə(r)/",
                 "meaning": "ông nội, ông ngoại",
                 "exampleEn": "My grandfather is seventy years old.",
                 "exampleVi": "Ông tôi năm nay bảy mươi tuổi."
               },
               {
                 "word": "grandmother",
-                "ipa": "/ˈɡɹæn(d)ˌmʌðɚ/",
+                "ipa": "/ˈɡrænmʌðə(r)/",
                 "meaning": "bà nội, bà ngoại",
                 "exampleEn": "Her grandmother tells interesting stories.",
                 "exampleVi": "Bà của cô ấy kể những câu chuyện rất thú vị."
               },
               {
                 "word": "uncle",
-                "ipa": "/ˈʌŋkl̩/",
+                "ipa": "/ˈʌŋkl/",
                 "meaning": "chú, bác, cậu, dượng",
                 "exampleEn": "Uncle David lives in Canada.",
                 "exampleVi": "Chú David sống ở Canada."
@@ -5614,14 +5614,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "cousin",
-                "ipa": "/ˈkʌzn̩/",
+                "ipa": "/ˈkʌzn/",
                 "meaning": "anh chị em họ",
                 "exampleEn": "Liam is my favorite cousin.",
                 "exampleVi": "Liam là người anh họ tôi yêu quý nhất."
               },
               {
                 "word": "nephew",
-                "ipa": "/ˈnɛfju/",
+                "ipa": "/ˈnefjuː/",
                 "meaning": "cháu trai (con của anh chị em)",
                 "exampleEn": "I bought a toy for my young nephew.",
                 "exampleVi": "Tôi đã mua một món đồ chơi cho cháu trai."
@@ -5635,14 +5635,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "child",
-                "ipa": "/ˈtʃaɪ̯ɫ̩d/",
+                "ipa": "/tʃaɪld/",
                 "meaning": "đứa trẻ, con cái",
                 "exampleEn": "They have one child.",
                 "exampleVi": "Họ có một người con."
               },
               {
                 "word": "children",
-                "ipa": "/ˈtʃɪlɹən/",
+                "ipa": "/ˈtʃɪldrən/",
                 "meaning": "những đứa trẻ, các con",
                 "exampleEn": "The children are playing happily.",
                 "exampleVi": "Những đứa trẻ đang chơi đùa vui vẻ."
@@ -5925,14 +5925,14 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "family",
-                "ipa": "/ˈfæm(ɪ)li/",
+                "ipa": "/ˈfæməli/",
                 "meaning": "gia đình",
                 "exampleEn": "I love spending time with my family.",
                 "exampleVi": "Tôi thích dành thời gian bên gia đình."
               },
               {
                 "word": "friend",
-                "ipa": "/fɹɛnd/",
+                "ipa": "/frend/",
                 "meaning": "người bạn",
                 "exampleEn": "She is a close friend from school.",
                 "exampleVi": "Cô ấy là một người bạn thân từ thời đi học."
@@ -5953,49 +5953,49 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "neighbour",
-                "ipa": "/ˈneɪbə/",
+                "ipa": "/ˈneɪbə(r)/",
                 "meaning": "hàng xóm",
                 "exampleEn": "Our neighbour is very quiet and kind.",
                 "exampleVi": "Người hàng xóm của chúng tôi rất hiền lành và tốt bụng."
               },
               {
                 "word": "relationship",
-                "ipa": "/ɹɪˈleɪʃ(ə)nˌʃɪp/",
+                "ipa": "/rɪˈleɪʃnʃɪp/",
                 "meaning": "mối quan hệ",
                 "exampleEn": "They have a wonderful friendly relationship.",
                 "exampleVi": "Họ có một mối quan hệ bạn bè rất tuyệt vời."
               },
               {
                 "word": "single",
-                "ipa": "/ˈsɪŋɡl̩/",
+                "ipa": "/ˈsɪŋɡl/",
                 "meaning": "độc thân",
                 "exampleEn": "My cousin is single and lives alone.",
                 "exampleVi": "Anh họ tôi còn độc thân và sống một mình."
               },
               {
                 "word": "married",
-                "ipa": "/ˈmæɹɪd/",
+                "ipa": "/ˈmærid/",
                 "meaning": "đã kết hôn, có gia đình",
                 "exampleEn": "They have been married for ten years.",
                 "exampleVi": "Họ đã kết hôn được mười năm."
               },
               {
                 "word": "divorced",
-                "ipa": "/dɪˈvɔː(ɹ)st/",
+                "ipa": "/dɪˈvɔːst/",
                 "meaning": "đã ly hôn",
                 "exampleEn": "His parents are divorced but stay good friends.",
                 "exampleVi": "Bố mẹ anh ấy đã ly hôn nhưng vẫn là bạn tốt."
               },
               {
                 "word": "love",
-                "ipa": "/ˈlʌv/",
+                "ipa": "/lʌv/",
                 "meaning": "yêu thương, quý mến",
                 "exampleEn": "I love my parents very much.",
                 "exampleVi": "Tôi rất yêu thương cha mẹ mình."
               },
               {
                 "word": "live",
-                "ipa": "/ˈlaɪ̯v/",
+                "ipa": "/lɪv/",
                 "meaning": "sinh sống, ở cùng",
                 "exampleEn": "Do you live with your parents?",
                 "exampleVi": "Bạn có sống cùng bố mẹ không?"
@@ -6961,49 +6961,49 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "slim",
-                "ipa": "/ˈslɪm/",
+                "ipa": "/slɪm/",
                 "meaning": "thon thả, mảnh mai",
                 "exampleEn": "The dancer is tall and slim.",
                 "exampleVi": "Vũ công có dáng người cao và thon thả."
               },
               {
                 "word": "thin",
-                "ipa": "/ˈθɪn/",
+                "ipa": "/θɪn/",
                 "meaning": "gầy",
                 "exampleEn": "He looked thin after the long illness.",
                 "exampleVi": "Anh ấy trông gầy đi sau trận ốm dài."
               },
               {
                 "word": "fat",
-                "ipa": "/ˈfæt/",
+                "ipa": "/fæt/",
                 "meaning": "béo, mập",
                 "exampleEn": "The fat cat likes sleeping on the sofa.",
                 "exampleVi": "Chú mèo béo thích ngủ trên ghế sofa."
               },
               {
                 "word": "heavy",
-                "ipa": "/ˈhɛvi/",
+                "ipa": "/ˈhevi/",
                 "meaning": "nặng cân, to con",
                 "exampleEn": "He is quite heavy and strong.",
                 "exampleVi": "Anh ấy khá nặng cân và khỏe khoắn."
               },
               {
                 "word": "chubby",
-                "ipa": "/ˈt͡ʃʌbi/",
+                "ipa": "/ˈtʃʌbi/",
                 "meaning": "mũm mĩm (đáng yêu)",
                 "exampleEn": "The baby has cute chubby cheeks.",
                 "exampleVi": "Em bé có đôi má phúng phính mũm mĩm rất dễ thương."
               },
               {
                 "word": "well-built",
-                "ipa": "/ˌwelˈbɪlt/",
+                "ipa": "/ˌwel ˈbɪlt/",
                 "meaning": "vạm vỡ, cường tráng",
                 "exampleEn": "The gym trainer is tall and well-built.",
                 "exampleVi": "Huấn luyện viên thể hình cao và rất vạm vỡ."
               },
               {
                 "word": "strong",
-                "ipa": "/stɹɒŋ/",
+                "ipa": "/strɒŋ/",
                 "meaning": "khỏe mạnh, cơ bắp",
                 "exampleEn": "He is strong enough to carry two bags.",
                 "exampleVi": "Anh ấy đủ khỏe để mang hai chiếc túi."
@@ -7024,14 +7024,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "appearance",
-                "ipa": "/əˈpɪəɹəns/",
+                "ipa": "/əˈpɪərəns/",
                 "meaning": "ngoại hình, diện mạo",
                 "exampleEn": "She takes good care of her appearance.",
                 "exampleVi": "Cô ấy chăm sóc ngoại hình rất chu đáo."
               },
               {
                 "word": "look",
-                "ipa": "/lɵk/",
+                "ipa": "/lʊk/",
                 "meaning": "trông như, có vẻ",
                 "exampleEn": "You look wonderful today!",
                 "exampleVi": "Hôm nay trông bạn thật tuyệt vời!"
@@ -7045,7 +7045,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "old",
-                "ipa": "/ˈɔld/",
+                "ipa": "/əʊld/",
                 "meaning": "lớn tuổi, già",
                 "exampleEn": "My grandfather is old but healthy.",
                 "exampleVi": "Ông tôi đã lớn tuổi nhưng vẫn rất khỏe mạnh."
@@ -7309,28 +7309,28 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "hair",
-                "ipa": "/ˈhɛə/",
+                "ipa": "/heə(r)/",
                 "meaning": "mái tóc",
                 "exampleEn": "She has long curly dark hair.",
                 "exampleVi": "Cô ấy có mái tóc đen xoăn dài."
               },
               {
                 "word": "long",
-                "ipa": "/lɔːŋ/",
+                "ipa": "/lɒŋ/",
                 "meaning": "dài",
                 "exampleEn": "Sophia has got long hair.",
                 "exampleVi": "Sophia có mái tóc dài."
               },
               {
                 "word": "curly",
-                "ipa": "/ˈkɝli/",
+                "ipa": "/ˈkɜːli/",
                 "meaning": "xoăn (tóc)",
                 "exampleEn": "He has naturally curly hair.",
                 "exampleVi": "Anh ấy có mái tóc xoăn tự nhiên."
               },
               {
                 "word": "straight",
-                "ipa": "/stɹeɪt/",
+                "ipa": "/streɪt/",
                 "meaning": "thẳng (tóc)",
                 "exampleEn": "Her hair is silky and straight.",
                 "exampleVi": "Mái tóc cô ấy mềm mượt và thẳng."
@@ -7358,21 +7358,21 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "fair",
-                "ipa": "/ˈfɛə/",
+                "ipa": "/feə(r)/",
                 "meaning": "sáng màu, trắng trẻo",
                 "exampleEn": "The baby has fair skin and fair hair.",
                 "exampleVi": "Em bé có làn da trắng và mái tóc sáng màu."
               },
               {
                 "word": "grey",
-                "ipa": "/ɡɹeɪ/",
+                "ipa": "/ɡreɪ/",
                 "meaning": "hoa râm, màu xám",
                 "exampleEn": "My grandfather has grey hair.",
                 "exampleVi": "Ông tôi có mái tóc hoa râm."
               },
               {
                 "word": "bald",
-                "ipa": "/boːld/",
+                "ipa": "/bɔːld/",
                 "meaning": "hói đầu",
                 "exampleEn": "Uncle David is completely bald.",
                 "exampleVi": "Chú David bị hói đầu hoàn toàn."
@@ -7393,14 +7393,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "eye",
-                "ipa": "/ˈaɪ̯/",
+                "ipa": "/aɪ/",
                 "meaning": "đôi mắt",
                 "exampleEn": "She has large brown eyes.",
                 "exampleVi": "Cô ấy có đôi mắt to tròn màu nâu."
               },
               {
                 "word": "brown",
-                "ipa": "/ˈbɹæʊ̯n/",
+                "ipa": "/braʊn/",
                 "meaning": "màu nâu",
                 "exampleEn": "He has brown hair and brown eyes.",
                 "exampleVi": "Anh ấy có mái tóc nâu và đôi mắt nâu."
@@ -7414,7 +7414,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "green",
-                "ipa": "/ˈɡɹin/",
+                "ipa": "/ɡriːn/",
                 "meaning": "xanh lá cây",
                 "exampleEn": "Green eyes are quite rare in the world.",
                 "exampleVi": "Đôi mắt màu xanh lá cây khá hiếm trên thế giới."
@@ -7428,7 +7428,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "wear",
-                "ipa": "/wɛə/",
+                "ipa": "/weə(r)/",
                 "meaning": "đeo, mặc",
                 "exampleEn": "She wears round glasses.",
                 "exampleVi": "Cô ấy đeo mắt kính tròn."
@@ -8378,21 +8378,21 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "happy",
-                "ipa": "/ˈhapɪj/",
+                "ipa": "/ˈhæpi/",
                 "meaning": "vui vẻ, hạnh phúc",
                 "exampleEn": "She feels very happy when she sees her family.",
                 "exampleVi": "Cô ấy cảm thấy rất vui vẻ khi gặp lại gia đình."
               },
               {
                 "word": "sad",
-                "ipa": "/ˈsæd/",
+                "ipa": "/sæd/",
                 "meaning": "buồn bã",
                 "exampleEn": "He was sad because his pet dog was sick.",
                 "exampleVi": "Anh ấy buồn vì chú chó cưng của mình bị ốm."
               },
               {
                 "word": "angry",
-                "ipa": "/ˈæŋɡɹi/",
+                "ipa": "/ˈæŋɡri/",
                 "meaning": "tức giận, tức tối",
                 "exampleEn": "The customer was angry about the slow service.",
                 "exampleVi": "Khách hàng tức giận vì sự phục vụ chậm chạp."
@@ -8413,7 +8413,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "scared",
-                "ipa": "/skɛəd/",
+                "ipa": "/skeəd/",
                 "meaning": "sợ hãi",
                 "exampleEn": "She is scared of dark and quiet rooms.",
                 "exampleVi": "Cô ấy sợ những căn phòng tối và vắng lặng."
@@ -8427,49 +8427,49 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "relaxed",
-                "ipa": "/ɹɪˈlækst/",
+                "ipa": "/rɪˈlækst/",
                 "meaning": "thư thái, thoải mái",
                 "exampleEn": "Listening to soft jazz makes me feel relaxed.",
                 "exampleVi": "Nghe nhạc jazz nhẹ nhàng làm tôi cảm thấy thư thái."
               },
               {
                 "word": "worried",
-                "ipa": "/ˈwʌɹid/",
+                "ipa": "/ˈwʌrid/",
                 "meaning": "lo lắng, băn khoăn",
                 "exampleEn": "Parents are worried when their children return late.",
                 "exampleVi": "Bố mẹ lo lắng khi con cái đi về muộn."
               },
               {
                 "word": "surprised",
-                "ipa": "/səˈpɹaɪzd/",
+                "ipa": "/səˈpraɪzd/",
                 "meaning": "ngạc nhiên",
                 "exampleEn": "We were surprised by the surprise birthday party.",
                 "exampleVi": "Chúng tôi ngạc nhiên trước bữa tiệc sinh nhật bất ngờ."
               },
               {
                 "word": "proud",
-                "ipa": "/ˈpɹaʊ̯d/",
+                "ipa": "/praʊd/",
                 "meaning": "tự hào",
                 "exampleEn": "Her mother was proud of her university degree.",
                 "exampleVi": "Mẹ cô ấy rất tự hào về tấm bằng đại học của cô."
               },
               {
                 "word": "calm",
-                "ipa": "/kɑm/",
+                "ipa": "/kɑːm/",
                 "meaning": "bình tĩnh, điềm tĩnh",
                 "exampleEn": "Please stay calm in an emergency situation.",
                 "exampleVi": "Xin hãy giữ bình tĩnh trong tình huống khẩn cấp."
               },
               {
                 "word": "feeling",
-                "ipa": "/ˈfilɪŋ/",
+                "ipa": "/ˈfiːlɪŋ/",
                 "meaning": "cảm giác, cảm xúc",
                 "exampleEn": "Love and joy are wonderful human feelings.",
                 "exampleVi": "Tình yêu và niềm vui là những cảm xúc tuyệt vời của con người."
               },
               {
                 "word": "emotion",
-                "ipa": "/ɪˈməʊʃən/",
+                "ipa": "/ɪˈməʊʃn/",
                 "meaning": "cảm xúc",
                 "exampleEn": "Anger is a difficult emotion to control.",
                 "exampleVi": "Sự tức giận là một cảm xúc khó kiểm soát."
@@ -8483,14 +8483,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "feel",
-                "ipa": "/ˈfiːl/",
+                "ipa": "/fiːl/",
                 "meaning": "cảm thấy",
                 "exampleEn": "How do you feel this morning?",
                 "exampleVi": "Sáng nay bạn cảm thấy thế nào?"
               },
               {
                 "word": "smile",
-                "ipa": "/ˈsmaɪl/",
+                "ipa": "/smaɪl/",
                 "meaning": "mỉm cười",
                 "exampleEn": "She greeted the guests with a bright smile.",
                 "exampleVi": "Cô ấy chào đón các vị khách bằng một nụ cười rạng rỡ."
@@ -8504,7 +8504,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "cry",
-                "ipa": "/kɹaɪ/",
+                "ipa": "/kraɪ/",
                 "meaning": "khóc",
                 "exampleEn": "The little girl started to cry when she lost her balloon.",
                 "exampleVi": "Cô bé òa khóc khi làm mất quả bóng bay."
@@ -8766,7 +8766,7 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "tired",
-                "ipa": "/ˈtaɪ̯əd/",
+                "ipa": "/ˈtaɪəd/",
                 "meaning": "mệt mỏi",
                 "exampleEn": "I feel tired after walking for ten kilometers.",
                 "exampleVi": "Tôi cảm thấy mệt mỏi sau khi đi bộ mười cây số."
@@ -8780,7 +8780,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "hungry",
-                "ipa": "/ˈhʌŋɡɹi/",
+                "ipa": "/ˈhʌŋɡri/",
                 "meaning": "đói bụng",
                 "exampleEn": "It is noon and everyone is hungry.",
                 "exampleVi": "Đã trưa rồi và mọi người đều đang đói bụng."
@@ -8808,14 +8808,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "sick",
-                "ipa": "/ˈsɪk/",
+                "ipa": "/sɪk/",
                 "meaning": "ốm, bị bệnh",
                 "exampleEn": "He cannot go to school today because he is sick.",
                 "exampleVi": "Hôm nay cậu ấy không thể đến trường vì bị ốm."
               },
               {
                 "word": "fine",
-                "ipa": "/ˈfaɪ̯n/",
+                "ipa": "/faɪn/",
                 "meaning": "ổn, khỏe khoắn",
                 "exampleEn": "I was ill yesterday, but I feel fine now.",
                 "exampleVi": "Hôm qua tôi bị ốm, nhưng bây giờ tôi cảm thấy ổn rồi."
@@ -9929,14 +9929,14 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "teacher",
-                "ipa": "/ˈtiːt͡ʃəː/",
+                "ipa": "/ˈtiːtʃə(r)/",
                 "meaning": "giáo viên",
                 "exampleEn": "Our English teacher is very patient and kind.",
                 "exampleVi": "Giáo viên tiếng Anh của chúng tôi rất kiên nhẫn và tốt bụng."
               },
               {
                 "word": "doctor",
-                "ipa": "/ˈdɒktə/",
+                "ipa": "/ˈdɒktə(r)/",
                 "meaning": "bác sĩ",
                 "exampleEn": "The doctor examined the patient carefully.",
                 "exampleVi": "Bác sĩ đã thăm khám cho bệnh nhân rất cẩn thận."
@@ -9950,7 +9950,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "engineer",
-                "ipa": "/ˌɛn(d)ʒɪˈnɪə/",
+                "ipa": "/ˌendʒɪˈnɪə(r)/",
                 "meaning": "kỹ sư",
                 "exampleEn": "My uncle is a software engineer at a technology firm.",
                 "exampleVi": "Chú tôi là một kỹ sư phần mềm tại một công ty công nghệ."
@@ -9964,77 +9964,77 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "chef",
-                "ipa": "/ʃɛf/",
+                "ipa": "/ʃef/",
                 "meaning": "đầu bếp chuyên nghiệp",
                 "exampleEn": "The head chef prepared a special seafood dish.",
                 "exampleVi": "Bếp trưởng đã chuẩn bị một món hải sản đặc biệt."
               },
               {
                 "word": "receptionist",
-                "ipa": "/ɹɪˈsɛpʃənɪst/",
+                "ipa": "/rɪˈsepʃənɪst/",
                 "meaning": "nhân viên lễ tân",
                 "exampleEn": "The receptionist welcomed us warmly at the front desk.",
                 "exampleVi": "Nhân viên lễ tân niềm nở chào đón chúng tôi tại quầy."
               },
               {
                 "word": "driver",
-                "ipa": "/ˈdɹaɪvə/",
+                "ipa": "/ˈdraɪvə(r)/",
                 "meaning": "tài xế, người lái xe",
                 "exampleEn": "The bus driver stopped safely at the station.",
                 "exampleVi": "Bác tài xế xe buýt đã dừng xe an toàn tại trạm."
               },
               {
                 "word": "waiter",
-                "ipa": "/ˈweɪ̯təː/",
+                "ipa": "/ˈweɪtə(r)/",
                 "meaning": "nam nhân viên phục vụ bàn",
                 "exampleEn": "The waiter brought us two glasses of sparkling water.",
                 "exampleVi": "Người phục vụ bàn mang cho chúng tôi hai ly nước có ga."
               },
               {
                 "word": "waitress",
-                "ipa": "/ˈweɪtɹɪs/",
+                "ipa": "/ˈweɪtrəs/",
                 "meaning": "nữ nhân viên phục vụ bàn",
                 "exampleEn": "The waitress recommended the fresh tomato pasta.",
                 "exampleVi": "Nữ phục vụ bàn đã giới thiệu món mì Ý sốt cà chua tươi."
               },
               {
                 "word": "officer",
-                "ipa": "/ˈɒfɪsə/",
+                "ipa": "/ˈɒfɪsə(r)/",
                 "meaning": "viên chức, sĩ quan, cán bộ",
                 "exampleEn": "A police officer directed traffic during rush hour.",
                 "exampleVi": "Một cảnh sát đã điều tiết giao thông trong giờ cao điểm."
               },
               {
                 "word": "manager",
-                "ipa": "/ˈmænɪdʒə/",
+                "ipa": "/ˈmænɪdʒə(r)/",
                 "meaning": "quản lý, giám đốc",
                 "exampleEn": "The store manager greeted the new employees.",
                 "exampleVi": "Người quản lý cửa hàng đã chào đón các nhân viên mới."
               },
               {
                 "word": "pilot",
-                "ipa": "/ˈpaɪ̯lət/",
+                "ipa": "/ˈpaɪlət/",
                 "meaning": "phi công",
                 "exampleEn": "The airline pilot announced a safe landing in Tokyo.",
                 "exampleVi": "Cơ trưởng phi công thông báo hạ cánh an toàn xuống Tokyo."
               },
               {
                 "word": "farmer",
-                "ipa": "/ˈfɑːmə/",
+                "ipa": "/ˈfɑːmə(r)/",
                 "meaning": "nông dân",
                 "exampleEn": "The farmer grows organic vegetables and rice.",
                 "exampleVi": "Người nông dân trồng rau củ hữu cơ và lúa gạo."
               },
               {
                 "word": "student",
-                "ipa": "/ˈstjuːdn̩t/",
+                "ipa": "/ˈstjuːdnt/",
                 "meaning": "học sinh, sinh viên",
                 "exampleEn": "She is a medical student in her second year.",
                 "exampleVi": "Cô ấy là sinh viên y khoa năm thứ hai."
               },
               {
                 "word": "job",
-                "ipa": "/d͡ʒəʊb/",
+                "ipa": "/dʒɒb/",
                 "meaning": "công việc, nghề nghiệp",
                 "exampleEn": "He applied for a new marketing job yesterday.",
                 "exampleVi": "Hôm qua anh ấy đã nộp hồ sơ xin một công việc tiếp thị mới."
@@ -10308,28 +10308,28 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "hospital",
-                "ipa": "/ˈhɒspɪtl̩/",
+                "ipa": "/ˈhɒspɪtl/",
                 "meaning": "bệnh viện",
                 "exampleEn": "The central hospital has three hundred beds.",
                 "exampleVi": "Bệnh viện trung tâm có ba trăm giường bệnh."
               },
               {
                 "word": "restaurant",
-                "ipa": "/ˈɹɛst(ə)ɹɒnt/",
+                "ipa": "/ˈrestrɒnt/",
                 "meaning": "nhà hàng",
                 "exampleEn": "We booked a table at an Italian restaurant.",
                 "exampleVi": "Chúng tôi đã đặt một bàn ở nhà hàng Ý."
               },
               {
                 "word": "hotel",
-                "ipa": "/həʊˈtɛl/",
+                "ipa": "/həʊˈtel/",
                 "meaning": "khách sạn",
                 "exampleEn": "The five-star hotel overlooks the blue sea.",
                 "exampleVi": "Khách sạn năm sao nhìn ra biển xanh."
               },
               {
                 "word": "factory",
-                "ipa": "/ˈfæktəɹi/",
+                "ipa": "/ˈfæktri/",
                 "meaning": "nhà máy, xí nghiệp",
                 "exampleEn": "The automobile factory employs two thousand workers.",
                 "exampleVi": "Nhà máy sản xuất ô tô tuyển dụng hai nghìn công nhân."
@@ -10343,14 +10343,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "bank",
-                "ipa": "/ˈbeɪ̯ŋk/",
+                "ipa": "/bæŋk/",
                 "meaning": "ngân hàng",
                 "exampleEn": "She works as a financial advisor at a global bank.",
                 "exampleVi": "Cô ấy làm tư vấn tài chính tại một ngân hàng toàn cầu."
               },
               {
                 "word": "company",
-                "ipa": "/ˈkʌmp(ə)ni/",
+                "ipa": "/ˈkʌmpəni/",
                 "meaning": "công ty, doanh nghiệp",
                 "exampleEn": "The tech company develops mobile applications.",
                 "exampleVi": "Công ty công nghệ phát triển các ứng dụng di động."
@@ -10364,21 +10364,21 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "workplace",
-                "ipa": "/ˈwɝkˌpleɪs/",
+                "ipa": "/ˈwɜːkpleɪs/",
                 "meaning": "nơi làm việc",
                 "exampleEn": "Safety is the top priority in every workplace.",
                 "exampleVi": "An toàn là ưu tiên hàng đầu tại mọi nơi làm việc."
               },
               {
                 "word": "teach",
-                "ipa": "/ˈtiːt͡ʃ/",
+                "ipa": "/tiːtʃ/",
                 "meaning": "giảng dạy, dạy học",
                 "exampleEn": "Mr. John teaches English to adult learners.",
                 "exampleVi": "Thầy John giảng dạy tiếng Anh cho người lớn."
               },
               {
                 "word": "help",
-                "ipa": "/hɛlp/",
+                "ipa": "/help/",
                 "meaning": "giúp đỡ, trợ giúp",
                 "exampleEn": "Nurses help patients recover from illness.",
                 "exampleVi": "Y tá giúp đỡ các bệnh nhân hồi phục sau cơn bệnh."
@@ -10392,7 +10392,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "drive",
-                "ipa": "/dɹaɪv/",
+                "ipa": "/draɪv/",
                 "meaning": "lái xe",
                 "exampleEn": "He drives a delivery truck across the province.",
                 "exampleVi": "Anh ấy lái một chiếc xe tải giao hàng khắp tỉnh."
@@ -11381,28 +11381,28 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "wake",
-                "ipa": "/ˈweɪ̯k/",
+                "ipa": "/weɪk/",
                 "meaning": "thức giấc",
                 "exampleEn": "I wake at six.",
                 "exampleVi": "Tôi thức lúc sáu."
               },
               {
                 "word": "brush",
-                "ipa": "/bɹʌʃ/",
+                "ipa": "/brʌʃ/",
                 "meaning": "chải",
                 "exampleEn": "I brush my teeth.",
                 "exampleVi": "Tôi chải răng."
               },
               {
                 "word": "dress",
-                "ipa": "/dɹɛs/",
+                "ipa": "/dres/",
                 "meaning": "mặc đồ",
                 "exampleEn": "We dress before breakfast.",
                 "exampleVi": "Chúng tôi mặc đồ trước sáng."
               },
               {
                 "word": "shower",
-                "ipa": "/ˈʃaʊɚ/",
+                "ipa": "/ˈʃaʊə(r)/",
                 "meaning": "tắm vòi sen",
                 "exampleEn": "I shower after exercise.",
                 "exampleVi": "Tôi tắm vòi sau tập."
@@ -11416,7 +11416,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "get",
-                "ipa": "/ɡɪt/",
+                "ipa": "/ɡet/",
                 "meaning": "đến trạng thái hoặc nơi",
                 "exampleEn": "I get home at six.",
                 "exampleVi": "Tôi về nhà lúc sáu."
@@ -11430,14 +11430,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "drink",
-                "ipa": "/ˈdɹɪŋk/",
+                "ipa": "/drɪŋk/",
                 "meaning": "uống",
                 "exampleEn": "I drink some water.",
                 "exampleVi": "Tôi uống ít nước."
               },
               {
                 "word": "leave",
-                "ipa": "/ˈliːv/",
+                "ipa": "/liːv/",
                 "meaning": "rời đi",
                 "exampleEn": "I leave home at seven.",
                 "exampleVi": "Tôi rời nhà bảy giờ."
@@ -11458,14 +11458,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "sleep",
-                "ipa": "/slɪjp/",
+                "ipa": "/sliːp/",
                 "meaning": "ngủ",
                 "exampleEn": "I sleep at night.",
                 "exampleVi": "Tôi ngủ đêm."
               },
               {
                 "word": "rest",
-                "ipa": "/ɹɛst/",
+                "ipa": "/rest/",
                 "meaning": "nghỉ ngơi",
                 "exampleEn": "We rest after lunch.",
                 "exampleVi": "Chúng tôi nghỉ sau trưa."
@@ -11764,21 +11764,21 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "breakfast",
-                "ipa": "/ˈbreɪkˌfɑːst/",
+                "ipa": "/ˈbrekfəst/",
                 "meaning": "bữa sáng",
                 "exampleEn": "Breakfast is at seven.",
                 "exampleVi": "Bữa sáng lúc bảy."
               },
               {
                 "word": "lunch",
-                "ipa": "/lʌnt͡ʃ/",
+                "ipa": "/lʌntʃ/",
                 "meaning": "bữa trưa",
                 "exampleEn": "Lunch is at twelve.",
                 "exampleVi": "Bữa trưa lúc mười hai."
               },
               {
                 "word": "dinner",
-                "ipa": "/ˈdɪnə/",
+                "ipa": "/ˈdɪnə(r)/",
                 "meaning": "bữa tối",
                 "exampleEn": "Dinner is at seven.",
                 "exampleVi": "Bữa tối lúc bảy."
@@ -11813,35 +11813,35 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "night",
-                "ipa": "/ˈnaɪ̯t/",
+                "ipa": "/naɪt/",
                 "meaning": "ban đêm",
                 "exampleEn": "The street is quiet at night.",
                 "exampleVi": "Phố yên ban đêm."
               },
               {
                 "word": "weekday",
-                "ipa": "/ˈwiːkdeɪ̯/",
+                "ipa": "/ˈwiːkdeɪ/",
                 "meaning": "ngày trong tuần",
                 "exampleEn": "Monday is a weekday.",
                 "exampleVi": "Thứ hai là ngày trong tuần."
               },
               {
                 "word": "weekend",
-                "ipa": "/wiːˈkɛnd/",
+                "ipa": "/ˌwiːkˈend/",
                 "meaning": "cuối tuần",
                 "exampleEn": "The weekend is relaxing.",
                 "exampleVi": "Cuối tuần thư giãn."
               },
               {
                 "word": "routine",
-                "ipa": "/ɹuːˈtiːn/",
+                "ipa": "/ruːˈtiːn/",
                 "meaning": "thói quen thường ngày",
                 "exampleEn": "My routine includes a walk.",
                 "exampleVi": "Thói quen có đi bộ."
               },
               {
                 "word": "schedule",
-                "ipa": "/ˈskɛd͡ʒʊl/",
+                "ipa": "/ˈʃedjuːl/",
                 "meaning": "lịch trình",
                 "exampleEn": "My schedule is on the wall.",
                 "exampleVi": "Lịch tôi trên tường."
@@ -12177,7 +12177,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "train",
-                "ipa": "/ˈtɹeɪn/",
+                "ipa": "/treɪn/",
                 "meaning": "tàu hoả",
                 "exampleEn": "The train leaves at seven.",
                 "exampleVi": "Tàu rời bảy giờ."
@@ -12191,7 +12191,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "exercise",
-                "ipa": "/ˈɛksəsaɪz/",
+                "ipa": "/ˈeksəsaɪz/",
                 "meaning": "sự vận động",
                 "exampleEn": "Exercise is in my routine.",
                 "exampleVi": "Vận động trong thói quen."
@@ -12205,14 +12205,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "read",
-                "ipa": "/rɛːd/",
+                "ipa": "/riːd/",
                 "meaning": "đọc",
                 "exampleEn": "I read after dinner.",
                 "exampleVi": "Tôi đọc sau tối."
               },
               {
                 "word": "relax",
-                "ipa": "/ɹɪˈlæks/",
+                "ipa": "/rɪˈlæks/",
                 "meaning": "thư giãn",
                 "exampleEn": "I relax on the sofa.",
                 "exampleVi": "Tôi thư giãn ghế dài."
@@ -13857,7 +13857,7 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "house",
-                "ipa": "/hæʊ̯s/",
+                "ipa": "/haʊs/",
                 "meaning": "nhà riêng",
                 "exampleEn": "Our house has a garden.",
                 "exampleVi": "Nhà tôi có vườn."
@@ -13878,7 +13878,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "cottage",
-                "ipa": "/ˈkɒtɪd͡ʒ/",
+                "ipa": "/ˈkɒtɪdʒ/",
                 "meaning": "nhà nhỏ vùng quê",
                 "exampleEn": "The cottage is near a farm.",
                 "exampleVi": "Nhà nhỏ gần trại."
@@ -13906,42 +13906,42 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "room",
-                "ipa": "/ɹʊm/",
+                "ipa": "/ruːm/",
                 "meaning": "phòng",
                 "exampleEn": "Each room has a window.",
                 "exampleVi": "Mỗi phòng có cửa sổ."
               },
               {
                 "word": "living room",
-                "ipa": "/ˈlɪvɪŋ ɹuːm/",
+                "ipa": "/ˈlɪvɪŋ ruːm/",
                 "meaning": "phòng khách",
                 "exampleEn": "The living room is bright.",
                 "exampleVi": "Phòng khách sáng."
               },
               {
                 "word": "kitchen",
-                "ipa": "/ˈkɪt͡ʃ(ɪ)n/",
+                "ipa": "/ˈkɪtʃɪn/",
                 "meaning": "bếp",
                 "exampleEn": "The kitchen is downstairs.",
                 "exampleVi": "Bếp ở dưới."
               },
               {
                 "word": "bedroom",
-                "ipa": "/ˈbɛdɹuːm/",
+                "ipa": "/ˈbedruːm/",
                 "meaning": "phòng ngủ",
                 "exampleEn": "My bedroom has a bed.",
                 "exampleVi": "Phòng tôi có giường."
               },
               {
                 "word": "bathroom",
-                "ipa": "/ˈbɑːθɹʊm/",
+                "ipa": "/ˈbɑːθruːm/",
                 "meaning": "phòng tắm",
                 "exampleEn": "The bathroom has a shower.",
                 "exampleVi": "Phòng tắm có vòi sen."
               },
               {
                 "word": "dining room",
-                "ipa": "/ˈdaɪnɪŋˌɹum/",
+                "ipa": "/ˈdaɪnɪŋ ruːm/",
                 "meaning": "phòng ăn",
                 "exampleEn": "We eat in the dining room.",
                 "exampleVi": "Chúng tôi ăn phòng ăn."
@@ -14249,28 +14249,28 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "garage",
-                "ipa": "/ˈɡæɹɪdʒ/",
+                "ipa": "/ˈɡærɑːʒ/",
                 "meaning": "ga ra",
                 "exampleEn": "The car is in the garage.",
                 "exampleVi": "Xe trong ga ra."
               },
               {
                 "word": "garden",
-                "ipa": "/ˈɡɑːd(ə)n/",
+                "ipa": "/ˈɡɑːdn/",
                 "meaning": "vườn",
                 "exampleEn": "The garden has flowers.",
                 "exampleVi": "Vườn có hoa."
               },
               {
                 "word": "yard",
-                "ipa": "/ˈjɑːd/",
+                "ipa": "/jɑːd/",
                 "meaning": "sân",
                 "exampleEn": "Children play in the yard.",
                 "exampleVi": "Trẻ chơi sân."
               },
               {
                 "word": "door",
-                "ipa": "/dɔː/",
+                "ipa": "/dɔː(r)/",
                 "meaning": "cửa ra vào",
                 "exampleEn": "Please close the door.",
                 "exampleVi": "Hãy đóng cửa."
@@ -14291,7 +14291,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "roof",
-                "ipa": "/ɹuːf/",
+                "ipa": "/ruːf/",
                 "meaning": "mái",
                 "exampleEn": "The roof is red.",
                 "exampleVi": "Mái đỏ."
@@ -14305,14 +14305,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "floor",
-                "ipa": "/flɔː/",
+                "ipa": "/flɔː(r)/",
                 "meaning": "sàn",
                 "exampleEn": "The floor is clean.",
                 "exampleVi": "Sàn sạch."
               },
               {
                 "word": "stairs",
-                "ipa": "/ˈstɛəz/",
+                "ipa": "/steəz/",
                 "meaning": "cầu thang",
                 "exampleEn": "The stairs are by the hall.",
                 "exampleVi": "Thang cạnh sảnh."
@@ -14326,7 +14326,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "entrance",
-                "ipa": "/ˈɛntɹəns/",
+                "ipa": "/ˈentrəns/",
                 "meaning": "lối vào",
                 "exampleEn": "The entrance is at the front.",
                 "exampleVi": "Lối vào phía trước."
@@ -14620,7 +14620,7 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "front",
-                "ipa": "/fɹʊnt/",
+                "ipa": "/frʌnt/",
                 "meaning": "phía trước",
                 "exampleEn": "The front faces the street.",
                 "exampleVi": "Mặt trước hướng phố."
@@ -14634,35 +14634,35 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "left",
-                "ipa": "/ˈɫɛft/",
+                "ipa": "/left/",
                 "meaning": "bên trái",
                 "exampleEn": "The kitchen is on the left.",
                 "exampleVi": "Bếp bên trái."
               },
               {
                 "word": "right",
-                "ipa": "/ɹaɪt/",
+                "ipa": "/raɪt/",
                 "meaning": "bên phải",
                 "exampleEn": "The bathroom is on the right.",
                 "exampleVi": "Phòng tắm bên phải."
               },
               {
                 "word": "upstairs",
-                "ipa": "/ˌʌpˈstɛəz/",
+                "ipa": "/ˌʌpˈsteəz/",
                 "meaning": "ở tầng trên",
                 "exampleEn": "The bedrooms are upstairs.",
                 "exampleVi": "Phòng ngủ trên lầu."
               },
               {
                 "word": "downstairs",
-                "ipa": "/daʊnˈstɛəz/",
+                "ipa": "/ˌdaʊnˈsteəz/",
                 "meaning": "ở tầng dưới",
                 "exampleEn": "The kitchen is downstairs.",
                 "exampleVi": "Bếp dưới lầu."
               },
               {
                 "word": "bright",
-                "ipa": "/ˈbɹaɪ̯t/",
+                "ipa": "/braɪt/",
                 "meaning": "sáng",
                 "exampleEn": "The flat is bright.",
                 "exampleVi": "Căn hộ sáng."
@@ -14676,7 +14676,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "large",
-                "ipa": "/lɑːd͡ʒ/",
+                "ipa": "/lɑːdʒ/",
                 "meaning": "lớn",
                 "exampleEn": "The house is large.",
                 "exampleVi": "Nhà lớn."
@@ -14690,7 +14690,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "quiet",
-                "ipa": "/ˈkwaɪ̯ət/",
+                "ipa": "/ˈkwaɪət/",
                 "meaning": "yên",
                 "exampleEn": "Our street is quiet.",
                 "exampleVi": "Phố yên."
@@ -16346,42 +16346,42 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "sofa",
-                "ipa": "/ˈsəʊ̯fə/",
+                "ipa": "/ˈsəʊfə/",
                 "meaning": "ghế dài",
                 "exampleEn": "The sofa is green.",
                 "exampleVi": "Ghế dài xanh."
               },
               {
                 "word": "wardrobe",
-                "ipa": "/ˈwɔːdɹəʊb/",
+                "ipa": "/ˈwɔːdrəʊb/",
                 "meaning": "tủ áo",
                 "exampleEn": "My wardrobe has two doors.",
                 "exampleVi": "Tủ áo hai cửa."
               },
               {
                 "word": "fridge",
-                "ipa": "/fɹɪd͡ʒ/",
+                "ipa": "/frɪdʒ/",
                 "meaning": "tủ lạnh",
                 "exampleEn": "The fridge is in the kitchen.",
                 "exampleVi": "Tủ lạnh trong bếp."
               },
               {
                 "word": "washing machine",
-                "ipa": "/ˈwɑːʃɪŋ məˌʃiːn/",
+                "ipa": "/ˈwɒʃɪŋ məʃiːn/",
                 "meaning": "máy giặt",
                 "exampleEn": "The washing machine is downstairs.",
                 "exampleVi": "Máy giặt dưới lầu."
               },
               {
                 "word": "microwave",
-                "ipa": "/ˈmaɪkɹəʊˌweɪv/",
+                "ipa": "/ˈmaɪkrəweɪv/",
                 "meaning": "lò vi sóng",
                 "exampleEn": "The microwave is on a shelf.",
                 "exampleVi": "Lò vi sóng trên kệ."
               },
               {
                 "word": "mirror",
-                "ipa": "/ˈmiɹɚ/",
+                "ipa": "/ˈmɪrə(r)/",
                 "meaning": "gương",
                 "exampleEn": "The mirror is by the door.",
                 "exampleVi": "Gương cạnh cửa."
@@ -16395,77 +16395,77 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "bookshelf",
-                "ipa": "/ˈbʊkˌʃɛlf/",
+                "ipa": "/ˈbʊkʃelf/",
                 "meaning": "giá sách",
                 "exampleEn": "My bookshelf is full.",
                 "exampleVi": "Giá sách đầy."
               },
               {
                 "word": "air conditioner",
-                "ipa": "/ˈɛə kənˌdɪʃn̩ə/",
+                "ipa": "/ˈeə kəndɪʃənə(r)/",
                 "meaning": "máy điều hoà",
                 "exampleEn": "The air conditioner is above the door.",
                 "exampleVi": "Điều hoà trên cửa."
               },
               {
                 "word": "television",
-                "ipa": "/ˈtɛlɪˌvɪʒən/",
+                "ipa": "/ˈtelɪvɪʒn/",
                 "meaning": "ti vi",
                 "exampleEn": "The television faces the sofa.",
                 "exampleVi": "Ti vi hướng ghế."
               },
               {
                 "word": "armchair",
-                "ipa": "/ˈɑɹmt͡ʃɛɚ/",
+                "ipa": "/ˈɑːmtʃeə(r)/",
                 "meaning": "ghế bành",
                 "exampleEn": "The armchair is beside the window.",
                 "exampleVi": "Ghế bành cạnh cửa sổ."
               },
               {
                 "word": "table",
-                "ipa": "/ˈt(ʰ)eɪbɫ̩/",
+                "ipa": "/ˈteɪbl/",
                 "meaning": "bàn",
                 "exampleEn": "The table is in the centre.",
                 "exampleVi": "Bàn ở giữa."
               },
               {
                 "word": "chair",
-                "ipa": "/t͡ʃɛə/",
+                "ipa": "/tʃeə(r)/",
                 "meaning": "ghế",
                 "exampleEn": "The chair is beside the desk.",
                 "exampleVi": "Ghế cạnh bàn."
               },
               {
                 "word": "desk",
-                "ipa": "/dɛsk/",
+                "ipa": "/desk/",
                 "meaning": "bàn làm việc",
                 "exampleEn": "I study at my desk.",
                 "exampleVi": "Tôi học ở bàn."
               },
               {
                 "word": "dishwasher",
-                "ipa": "/ˈdɪʃˌwɒʃə/",
+                "ipa": "/ˈdɪʃwɒʃə(r)/",
                 "meaning": "máy rửa bát",
                 "exampleEn": "The dishwasher is beside the sink.",
                 "exampleVi": "Máy rửa bát cạnh bồn."
               },
               {
                 "word": "freezer",
-                "ipa": "/ˈfɹiːzə/",
+                "ipa": "/ˈfriːzə(r)/",
                 "meaning": "tủ đông",
                 "exampleEn": "The freezer has three drawers.",
                 "exampleVi": "Tủ đông có ba ngăn."
               },
               {
                 "word": "cooker",
-                "ipa": "/ˈkʊkə/",
+                "ipa": "/ˈkʊkə(r)/",
                 "meaning": "bếp nấu",
                 "exampleEn": "The cooker has four rings.",
                 "exampleVi": "Bếp có bốn vùng nấu."
               },
               {
                 "word": "radiator",
-                "ipa": "/ˈrædɪeɪ̯tə/",
+                "ipa": "/ˈreɪdieɪtə(r)/",
                 "meaning": "bộ tản nhiệt sưởi",
                 "exampleEn": "The radiator is below the window.",
                 "exampleVi": "Bộ sưởi dưới cửa sổ."
@@ -16842,42 +16842,42 @@ window.WRITING_UNITS = [
             "words": [
               {
                 "word": "bed",
-                "ipa": "/bɛd/",
+                "ipa": "/bed/",
                 "meaning": "giường",
                 "exampleEn": "The bed is in my room.",
                 "exampleVi": "Giường trong phòng."
               },
               {
                 "word": "lamp",
-                "ipa": "/ˈlæ̞mp/",
+                "ipa": "/læmp/",
                 "meaning": "đèn",
                 "exampleEn": "The lamp is on the desk.",
                 "exampleVi": "Đèn trên bàn."
               },
               {
                 "word": "curtain",
-                "ipa": "/ˈkɜːtn̩/",
+                "ipa": "/ˈkɜːtn/",
                 "meaning": "rèm",
                 "exampleEn": "The curtain is blue.",
                 "exampleVi": "Rèm xanh."
               },
               {
                 "word": "cushion",
-                "ipa": "/ˈkɵʃən/",
+                "ipa": "/ˈkʊʃn/",
                 "meaning": "gối tựa",
                 "exampleEn": "The cushion is on the sofa.",
                 "exampleVi": "Gối tựa trên ghế."
               },
               {
                 "word": "rug",
-                "ipa": "/ˈɹʌɡ/",
+                "ipa": "/rʌɡ/",
                 "meaning": "thảm rời",
                 "exampleEn": "The rug is under the table.",
                 "exampleVi": "Thảm dưới bàn."
               },
               {
                 "word": "drawer",
-                "ipa": "/ˈdɹɔɚ/",
+                "ipa": "/drɔː(r)/",
                 "meaning": "ngăn kéo",
                 "exampleEn": "The drawer contains pens.",
                 "exampleVi": "Ngăn kéo có bút."
@@ -16891,21 +16891,21 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "shelf",
-                "ipa": "/ʃɛlf/",
+                "ipa": "/ʃelf/",
                 "meaning": "kệ",
                 "exampleEn": "The shelf holds cups.",
                 "exampleVi": "Kệ có cốc."
               },
               {
                 "word": "cabinet",
-                "ipa": "/ˈkæbɪnɪt/",
+                "ipa": "/ˈkæbɪnət/",
                 "meaning": "tủ đựng hoặc trưng bày",
                 "exampleEn": "The cabinet has glass doors.",
                 "exampleVi": "Tủ có cửa kính."
               },
               {
                 "word": "bookcase",
-                "ipa": "/ˈbʊkˌkeɪs/",
+                "ipa": "/ˈbʊkkeɪs/",
                 "meaning": "tủ sách",
                 "exampleEn": "The bookcase is tall.",
                 "exampleVi": "Tủ sách cao."
@@ -16926,14 +16926,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "kettle",
-                "ipa": "/ˈkɛtəl/",
+                "ipa": "/ˈketl/",
                 "meaning": "ấm đun nước",
                 "exampleEn": "The kettle is near the sink.",
                 "exampleVi": "Ấm gần bồn."
               },
               {
                 "word": "mattress",
-                "ipa": "/ˈmætɹɪs/",
+                "ipa": "/ˈmætrəs/",
                 "meaning": "nệm",
                 "exampleEn": "The mattress fits the bed.",
                 "exampleVi": "Nệm vừa giường."
@@ -17344,7 +17344,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "shoe",
-                "ipa": "/ˈʃuː/",
+                "ipa": "/ʃuː/",
                 "meaning": "giày",
                 "exampleEn": "One shoe is by the door.",
                 "exampleVi": "Một giày cạnh cửa."
@@ -17358,14 +17358,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "book",
-                "ipa": "/bɵk/",
+                "ipa": "/bʊk/",
                 "meaning": "sách",
                 "exampleEn": "The book is on the table.",
                 "exampleVi": "Sách trên bàn."
               },
               {
                 "word": "phone",
-                "ipa": "/ˈfəʊ̯n/",
+                "ipa": "/fəʊn/",
                 "meaning": "điện thoại",
                 "exampleEn": "My phone is on the shelf.",
                 "exampleVi": "Điện thoại trên kệ."
@@ -17393,7 +17393,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "picture",
-                "ipa": "/ˈpɪkt͡ʃɚ/",
+                "ipa": "/ˈpɪktʃə(r)/",
                 "meaning": "bức tranh hoặc ảnh",
                 "exampleEn": "The picture is above the sofa.",
                 "exampleVi": "Bức ảnh trên ghế."
@@ -17414,7 +17414,7 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "door",
-                "ipa": "/dɔː/",
+                "ipa": "/dɔː(r)/",
                 "meaning": "cửa",
                 "exampleEn": "The door is open.",
                 "exampleVi": "Cửa mở."
@@ -17435,14 +17435,14 @@ window.WRITING_UNITS = [
               },
               {
                 "word": "switch",
-                "ipa": "/swɪt͡ʃ/",
+                "ipa": "/swɪtʃ/",
                 "meaning": "công tắc",
                 "exampleEn": "The switch is beside the door.",
                 "exampleVi": "Công tắc cạnh cửa."
               },
               {
                 "word": "hanger",
-                "ipa": "/ˈhæŋə/",
+                "ipa": "/ˈhæŋə(r)/",
                 "meaning": "móc áo",
                 "exampleEn": "There are six hangers inside.",
                 "exampleVi": "Có sáu móc bên trong."
