@@ -841,25 +841,53 @@ button, input, select, textarea {
 }
 
 .notif-bell-btn:hover { background: #F4F1EA; }
-.notif-bell-btn.has-unread { background: var(--accent-yellow-bright); }
+.notif-bell-btn.has-unread {
+  background: var(--accent-yellow-bright);
+  overflow: visible;
+}
+
+@keyframes notifBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
 
 .notif-unread-badge {
   position: absolute;
   top: -7px;
   right: -7px;
-  min-width: 19px;
-  height: 19px;
+  min-width: 20px;
+  height: 20px;
   padding: 0 5px;
   border-radius: 999px;
   background: #EF4444;
   border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 4px rgba(239, 68, 68, 0.45);
   color: #FFFFFF;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 800;
+  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+  animation: notifBadgePulse 2.2s ease-in-out infinite;
+}
+
+.notif-mark-all-btn {
+  border: 1.5px solid #18181B;
+  background: #FFFFFF;
+  color: #18181B;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notif-mark-all-btn:hover {
+  background: var(--accent-yellow-bright);
 }
 
 .notif-dropdown,

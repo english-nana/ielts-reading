@@ -475,6 +475,42 @@
       .sort((a, b) => new Date(b.release_at || b.updated_at || 0).getTime() - new Date(a.release_at || a.updated_at || 0).getTime());
   }
 
+  function getTeacherFeedbackNotifs(stuObj) {
+    const seenMap = (stuObj && stuObj.seenTeacherFeedback) || {};
+    return Object.keys(cloudState.submissionsByLessonId)
+      .map(unitId => {
+        const sub = cloudState.submissionsByLessonId[unitId];
+        const fb = sub && sub.teacher_feedback ? String(sub.teacher_feedback).trim() : "";
+        if (!fb) return null;
+        const uObj = WRITING_UNITS.find(u => u.id === unitId);
+        const title = uObj ? `Unit ${uObj.number}: ${uObj.titleEn}` : (sub && sub.lesson_title) || unitId;
+        const isUnread = seenMap[unitId] !== fb;
+        return {
+          unitId,
+          title,
+          feedback: fb,
+          updatedAt: sub.updated_at || sub.submitted_at || "",
+          isUnread
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime());
+  }
+
+  function markTeacherFeedbackSeen(unitId, fbText) {
+    if (!unitId) return;
+    const stuObj = getStudent();
+    if (!stuObj.seenTeacherFeedback || typeof stuObj.seenTeacherFeedback !== "object") {
+      stuObj.seenTeacherFeedback = {};
+    }
+    const sub = getCloudWritingSubmission(unitId);
+    const val = fbText != null ? String(fbText).trim() : String((sub && sub.teacher_feedback) || "").trim();
+    if (val) {
+      stuObj.seenTeacherFeedback[unitId] = val;
+      persist();
+    }
+  }
+
   async function markWritingReviewSeen(unitId) {
     const rev = getReleasedWritingReview(unitId);
     if (!rev || rev.student_seen_at || !CLOUD || state.localPreviewMode) return;
@@ -484,6 +520,29 @@
     try {
       await client.rpc("mark_writing_review_seen", { p_submission_id: rev.submission_id });
     } catch (e) {}
+  }
+
+  async function markAllNotificationsRead() {
+    const stuObj = getStudent();
+    (stuObj.notifications || []).forEach(n => {
+      n.read = true;
+    });
+    const fbList = getTeacherFeedbackNotifs(stuObj);
+    if (fbList.length > 0) {
+      if (!stuObj.seenTeacherFeedback || typeof stuObj.seenTeacherFeedback !== "object") {
+        stuObj.seenTeacherFeedback = {};
+      }
+      fbList.forEach(item => {
+        stuObj.seenTeacherFeedback[item.unitId] = item.feedback;
+      });
+    }
+    persist();
+
+    const released = getAllReleasedWritingReviews().filter(r => !r.student_seen_at);
+    released.forEach(r => {
+      markWritingReviewSeen(r.lesson_id);
+    });
+    renderApp();
   }
 
   function findPrimaryWritingExercise(unit) {
@@ -531,14 +590,17 @@
     const client = CLOUD ? CLOUD.getClient() : null;
     if (!client || !currentAccount || state.localPreviewMode || cloudState.reviewsRefreshInFlight) return;
     const now = Date.now();
-    if (!force && now - cloudState.lastReviewsRefreshMs < 10000) return;
+    if (!force && now - cloudState.lastReviewsRefreshMs < 5000) return;
 
     cloudState.reviewsRefreshInFlight = true;
     try {
-      const prevSig = JSON.stringify({
-        s: cloudState.submissionsByLessonId,
-        r: cloudState.reviewsByLessonId
-      });
+      const computeSig = () =>
+        JSON.stringify({
+          s: cloudState.submissionsByLessonId,
+          r: cloudState.reviewsByLessonId,
+          rel: getAllReleasedWritingReviews().map(x => `${x.submission_id}:${x.student_seen_at || ""}`)
+        });
+      const prevSig = computeSig();
       const [subsRes, reviewsRes] = await Promise.all([
         client.from("writing_submissions").select("*").eq("user_id", currentAccount.id),
         client.from("writing_ai_reviews").select("*").eq("user_id", currentAccount.id)
@@ -559,10 +621,7 @@
         });
         cloudState.reviewsByLessonId = revMap;
       }
-      const nextSig = JSON.stringify({
-        s: cloudState.submissionsByLessonId,
-        r: cloudState.reviewsByLessonId
-      });
+      const nextSig = computeSig();
       if (nextSig !== prevSig) {
         renderApp();
       }
@@ -578,10 +637,18 @@
     }
     if (state.localPreviewMode) return;
     cloudState.notifPollTimer = setInterval(() => {
-      if (currentAccount && document.visibilityState === "visible") {
-        refreshCloudWritingReviews(false);
+      if (!currentAccount || document.visibilityState !== "visible") return;
+      const nowMs = Date.now();
+      const hasDueSubmission = Object.keys(cloudState.submissionsByLessonId).some(unitId => {
+        const sub = cloudState.submissionsByLessonId[unitId];
+        if (!sub || !sub.is_submitted || getReleasedWritingReview(unitId)) return false;
+        const relMs = sub.ai_release_at ? new Date(sub.ai_release_at).getTime() : 0;
+        return !isNaN(relMs) && relMs > 0 && relMs <= nowMs + 5000;
+      });
+      if (hasDueSubmission || nowMs - cloudState.lastReviewsRefreshMs >= 20000) {
+        refreshCloudWritingReviews(hasDueSubmission);
       }
-    }, 30000);
+    }, 5000);
   }
 
   async function submitWritingEssayToCloud(unit, ex, content, wordCount) {
@@ -1153,9 +1220,11 @@
     const wrUnit = isWritingLesson ? getCurrentWritingUnit() : null;
     const wrProg = wrUnit ? ensureWritingUnitProgress(wrUnit.id) : null;
     const releasedReviews = getAllReleasedWritingReviews();
+    const teacherFbNotifs = getTeacherFeedbackNotifs(stu);
     const unreadCloudReviews = releasedReviews.filter(r => !r.student_seen_at).length;
+    const unreadTeacherFbs = teacherFbNotifs.filter(f => f.isUnread).length;
     const unreadLocalNotifs = (stu.notifications || []).filter(n => !n.read).length;
-    const unreadNotifs = unreadLocalNotifs + unreadCloudReviews;
+    const unreadNotifs = unreadLocalNotifs + unreadCloudReviews + unreadTeacherFbs;
 
     let leftGroupHtml = `
       <button type="button" class="ej-mobile-menu-btn" id="ej-mobile-menu-btn" aria-label="Mở menu">
@@ -1223,10 +1292,11 @@
                 type="button"
                 class="notif-bell-btn ${unreadNotifs > 0 ? "has-unread" : ""}"
                 id="topbar-notif-btn"
-                title="Thông báo học tập & bài sửa Writing"
+                title="${unreadNotifs > 0 ? `Bạn có ${unreadNotifs} thông báo mới` : "Thông báo học tập & bài sửa Writing"}"
+                aria-label="${unreadNotifs > 0 ? `Thông báo (${unreadNotifs} chưa đọc)` : "Thông báo"}"
               >
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                ${unreadNotifs > 0 ? `<span class="notif-unread-badge">${unreadNotifs}</span>` : ""}
+                ${unreadNotifs > 0 ? `<span class="notif-unread-badge">${unreadNotifs > 99 ? "99+" : unreadNotifs}</span>` : ""}
               </button>
 
               ${
@@ -1234,12 +1304,16 @@
                   ? `
                 <div class="notif-dropdown">
                   <div class="notif-dropdown-header">
-                    <span>Thông báo bài sửa &amp; kết quả</span>
-                    <span class="notif-header-sub">Trả bài sau 15 phút</span>
+                    <span>Thông báo bài sửa${unreadNotifs > 0 ? ` (${unreadNotifs} mới)` : ""}</span>
+                    ${
+                      unreadNotifs > 0
+                        ? `<button type="button" class="notif-mark-all-btn" id="btn-mark-all-notifs-read">Đánh dấu đã đọc</button>`
+                        : `<span class="notif-header-sub">Trả bài sau 15 phút</span>`
+                    }
                   </div>
                   <div class="notif-dropdown-list">
                     ${
-                      releasedReviews.length === 0 && stu.notifications.length === 0
+                      releasedReviews.length === 0 && teacherFbNotifs.length === 0 && stu.notifications.length === 0
                         ? `<div class="notif-empty-state">Chưa có thông báo nào. Khi giáo viên gửi bài sửa Writing (sau khoảng 15 phút kể từ lúc nộp), thông báo sẽ xuất hiện tại đây.</div>`
                         : `
                           ${releasedReviews
@@ -1265,7 +1339,29 @@
                                     <span class="notif-item-time">${escapeHtml(relTime)}</span>
                                   </div>
                                   <div class="notif-item-title">✅ Đã trả bài sửa: ${escapeHtml(title)}</div>
-                                  <div class="notif-item-sub">${errCount > 0 ? `Phát hiện ${errCount} lỗi cần chú ý — Bấm để xem bài sửa chi tiết.` : "Bài viết rất sạch lỗi — Bấm để xem nhận xét chi tiết."}</div>
+                                  <div class="notif-item-sub">${errCount > 0 ? `Có ${errCount} lỗi cần chú ý — Bấm để xem bài sửa chi tiết.` : "Bài viết rất sạch lỗi — Bấm để xem nhận xét chi tiết."}</div>
+                                </button>
+                              `;
+                            })
+                            .join("")}
+                          ${teacherFbNotifs
+                            .map(fb => {
+                              const fbTime = fb.updatedAt ? (CLOUD ? CLOUD.formatDateTime(fb.updatedAt) : formatDateTime(fb.updatedAt)) : "";
+                              const snippet = fb.feedback.length > 90 ? fb.feedback.slice(0, 90) + "…" : fb.feedback;
+                              return `
+                                <button
+                                  type="button"
+                                  class="notif-item-btn ${fb.isUnread ? "unread" : ""}"
+                                  data-open-writing-unit="${escapeHtml(fb.unitId)}"
+                                  data-open-writing-sec="writing"
+                                  data-mark-fb-seen="${escapeHtml(fb.unitId)}"
+                                >
+                                  <div class="notif-item-top">
+                                    <span class="notif-item-tag ${fb.isUnread ? "new-dot" : ""}">${fb.isUnread ? "Nhận xét mới" : "✓ Đã xem"}</span>
+                                    <span class="notif-item-time">${escapeHtml(fbTime)}</span>
+                                  </div>
+                                  <div class="notif-item-title">👨‍🏫 Giáo viên đã nhận xét: ${escapeHtml(fb.title)}</div>
+                                  <div class="notif-item-sub">${escapeHtml(snippet)}</div>
                                 </button>
                               `;
                             })
@@ -4344,8 +4440,11 @@
         }
         const unitId = btn.getAttribute("data-open-writing-unit");
         const secKey = btn.getAttribute("data-open-writing-sec") || "vocabulary";
-        if (btn.getAttribute("data-mark-review-seen") || secKey === "writing") {
+        if (btn.getAttribute("data-mark-review-seen")) {
           markWritingReviewSeen(unitId);
+        }
+        if (btn.getAttribute("data-mark-fb-seen")) {
+          markTeacherFeedbackSeen(unitId);
         }
         openWritingUnit(unitId, secKey);
       };
@@ -4407,11 +4506,17 @@
         state.notifOpen = !state.notifOpen;
         state.accountMenuOpen = false;
         if (state.notifOpen) {
-          stu.notifications.forEach(n => { n.read = true; });
-          persist();
           refreshCloudWritingReviews(true);
         }
         renderApp();
+      };
+    }
+
+    const btnMarkAllRead = document.getElementById("btn-mark-all-notifs-read");
+    if (btnMarkAllRead) {
+      btnMarkAllRead.onclick = e => {
+        e.stopPropagation();
+        markAllNotificationsRead();
       };
     }
 
@@ -4987,13 +5092,8 @@
         };
       });
 
-      // Auto-mark released review as seen when viewing Writing section
-      if (unit && state.currentWritingSection === "writing") {
-        const rel = getReleasedWritingReview(unit.id);
-        if (rel && !rel.student_seen_at) {
-          markWritingReviewSeen(unit.id);
-        }
-      }
+      // Note: Do NOT silently mark released writing reviews as seen here —
+      // let the bell notification & unread count stay visible until clicked.
 
       // 6. Check / Submit & Reset Exercise
       document.querySelectorAll("[data-wr-check]").forEach(btn => {
@@ -5319,6 +5419,12 @@
 
   window.addEventListener("focus", () => {
     if (currentAccount && !state.localPreviewMode) {
+      refreshCloudWritingReviews(false);
+    }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && currentAccount && !state.localPreviewMode) {
       refreshCloudWritingReviews(false);
     }
   });
