@@ -24,6 +24,12 @@
   }
 
   function getRedirectUrl() {
+    if (window.location.protocol === "file:" || !window.location.origin || window.location.origin === "null") {
+      const isTeacher = /teacher\.html$/i.test(window.location.pathname || "");
+      return isTeacher
+        ? "https://english-nana.github.io/ielts-reading/teacher.html"
+        : "https://english-nana.github.io/ielts-reading/";
+    }
     return window.location.origin + window.location.pathname;
   }
 
