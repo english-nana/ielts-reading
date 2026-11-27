@@ -137,6 +137,7 @@
       theoryQuiz: base.theoryQuiz || { answers: {}, submitted: false, score: 0 },
       exercises: base.exercises || {},
       writingProgress: base.writingProgress || {},
+      pageHighlights: base.pageHighlights && typeof base.pageHighlights === "object" ? base.pageHighlights : {},
       notifications: Array.isArray(base.notifications)
         ? base.notifications
         : [
@@ -232,6 +233,7 @@
     const stu = store.profile;
     if (!stu.exercises) stu.exercises = {};
     if (!stu.writingProgress) stu.writingProgress = {};
+    if (!stu.pageHighlights || typeof stu.pageHighlights !== "object") stu.pageHighlights = {};
     if (!stu.savedVocab) stu.savedVocab = [];
     if (!stu.theoryQuiz) stu.theoryQuiz = { answers: {}, submitted: false, score: 0 };
     if (!stu.notifications) stu.notifications = [];
@@ -314,8 +316,7 @@
     authInfo: "",
     authLoading: false,
     localPreviewMode: false,
-    // Practice room interactive helpers
-    highlightToolActive: false,
+    // Practice room & global interactive helpers
     highlightColor: "yellow", // "yellow" | "green" | "blue" | "pink" | "purple"
     scanHelperActive: false,
     translateModeActive: false,
@@ -929,32 +930,1044 @@
     exState.textHighlights[sentId] = merged;
   }
 
-  function removeOrRecolorTextHighlight(exState, sentId, start, end, activeColor) {
+  function removeTextHighlightRange(exState, sentId, start, end) {
     if (!exState.textHighlights || !Array.isArray(exState.textHighlights[sentId])) return;
     const prev = exState.textHighlights[sentId];
-    const target = prev.find(r => r.start <= start && r.end >= end);
-    if (!target) return;
-    if (target.color === activeColor) {
-      const next = [];
-      prev.forEach(r => {
-        if (r.end <= start || r.start >= end) {
-          next.push(r);
-        } else {
-          if (r.start < start) next.push({ start: r.start, end: start, color: r.color });
-          if (r.end > end) next.push({ start: end, end: r.end, color: r.color });
-        }
-      });
-      if (next.length === 0) delete exState.textHighlights[sentId];
-      else exState.textHighlights[sentId] = next;
-    } else {
-      applyTextHighlight(exState, sentId, start, end, activeColor);
-    }
+    const next = [];
+    prev.forEach(r => {
+      if (r.end <= start || r.start >= end) {
+        next.push(r);
+      } else {
+        if (r.start < start) next.push({ start: r.start, end: start, color: r.color });
+        if (r.end > end) next.push({ start: end, end: r.end, color: r.color });
+      }
+    });
+    if (next.length === 0) delete exState.textHighlights[sentId];
+    else exState.textHighlights[sentId] = next;
   }
 
   function hasAnyPassageHighlights(exState) {
+    if (!exState) return false;
     const hasSent = Object.values(exState.highlightedSentences || {}).some(v => Boolean(v));
     const hasText = Object.values(exState.textHighlights || {}).some(arr => Array.isArray(arr) && arr.length > 0);
     return hasSent || hasText;
+  }
+
+  // --------------------------------------------------------------------------
+  // SITE-WIDE RIGHT-CLICK HIGHLIGHTING ENGINE (ALL VIEWS)
+  // --------------------------------------------------------------------------
+  const HL_BLOCK_SEP = "\u0001";
+  const HL_BLOCK_TAGS = new Set([
+    "P", "DIV", "LI", "TD", "TH", "TR",
+    "H1", "H2", "H3", "H4", "H5", "H6",
+    "BLOCKQUOTE", "SECTION", "ARTICLE", "HEADER", "FOOTER", "MAIN", "ASIDE", "NAV",
+    "UL", "OL", "DL", "DT", "DD", "TABLE", "THEAD", "TBODY",
+    "FIGURE", "FIGCAPTION", "FORM", "FIELDSET", "PRE", "HR", "BUTTON", "SUMMARY", "DETAILS"
+  ]);
+  const HL_SKIP_TAGS = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "SVG", "INPUT", "TEXTAREA", "SELECT", "OPTION"]);
+  const HL_ABBREVS = new Set([
+    "mr", "mrs", "ms", "dr", "prof", "st", "vs", "etc", "fig", "no", "vol",
+    "p", "pp", "eg", "ie", "jan", "feb", "mar", "apr", "jun", "jul", "aug",
+    "sep", "sept", "oct", "nov", "dec", "inc", "ltd", "co", "jr", "sr"
+  ]);
+
+  let hlMenuEl = null;
+  let hlMenuCtx = null;
+
+  function getCurrentHighlightScopeKey() {
+    if (state.view === "practice") return `practice::${state.currentExerciseId}`;
+    if (state.view === "writing-lesson") return `writing::${state.currentWritingUnitId}::${state.currentWritingSection}`;
+    if (state.view === "part-topics") return `part-topics::${state.selectedPart}`;
+    return String(state.view || "home");
+  }
+
+  function getPageHighlightsForCurrentScope() {
+    const stu = getActiveStudent();
+    const key = getCurrentHighlightScopeKey();
+    const list = stu.pageHighlights && stu.pageHighlights[key];
+    return Array.isArray(list) ? list : [];
+  }
+
+  function setPageHighlightsForCurrentScope(list) {
+    const stu = getActiveStudent();
+    if (!stu.pageHighlights || typeof stu.pageHighlights !== "object") stu.pageHighlights = {};
+    const key = getCurrentHighlightScopeKey();
+    if (!Array.isArray(list) || list.length === 0) {
+      delete stu.pageHighlights[key];
+    } else {
+      stu.pageHighlights[key] = list;
+    }
+  }
+
+  function hasAnyCurrentViewHighlights() {
+    if (getPageHighlightsForCurrentScope().length > 0) return true;
+    if (state.view === "practice") {
+      const ex = getCurrentExercise();
+      if (ex && hasAnyPassageHighlights(ensureExerciseState(ex.id))) return true;
+    }
+    return false;
+  }
+
+  function shouldSkipHighlightElement(el) {
+    if (!el || el.nodeType !== 1) return false;
+    if (HL_SKIP_TAGS.has(el.tagName)) return true;
+    if (el.id === "hl-context-menu") return true;
+    if (el.classList && (el.classList.contains("hl-context-menu") || el.classList.contains("sent-vi-inline"))) return true;
+    if (el.hasAttribute && el.hasAttribute("data-sentence-id")) return true;
+    if (el.isContentEditable) return true;
+    return false;
+  }
+
+  function collectPageTextModel(rootEl) {
+    const parts = [];
+    const segments = [];
+    let offset = 0;
+    let lastBlock = null;
+
+    function pushSep() {
+      if (offset > 0 && parts[parts.length - 1] !== HL_BLOCK_SEP) {
+        parts.push(HL_BLOCK_SEP);
+        offset += 1;
+      }
+    }
+
+    function walk(node, currentBlock) {
+      if (!node) return;
+      if (node.nodeType === 3) {
+        const val = node.nodeValue || "";
+        if (!val.length) return;
+        if (lastBlock !== null && lastBlock !== currentBlock) {
+          pushSep();
+        }
+        const start = offset;
+        const end = offset + val.length;
+        parts.push(val);
+        offset = end;
+        segments.push({ node, start, end, block: currentBlock });
+        lastBlock = currentBlock;
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      if (shouldSkipHighlightElement(node)) return;
+      if (node.tagName === "BR") {
+        pushSep();
+        lastBlock = null;
+        return;
+      }
+      const nextBlock = HL_BLOCK_TAGS.has(node.tagName) ? node : currentBlock;
+      const children = node.childNodes;
+      for (let i = 0; i < children.length; i++) {
+        walk(children[i], nextBlock);
+      }
+    }
+
+    walk(rootEl, rootEl);
+    return { fullText: parts.join(""), segments };
+  }
+
+  function isSentenceEndAt(text, idx) {
+    const ch = text[idx];
+    if (ch !== "." && ch !== "!" && ch !== "?" && ch !== "…") return false;
+    const nextRaw = text[idx + 1] || "";
+
+    // Skip middle dots of an ellipsis "..."
+    if (ch === "." && nextRaw === ".") return false;
+
+    // Skip decimals like 5.5, 6.0
+    if (ch === "." && idx > 0 && /\d/.test(text[idx - 1]) && /\d/.test(nextRaw)) return false;
+
+    // Skip closing quotes/brackets after punctuation
+    let k = idx + 1;
+    while (k < text.length && /["'”’)\]]/.test(text[k])) k++;
+    if (k < text.length && text[k] !== HL_BLOCK_SEP && !/\s/.test(text[k])) return false;
+
+    if (ch === ".") {
+      // Check abbreviations before dot
+      let wStart = idx - 1;
+      while (wStart >= 0 && /[A-Za-z]/.test(text[wStart])) wStart--;
+      const word = text.slice(wStart + 1, idx);
+      if (word) {
+        const lower = word.toLowerCase();
+        if (HL_ABBREVS.has(lower)) return false;
+        // Single-letter initial or acronym like U.S. / a.m. / A.
+        if (word.length === 1) {
+          const prevChar = wStart >= 0 ? text[wStart] : "";
+          if (!prevChar || prevChar === HL_BLOCK_SEP || /[\s.(["'“]/.test(prevChar)) return false;
+        }
+      }
+      // Numbered list item prefix right after block boundary (e.g. "1. ", "2. ")
+      let nStart = idx - 1;
+      while (nStart >= 0 && /\d/.test(text[nStart])) nStart--;
+      const numStr = text.slice(nStart + 1, idx);
+      if (numStr && numStr.length <= 2) {
+        let p = nStart;
+        while (p >= 0 && /\s/.test(text[p])) p--;
+        if (p < 0 || text[p] === HL_BLOCK_SEP) return false;
+      }
+    }
+    return true;
+  }
+
+  function expandOffsetsToSentence(fullText, selStart, selEnd) {
+    const len = fullText.length;
+    let s = Math.max(0, Math.min(len, selStart));
+    let e = Math.max(s, Math.min(len, selEnd));
+    while (s < e && (fullText[s] === HL_BLOCK_SEP || /\s/.test(fullText[s]))) s++;
+    while (e > s && (fullText[e - 1] === HL_BLOCK_SEP || /\s/.test(fullText[e - 1]))) e--;
+    if (e <= s) return { start: s, end: e };
+
+    // Scan backward for sentence start
+    let sentStart = 0;
+    for (let i = s - 1; i >= 0; i--) {
+      if (fullText[i] === HL_BLOCK_SEP) {
+        sentStart = i + 1;
+        break;
+      }
+      if (isSentenceEndAt(fullText, i)) {
+        let k = i + 1;
+        while (k < s && /["'”’)\]]/.test(fullText[k])) k++;
+        sentStart = k;
+        break;
+      }
+    }
+
+    // Check if selection already ends on a sentence terminator
+    let lastContentIdx = e - 1;
+    while (lastContentIdx > s && /["'”’)\]]/.test(fullText[lastContentIdx])) lastContentIdx--;
+    let sentEnd = len;
+    if (isSentenceEndAt(fullText, lastContentIdx)) {
+      sentEnd = e;
+      while (sentEnd < len && /["'”’)\]]/.test(fullText[sentEnd])) sentEnd++;
+    } else {
+      for (let i = e; i < len; i++) {
+        if (fullText[i] === HL_BLOCK_SEP) {
+          sentEnd = i;
+          break;
+        }
+        if (isSentenceEndAt(fullText, i)) {
+          let k = i + 1;
+          while (k < len && /["'”’)\]]/.test(fullText[k])) k++;
+          sentEnd = k;
+          break;
+        }
+      }
+    }
+
+    while (sentStart < sentEnd && (fullText[sentStart] === HL_BLOCK_SEP || /\s/.test(fullText[sentStart]))) sentStart++;
+    while (sentEnd > sentStart && (fullText[sentEnd - 1] === HL_BLOCK_SEP || /\s/.test(fullText[sentEnd - 1]))) sentEnd--;
+    return { start: sentStart, end: sentEnd };
+  }
+
+  function createPageHighlightEntry(fullText, start, end, color, isSentence) {
+    let s = Math.max(0, Math.min(fullText.length, start));
+    let e = Math.max(s, Math.min(fullText.length, end));
+    while (s < e && fullText[s] === HL_BLOCK_SEP) s++;
+    while (e > s && fullText[e - 1] === HL_BLOCK_SEP) e--;
+    const exact = fullText.slice(s, e);
+    if (!exact || !exact.replace(new RegExp(HL_BLOCK_SEP, "g"), "").trim()) return null;
+
+    const prefix = fullText.slice(Math.max(0, s - 36), s);
+    const suffix = fullText.slice(e, Math.min(fullText.length, e + 36));
+    const shortPre = prefix.slice(-12);
+    const shortSuf = suffix.slice(0, 12);
+
+    let occ = 0;
+    let rawOcc = 0;
+    let pos = 0;
+    while (pos < s) {
+      const found = fullText.indexOf(exact, pos);
+      if (found === -1 || found >= s) break;
+      rawOcc++;
+      const candPre = fullText.slice(Math.max(0, found - shortPre.length), found);
+      const candSuf = fullText.slice(found + exact.length, found + exact.length + shortSuf.length);
+      if (candPre === shortPre && candSuf === shortSuf) occ++;
+      pos = found + 1;
+    }
+
+    return {
+      id: "phl_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 7),
+      color: normalizeHighlightColor(color) || "yellow",
+      exact,
+      prefix,
+      suffix,
+      occ,
+      rawOcc,
+      isSentence: Boolean(isSentence)
+    };
+  }
+
+  function resolvePageHighlightMatch(fullText, hl) {
+    if (!hl || !hl.exact) return null;
+    const exact = hl.exact;
+    const candidates = [];
+    let pos = 0;
+    while (pos <= fullText.length - exact.length) {
+      const idx = fullText.indexOf(exact, pos);
+      if (idx === -1) break;
+      candidates.push(idx);
+      pos = idx + 1;
+    }
+    if (candidates.length === 0) return null;
+    if (candidates.length === 1) return { start: candidates[0], end: candidates[0] + exact.length };
+
+    const targetPre = hl.prefix || "";
+    const targetSuf = hl.suffix || "";
+    let bestScore = -1;
+    let scored = [];
+
+    for (let c = 0; c < candidates.length; c++) {
+      const idx = candidates[c];
+      let preScore = 0;
+      const maxPre = Math.min(targetPre.length, idx);
+      for (let k = 1; k <= maxPre; k++) {
+        if (fullText[idx - k] === targetPre[targetPre.length - k]) preScore++;
+        else break;
+      }
+      let sufScore = 0;
+      const afterIdx = idx + exact.length;
+      const maxSuf = Math.min(targetSuf.length, fullText.length - afterIdx);
+      for (let k = 0; k < maxSuf; k++) {
+        if (fullText[afterIdx + k] === targetSuf[k]) sufScore++;
+        else break;
+      }
+      const total = preScore + sufScore;
+      if (total > bestScore) {
+        bestScore = total;
+        scored = [{ idx, rawIdx: c }];
+      } else if (total === bestScore) {
+        scored.push({ idx, rawIdx: c });
+      }
+    }
+
+    if (scored.length === 1) {
+      return { start: scored[0].idx, end: scored[0].idx + exact.length };
+    }
+    const desiredOcc = typeof hl.occ === "number" ? hl.occ : 0;
+    if (desiredOcc >= 0 && desiredOcc < scored.length) {
+      const pick = scored[desiredOcc];
+      return { start: pick.idx, end: pick.idx + exact.length };
+    }
+    const desiredRaw = typeof hl.rawOcc === "number" ? hl.rawOcc : 0;
+    let bestPick = scored[0];
+    let bestDist = Math.abs(scored[0].rawIdx - desiredRaw);
+    for (let i = 1; i < scored.length; i++) {
+      const d = Math.abs(scored[i].rawIdx - desiredRaw);
+      if (d < bestDist) {
+        bestDist = d;
+        bestPick = scored[i];
+      }
+    }
+    return { start: bestPick.idx, end: bestPick.idx + exact.length };
+  }
+
+  function unwrapAllPageHighlights(rootEl) {
+    if (!rootEl) return;
+    const marks = rootEl.querySelectorAll("mark[data-page-hl-id]");
+    if (!marks.length) return;
+    const touchedParents = new Set();
+    marks.forEach(mark => {
+      const parent = mark.parentNode;
+      if (!parent) return;
+      touchedParents.add(parent);
+      while (mark.firstChild) {
+        parent.insertBefore(mark.firstChild, mark);
+      }
+      parent.removeChild(mark);
+    });
+    touchedParents.forEach(p => {
+      try { p.normalize(); } catch (e) {}
+    });
+  }
+
+  function applyPageHighlights(rootEl) {
+    if (!rootEl) return;
+    const list = getPageHighlightsForCurrentScope();
+    if (!list.length) return;
+
+    const model = collectPageTextModel(rootEl);
+    if (!model.fullText) return;
+
+    // Flatten overlapping spans in chronological order (later highlight wins)
+    let spans = [];
+    list.forEach(hl => {
+      const color = normalizeHighlightColor(hl.color);
+      if (!color) return;
+      const match = resolvePageHighlightMatch(model.fullText, hl);
+      if (!match || match.end <= match.start) return;
+      const nextSpans = [];
+      spans.forEach(sp => {
+        if (sp.end <= match.start || sp.start >= match.end) {
+          nextSpans.push(sp);
+        } else {
+          if (sp.start < match.start) nextSpans.push({ ...sp, end: match.start });
+          if (sp.end > match.end) nextSpans.push({ ...sp, start: match.end });
+        }
+      });
+      nextSpans.push({ start: match.start, end: match.end, color, id: hl.id });
+      spans = nextSpans;
+    });
+    if (!spans.length) return;
+    spans.sort((a, b) => a.start - b.start);
+
+    let spanCursor = 0;
+    model.segments.forEach(seg => {
+      while (spanCursor < spans.length && spans[spanCursor].end <= seg.start) spanCursor++;
+      if (spanCursor >= spans.length || spans[spanCursor].start >= seg.end) return;
+
+      const node = seg.node;
+      const parent = node.parentNode;
+      if (!parent) return;
+      const text = node.nodeValue || "";
+      const frag = document.createDocumentFragment();
+      let localPos = 0;
+
+      for (let k = spanCursor; k < spans.length; k++) {
+        const sp = spans[k];
+        if (sp.start >= seg.end) break;
+        const ovStart = Math.max(seg.start, sp.start) - seg.start;
+        const ovEnd = Math.min(seg.end, sp.end) - seg.start;
+        if (ovEnd <= ovStart) continue;
+
+        if (ovStart > localPos) {
+          frag.appendChild(document.createTextNode(text.slice(localPos, ovStart)));
+        }
+        const mark = document.createElement("mark");
+        mark.className = `user-hl-mark hl-${sp.color}`;
+        mark.setAttribute("data-page-hl-id", sp.id);
+        mark.setAttribute("data-hl-color", sp.color);
+        mark.textContent = text.slice(ovStart, ovEnd);
+        frag.appendChild(mark);
+        localPos = ovEnd;
+      }
+
+      if (localPos < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(localPos)));
+      }
+      parent.replaceChild(frag, node);
+    });
+  }
+
+  function refreshPageHighlightsInPlace() {
+    const root = document.getElementById("app");
+    if (!root) return;
+    unwrapAllPageHighlights(root);
+    applyPageHighlights(root);
+  }
+
+  function addPageHighlightByOffsets(fullText, start, end, color, isSentence) {
+    const entry = createPageHighlightEntry(fullText, start, end, color, isSentence);
+    if (!entry) return false;
+    const list = getPageHighlightsForCurrentScope().slice();
+    list.push(entry);
+    setPageHighlightsForCurrentScope(list);
+    return true;
+  }
+
+  function removePageHighlightsOverlapping(rootEl, selStart, selEnd) {
+    const list = getPageHighlightsForCurrentScope();
+    if (!list.length) return false;
+    const model = collectPageTextModel(rootEl);
+    const nextList = [];
+    let removedAny = false;
+
+    list.forEach(hl => {
+      const m = resolvePageHighlightMatch(model.fullText, hl);
+      if (!m || m.end <= selStart || m.start >= selEnd) {
+        nextList.push(hl);
+      } else {
+        removedAny = true;
+        if (m.start < selStart) {
+          const leftEntry = createPageHighlightEntry(model.fullText, m.start, selStart, hl.color, false);
+          if (leftEntry) nextList.push(leftEntry);
+        }
+        if (m.end > selEnd) {
+          const rightEntry = createPageHighlightEntry(model.fullText, selEnd, m.end, hl.color, false);
+          if (rightEntry) nextList.push(rightEntry);
+        }
+      }
+    });
+
+    if (removedAny) {
+      setPageHighlightsForCurrentScope(nextList);
+    }
+    return removedAny;
+  }
+
+  function closeHighlightContextMenu() {
+    hlMenuCtx = null;
+    if (hlMenuEl && hlMenuEl.parentNode) {
+      hlMenuEl.parentNode.removeChild(hlMenuEl);
+    }
+    hlMenuEl = null;
+  }
+
+  function clearBrowserSelection() {
+    try {
+      const sel = window.getSelection ? window.getSelection() : null;
+      if (sel && sel.removeAllRanges) sel.removeAllRanges();
+    } catch (e) {}
+  }
+
+  function copyTextToClipboard(text) {
+    if (!text) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    } else {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      } catch (e) {}
+    }
+  }
+
+  function capturePassageTargetsFromRange(range) {
+    const passageCard = document.getElementById("passage-paper-card");
+    if (!passageCard || !range) return [];
+    const targets = [];
+    passageCard.querySelectorAll("[data-sentence-id]").forEach(sentEl => {
+      if (!range.intersectsNode(sentEl)) return;
+      const sId = sentEl.getAttribute("data-sentence-id");
+      const walker = document.createTreeWalker(sentEl, NodeFilter.SHOW_TEXT);
+      let offset = 0;
+      let hlStart = null;
+      let hlEnd = null;
+      let node;
+      while ((node = walker.nextNode())) {
+        const nodeLen = node.nodeValue ? node.nodeValue.length : 0;
+        if (nodeLen > 0) {
+          const nodeRange = document.createRange();
+          nodeRange.selectNodeContents(node);
+          const endsBefore = range.compareBoundaryPoints(Range.END_TO_START, nodeRange) >= 0;
+          const startsAfter = range.compareBoundaryPoints(Range.START_TO_END, nodeRange) <= 0;
+          if (!endsBefore && !startsAfter) {
+            const localStart = range.compareBoundaryPoints(Range.START_TO_START, nodeRange) <= 0 ? 0 : range.startOffset;
+            const localEnd = range.compareBoundaryPoints(Range.END_TO_END, nodeRange) >= 0 ? nodeLen : range.endOffset;
+            if (localEnd > localStart) {
+              if (hlStart === null) hlStart = offset + localStart;
+              hlEnd = offset + localEnd;
+            }
+          }
+        }
+        offset += nodeLen;
+      }
+      if (hlStart !== null && hlEnd !== null && hlEnd > hlStart) {
+        targets.push({ sentId: sId, start: hlStart, end: hlEnd, sentLen: offset });
+      }
+    });
+    return targets;
+  }
+
+  function capturePageTargetFromRange(rootEl, range) {
+    if (!rootEl || !range) return null;
+    const model = collectPageTextModel(rootEl);
+    if (!model.segments.length) return null;
+
+    let selStart = null;
+    let selEnd = null;
+    for (let i = 0; i < model.segments.length; i++) {
+      const seg = model.segments[i];
+      const nodeLen = seg.node.nodeValue ? seg.node.nodeValue.length : 0;
+      if (!nodeLen) continue;
+      const nodeRange = document.createRange();
+      nodeRange.selectNodeContents(seg.node);
+      const endsBefore = range.compareBoundaryPoints(Range.END_TO_START, nodeRange) >= 0;
+      const startsAfter = range.compareBoundaryPoints(Range.START_TO_END, nodeRange) <= 0;
+      if (!endsBefore && !startsAfter) {
+        const localStart = range.compareBoundaryPoints(Range.START_TO_START, nodeRange) <= 0 ? 0 : range.startOffset;
+        const localEnd = range.compareBoundaryPoints(Range.END_TO_END, nodeRange) >= 0 ? nodeLen : range.endOffset;
+        if (localEnd > localStart) {
+          if (selStart === null) selStart = seg.start + localStart;
+          selEnd = seg.start + localEnd;
+        }
+      }
+    }
+    if (selStart === null || selEnd === null || selEnd <= selStart) return null;
+
+    const sentBounds = expandOffsetsToSentence(model.fullText, selStart, selEnd);
+    const list = getPageHighlightsForCurrentScope();
+    let overlapsExisting = false;
+    for (let i = 0; i < list.length; i++) {
+      const m = resolvePageHighlightMatch(model.fullText, list[i]);
+      if (m && m.end > selStart && m.start < selEnd) {
+        overlapsExisting = true;
+        break;
+      }
+    }
+    return {
+      fullText: model.fullText,
+      start: selStart,
+      end: selEnd,
+      sentStart: sentBounds.start,
+      sentEnd: sentBounds.end,
+      overlapsExisting
+    };
+  }
+
+  function executeMenuHighlightSelection(color) {
+    if (!hlMenuCtx) return;
+    const safeColor = normalizeHighlightColor(color) || "yellow";
+    state.highlightColor = safeColor;
+    const ctx = hlMenuCtx;
+    closeHighlightContextMenu();
+
+    let needFullRender = false;
+    let needPageRefresh = false;
+
+    if (ctx.hasSelection) {
+      if (ctx.passageTargets.length > 0 && state.view === "practice") {
+        const ex = getCurrentExercise();
+        const exState = ensureExerciseState(ex.id);
+        ctx.passageTargets.forEach(t => {
+          applyTextHighlight(exState, t.sentId, t.start, t.end, safeColor);
+        });
+        needFullRender = true;
+      }
+      if (ctx.pageTarget) {
+        if (addPageHighlightByOffsets(ctx.pageTarget.fullText, ctx.pageTarget.start, ctx.pageTarget.end, safeColor, false)) {
+          needPageRefresh = true;
+        }
+      }
+    } else if (ctx.clickedPassageMark && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      applyTextHighlight(exState, ctx.clickedPassageMark.sentId, ctx.clickedPassageMark.start, ctx.clickedPassageMark.end, safeColor);
+      needFullRender = true;
+    } else if (ctx.clickedPassageSentId && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      if (!exState.highlightedSentences) exState.highlightedSentences = {};
+      exState.highlightedSentences[ctx.clickedPassageSentId] = safeColor;
+      needFullRender = true;
+    } else if (ctx.clickedPageHlId) {
+      const list = getPageHighlightsForCurrentScope().slice();
+      const target = list.find(h => h.id === ctx.clickedPageHlId);
+      if (target) {
+        target.color = safeColor;
+        setPageHighlightsForCurrentScope(list);
+        needPageRefresh = true;
+      }
+    }
+
+    clearBrowserSelection();
+    if (needFullRender || needPageRefresh) persist();
+    if (needFullRender) {
+      renderApp();
+    } else if (needPageRefresh) {
+      refreshPageHighlightsInPlace();
+    }
+  }
+
+  function executeMenuHighlightSentence(color) {
+    if (!hlMenuCtx) return;
+    const safeColor = normalizeHighlightColor(color) || state.highlightColor || "yellow";
+    state.highlightColor = safeColor;
+    const ctx = hlMenuCtx;
+    closeHighlightContextMenu();
+
+    let needFullRender = false;
+    let needPageRefresh = false;
+
+    if (ctx.passageTargets.length > 0 && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      if (!exState.highlightedSentences) exState.highlightedSentences = {};
+      ctx.passageTargets.forEach(t => {
+        exState.highlightedSentences[t.sentId] = safeColor;
+        if (exState.textHighlights && exState.textHighlights[t.sentId]) {
+          delete exState.textHighlights[t.sentId];
+        }
+      });
+      needFullRender = true;
+    } else if (ctx.clickedPassageMark && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      if (!exState.highlightedSentences) exState.highlightedSentences = {};
+      exState.highlightedSentences[ctx.clickedPassageMark.sentId] = safeColor;
+      if (exState.textHighlights && exState.textHighlights[ctx.clickedPassageMark.sentId]) {
+        delete exState.textHighlights[ctx.clickedPassageMark.sentId];
+      }
+      needFullRender = true;
+    } else if (ctx.clickedPassageSentId && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      if (!exState.highlightedSentences) exState.highlightedSentences = {};
+      exState.highlightedSentences[ctx.clickedPassageSentId] = safeColor;
+      needFullRender = true;
+    }
+
+    if (ctx.pageTarget && ctx.pageTarget.sentEnd > ctx.pageTarget.sentStart) {
+      if (addPageHighlightByOffsets(ctx.pageTarget.fullText, ctx.pageTarget.sentStart, ctx.pageTarget.sentEnd, safeColor, true)) {
+        needPageRefresh = true;
+      }
+    }
+
+    clearBrowserSelection();
+    if (needFullRender || needPageRefresh) persist();
+    if (needFullRender) {
+      renderApp();
+    } else if (needPageRefresh) {
+      refreshPageHighlightsInPlace();
+    }
+  }
+
+  function executeMenuRemoveHighlight() {
+    if (!hlMenuCtx) return;
+    const ctx = hlMenuCtx;
+    closeHighlightContextMenu();
+
+    const root = document.getElementById("app");
+    let needFullRender = false;
+    let needPageRefresh = false;
+
+    if (ctx.hasSelection) {
+      if (ctx.passageTargets.length > 0 && state.view === "practice") {
+        const ex = getCurrentExercise();
+        const exState = ensureExerciseState(ex.id);
+        ctx.passageTargets.forEach(t => {
+          removeTextHighlightRange(exState, t.sentId, t.start, t.end);
+          if (exState.highlightedSentences && exState.highlightedSentences[t.sentId]) {
+            const prevSentColor = normalizeHighlightColor(exState.highlightedSentences[t.sentId]);
+            delete exState.highlightedSentences[t.sentId];
+            if (prevSentColor && (t.start > 0 || t.end < t.sentLen)) {
+              if (t.start > 0) applyTextHighlight(exState, t.sentId, 0, t.start, prevSentColor);
+              if (t.end < t.sentLen) applyTextHighlight(exState, t.sentId, t.end, t.sentLen, prevSentColor);
+            }
+          }
+        });
+        needFullRender = true;
+      }
+      if (ctx.pageTarget && root) {
+        if (removePageHighlightsOverlapping(root, ctx.pageTarget.start, ctx.pageTarget.end)) {
+          needPageRefresh = true;
+        }
+      }
+    } else if (ctx.clickedPassageMark && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      removeTextHighlightRange(exState, ctx.clickedPassageMark.sentId, ctx.clickedPassageMark.start, ctx.clickedPassageMark.end);
+      needFullRender = true;
+    } else if (ctx.clickedPassageSentId && state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      if (exState.highlightedSentences) delete exState.highlightedSentences[ctx.clickedPassageSentId];
+      if (exState.textHighlights) delete exState.textHighlights[ctx.clickedPassageSentId];
+      needFullRender = true;
+    } else if (ctx.clickedPageHlId) {
+      const list = getPageHighlightsForCurrentScope().filter(h => h.id !== ctx.clickedPageHlId);
+      setPageHighlightsForCurrentScope(list);
+      needPageRefresh = true;
+    }
+
+    clearBrowserSelection();
+    if (needFullRender || needPageRefresh) persist();
+    if (needFullRender) {
+      renderApp();
+    } else if (needPageRefresh) {
+      refreshPageHighlightsInPlace();
+    }
+  }
+
+  function executeMenuClearAllHighlights() {
+    closeHighlightContextMenu();
+    let needFullRender = false;
+    const hadPage = getPageHighlightsForCurrentScope().length > 0;
+    setPageHighlightsForCurrentScope([]);
+
+    if (state.view === "practice") {
+      const ex = getCurrentExercise();
+      const exState = ensureExerciseState(ex.id);
+      if (hasAnyPassageHighlights(exState)) {
+        exState.highlightedSentences = {};
+        exState.textHighlights = {};
+        needFullRender = true;
+      }
+    }
+
+    clearBrowserSelection();
+    persist();
+    if (needFullRender) {
+      renderApp();
+    } else if (hadPage) {
+      refreshPageHighlightsInPlace();
+    }
+  }
+
+  function openHighlightContextMenu(clientX, clientY, ctx) {
+    closeHighlightContextMenu();
+    hlMenuCtx = ctx;
+
+    const activeSwatch = HIGHLIGHT_COLORS.find(c => c.key === state.highlightColor) || HIGHLIGHT_COLORS[0];
+    const primaryLabel = ctx.hasSelection ? "Highlight vùng chọn" : "Đổi màu highlight";
+
+    const menu = document.createElement("div");
+    menu.id = "hl-context-menu";
+    menu.className = "hl-context-menu";
+    menu.setAttribute("role", "menu");
+    menu.setAttribute("aria-label", "Công cụ Highlight");
+
+    menu.innerHTML = `
+      <div class="hl-cm-section">
+        <div class="hl-cm-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>
+          <span>${primaryLabel}</span>
+        </div>
+        <div class="hl-cm-swatches" role="group" aria-label="Chọn màu highlight">
+          ${HIGHLIGHT_COLORS.map(
+            c => `
+            <button
+              type="button"
+              class="hl-cm-swatch ${state.highlightColor === c.key ? "is-active" : ""}"
+              data-cm-hl-color="${c.key}"
+              title="${escapeHtml(c.label)}"
+              aria-label="${escapeHtml(c.label)}"
+              style="background:${c.bg};"
+            ></button>
+          `
+          ).join("")}
+        </div>
+      </div>
+
+      ${
+        ctx.canHighlightSentence
+          ? `
+        <div class="hl-cm-divider"></div>
+        <div class="hl-cm-section hl-cm-sentence-section">
+          <button
+            type="button"
+            class="hl-cm-item hl-cm-sentence-btn"
+            data-cm-hl-sentence="${escapeHtml(activeSwatch.key)}"
+            title="Highlight cả câu bằng màu hiện tại"
+          >
+            <span class="hl-cm-item-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/></svg>
+              <span>Highlight cả câu</span>
+            </span>
+            <span class="hl-cm-active-pill" style="background:${activeSwatch.bg};"></span>
+          </button>
+          <div class="hl-cm-sentence-swatches" role="group" aria-label="Chọn màu highlight cả câu">
+            ${HIGHLIGHT_COLORS.map(
+              c => `
+              <button
+                type="button"
+                class="hl-cm-mini-swatch ${state.highlightColor === c.key ? "is-active" : ""}"
+                data-cm-hl-sentence="${c.key}"
+                title="Highlight cả câu · ${escapeHtml(c.label)}"
+                aria-label="Highlight cả câu · ${escapeHtml(c.label)}"
+                style="background:${c.bg};"
+              ></button>
+            `
+            ).join("")}
+          </div>
+        </div>
+      `
+          : ""
+      }
+
+      ${
+        ctx.hasSelection || ctx.canRemove || ctx.canClearAll
+          ? `
+        <div class="hl-cm-divider"></div>
+        <div class="hl-cm-actions">
+          ${
+            ctx.hasSelection
+              ? `
+            <button type="button" class="hl-cm-item" data-cm-action="copy">
+              <span class="hl-cm-item-left">
+                <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Sao chép</span>
+              </span>
+            </button>
+          `
+              : ""
+          }
+          ${
+            ctx.canRemove
+              ? `
+            <button type="button" class="hl-cm-item hl-cm-danger" data-cm-action="remove">
+              <span class="hl-cm-item-left">
+                <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Bỏ highlight</span>
+              </span>
+            </button>
+          `
+              : ""
+          }
+          ${
+            ctx.canClearAll
+              ? `
+            <button type="button" class="hl-cm-item hl-cm-danger" data-cm-action="clear-all">
+              <span class="hl-cm-item-left">
+                <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                <span>Xoá tất cả highlight</span>
+              </span>
+            </button>
+          `
+              : ""
+          }
+        </div>
+      `
+          : ""
+      }
+    `;
+
+    // Prevent browser from collapsing selection on mousedown inside popup
+    menu.addEventListener("mousedown", ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+    });
+
+    menu.addEventListener("contextmenu", ev => {
+      ev.preventDefault();
+    });
+
+    menu.addEventListener("click", ev => {
+      const swatchBtn = ev.target.closest ? ev.target.closest("[data-cm-hl-color]") : null;
+      if (swatchBtn) {
+        executeMenuHighlightSelection(swatchBtn.getAttribute("data-cm-hl-color"));
+        return;
+      }
+      const sentBtn = ev.target.closest ? ev.target.closest("[data-cm-hl-sentence]") : null;
+      if (sentBtn) {
+        executeMenuHighlightSentence(sentBtn.getAttribute("data-cm-hl-sentence"));
+        return;
+      }
+      const actBtn = ev.target.closest ? ev.target.closest("[data-cm-action]") : null;
+      if (actBtn) {
+        const action = actBtn.getAttribute("data-cm-action");
+        if (action === "copy") {
+          const textToCopy = hlMenuCtx ? hlMenuCtx.selectedText : "";
+          closeHighlightContextMenu();
+          copyTextToClipboard(textToCopy);
+        } else if (action === "remove") {
+          executeMenuRemoveHighlight();
+        } else if (action === "clear-all") {
+          executeMenuClearAllHighlights();
+        }
+      }
+    });
+
+    menu.style.left = "-9999px";
+    menu.style.top = "-9999px";
+    document.body.appendChild(menu);
+    hlMenuEl = menu;
+
+    // Position and clamp inside viewport
+    const rect = menu.getBoundingClientRect();
+    const pad = 10;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let left = clientX + 4;
+    let top = clientY + 6;
+    if (left + rect.width + pad > vw) {
+      left = Math.max(pad, clientX - rect.width - 4);
+    }
+    if (top + rect.height + pad > vh) {
+      top = Math.max(pad, clientY - rect.height - 6);
+    }
+    left = Math.max(pad, Math.min(left, vw - rect.width - pad));
+    top = Math.max(pad, Math.min(top, vh - rect.height - pad));
+
+    menu.style.left = `${Math.round(left)}px`;
+    menu.style.top = `${Math.round(top)}px`;
+  }
+
+  function handleGlobalHighlightContextMenu(e) {
+    const root = document.getElementById("app");
+    if (!root || !currentAccount) return;
+    const target = e.target;
+    if (!target || !root.contains(target)) return;
+
+    // Keep native context menu for form fields & editable controls
+    const editable = target.closest ? target.closest("input, textarea, select, [contenteditable='true'], [contenteditable='']") : null;
+    if (editable) return;
+
+    const sel = window.getSelection ? window.getSelection() : null;
+    const rawSelected = sel && !sel.isCollapsed && sel.rangeCount > 0 ? sel.toString() : "";
+    const hasSelection = Boolean(rawSelected && rawSelected.trim().length > 0);
+
+    const clickedPageMark = target.closest ? target.closest("mark[data-page-hl-id]") : null;
+    const clickedPassageMark = target.closest ? target.closest("mark[data-hl-sent]") : null;
+    const clickedPassageSent = target.closest ? target.closest("[data-sentence-id]") : null;
+    const clickedPassageSentHl = clickedPassageSent && clickedPassageSent.classList.contains("user-hl") ? clickedPassageSent : null;
+    const hasClickedHighlight = Boolean(clickedPageMark || clickedPassageMark || clickedPassageSentHl);
+
+    if (!hasSelection && !hasClickedHighlight) return;
+
+    let passageTargets = [];
+    let pageTarget = null;
+    let clickedPassageMarkObj = null;
+    let clickedPassageSentId = "";
+    let clickedPageHlId = "";
+    let canRemove = hasClickedHighlight;
+
+    if (hasSelection) {
+      const range = sel.getRangeAt(0).cloneRange();
+      if (state.view === "practice") {
+        passageTargets = capturePassageTargetsFromRange(range);
+        if (passageTargets.length > 0) {
+          const ex = getCurrentExercise();
+          const exState = ensureExerciseState(ex.id);
+          for (let i = 0; i < passageTargets.length; i++) {
+            const t = passageTargets[i];
+            if (exState.highlightedSentences && exState.highlightedSentences[t.sentId]) {
+              canRemove = true;
+              break;
+            }
+            const ranges = exState.textHighlights && exState.textHighlights[t.sentId];
+            if (Array.isArray(ranges) && ranges.some(r => r.end > t.start && r.start < t.end)) {
+              canRemove = true;
+              break;
+            }
+          }
+        }
+      }
+      pageTarget = capturePageTargetFromRange(root, range);
+      if (pageTarget && pageTarget.overlapsExisting) canRemove = true;
+
+      if (passageTargets.length === 0 && !pageTarget) return;
+    } else {
+      if (clickedPassageMark) {
+        clickedPassageMarkObj = {
+          sentId: clickedPassageMark.getAttribute("data-hl-sent"),
+          start: parseInt(clickedPassageMark.getAttribute("data-hl-start"), 10),
+          end: parseInt(clickedPassageMark.getAttribute("data-hl-end"), 10)
+        };
+      } else if (clickedPassageSentHl) {
+        clickedPassageSentId = clickedPassageSentHl.getAttribute("data-sentence-id") || "";
+      } else if (clickedPageMark) {
+        clickedPageHlId = clickedPageMark.getAttribute("data-page-hl-id") || "";
+        const markRange = document.createRange();
+        markRange.selectNodeContents(clickedPageMark);
+        pageTarget = capturePageTargetFromRange(root, markRange);
+      }
+    }
+
+    const canHighlightSentence = Boolean(
+      passageTargets.length > 0 ||
+        clickedPassageMarkObj ||
+        clickedPassageSentId ||
+        (pageTarget && pageTarget.sentEnd > pageTarget.sentStart)
+    );
+
+    e.preventDefault();
+    openHighlightContextMenu(e.clientX, e.clientY, {
+      hasSelection,
+      selectedText: rawSelected,
+      passageTargets,
+      pageTarget,
+      clickedPassageMark: clickedPassageMarkObj,
+      clickedPassageSentId,
+      clickedPageHlId,
+      canRemove,
+      canClearAll: hasAnyCurrentViewHighlights(),
+      canHighlightSentence
+    });
   }
 
   function decorateSentenceText(rawText, ex, sentId, exState) {
@@ -3391,56 +4404,6 @@
         <section class="left-pane" aria-label="Bài đọc tương tác">
           <div class="left-pane-inner">
             <div class="passage-toolbar">
-              ${(() => {
-                const activeSwatch = HIGHLIGHT_COLORS.find(c => c.key === state.highlightColor) || HIGHLIGHT_COLORS[0];
-                const hasHl = hasAnyPassageHighlights(exState);
-                return `
-                <div class="hl-tool-group ${state.highlightToolActive ? "is-open" : ""}">
-                  <button
-                    type="button"
-                    class="hl-main-btn ${state.highlightToolActive ? "active" : ""}"
-                    id="btn-toggle-hl-tool"
-                    title="Bôi đen đoạn bất kỳ hoặc bấm vào cả câu để highlight"
-                  >
-                    <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>
-                    <span>Gạch chân</span>
-                    ${state.highlightToolActive ? `<span class="hl-active-dot" style="background:${activeSwatch.bg};"></span>` : ""}
-                  </button>
-                  ${
-                    state.highlightToolActive
-                      ? `
-                    <span class="hl-divider" aria-hidden="true"></span>
-                    <div class="hl-swatches" role="group" aria-label="Chọn màu highlight pastel">
-                      ${HIGHLIGHT_COLORS.map(
-                        c => `
-                        <button
-                          type="button"
-                          class="hl-color-swatch ${state.highlightColor === c.key ? "active" : ""}"
-                          data-hl-color="${c.key}"
-                          title="${escapeHtml(c.label)}"
-                          aria-label="${escapeHtml(c.label)}"
-                          style="background:${c.bg};"
-                        ></button>
-                      `
-                      ).join("")}
-                    </div>
-                    ${
-                      hasHl
-                        ? `
-                      <span class="hl-divider" aria-hidden="true"></span>
-                      <button type="button" class="hl-clear-icon-btn" id="btn-clear-highlights" title="Xoá toàn bộ highlight trong bài" aria-label="Xoá toàn bộ highlight">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                      </button>
-                    `
-                        : ""
-                    }
-                  `
-                      : ""
-                  }
-                </div>
-              `;
-              })()}
-
               <button
                 type="button"
                 class="tool-toggle-btn ${state.scanHelperActive ? "active" : ""}"
@@ -3481,7 +4444,7 @@
               </div>
             </div>
 
-            <article class="passage-paper-card ${state.highlightToolActive ? "hl-mode-active" : ""}" id="passage-paper-card">
+            <article class="passage-paper-card" id="passage-paper-card">
               <div style="font-family:var(--font-mono);font-size:11px;font-weight:800;color:#71717A;text-transform:uppercase;margin-bottom:4px;">
                 ${escapeHtml(ex.badge)}
               </div>
@@ -3507,7 +4470,7 @@
                           );
                           const isEv = state.activeEvidenceSentenceId === sent.id;
                           const isTransOpen = Boolean(state.revealedTranslations[sent.id]);
-                          const clickable = state.highlightToolActive || state.translateModeActive;
+                          const clickable = state.translateModeActive;
                           return `<span
                             id="sent-${escapeHtml(sent.id)}"
                             class="passage-sentence ${clickable ? "translate-ready" : ""} ${hlColor ? `user-hl hl-${hlColor}` : ""} ${isEv ? "evidence-active" : ""}"
@@ -4061,6 +5024,7 @@
   // MAIN RENDER
   // --------------------------------------------------------------------------
   function renderApp(resetScrollPanes, scrollToWrPart) {
+    closeHighlightContextMenu();
     const root = document.getElementById("app");
     if (!root) return;
 
@@ -4141,6 +5105,7 @@
     });
 
     bindEvents();
+    applyPageHighlights(root);
   }
 
   function openWritingUnit(unitId, sectionKey) {
@@ -4635,32 +5600,6 @@
       const samePartList = getExercisesByPart(ex.part);
       const exIdx = samePartList.findIndex(item => item.id === ex.id);
 
-      const btnHl = document.getElementById("btn-toggle-hl-tool");
-      if (btnHl) {
-        btnHl.onclick = () => {
-          state.highlightToolActive = !state.highlightToolActive;
-          if (state.highlightToolActive) state.translateModeActive = false;
-          renderApp();
-        };
-      }
-
-      document.querySelectorAll("[data-hl-color]").forEach(btn => {
-        btn.onclick = () => {
-          state.highlightColor = btn.getAttribute("data-hl-color") || "yellow";
-          renderApp();
-        };
-      });
-
-      const btnClearHl = document.getElementById("btn-clear-highlights");
-      if (btnClearHl) {
-        btnClearHl.onclick = () => {
-          exState.highlightedSentences = {};
-          exState.textHighlights = {};
-          persist();
-          renderApp();
-        };
-      }
-
       const btnScan = document.getElementById("btn-toggle-scan");
       if (btnScan) {
         btnScan.onclick = () => {
@@ -4673,97 +5612,20 @@
       if (btnTrans) {
         btnTrans.onclick = () => {
           state.translateModeActive = !state.translateModeActive;
-          if (state.translateModeActive) state.highlightToolActive = false;
           renderApp();
         };
       }
 
-      // Drag-select any text in the passage to highlight arbitrary words/phrases
-      let justAppliedDragHl = false;
-      const passageCard = document.getElementById("passage-paper-card");
-      if (passageCard && state.highlightToolActive) {
-        passageCard.onmouseup = () => {
-          const sel = window.getSelection ? window.getSelection() : null;
-          if (!sel || sel.isCollapsed || !sel.rangeCount) return;
-          const selectedText = sel.toString();
-          if (!selectedText || !selectedText.trim()) return;
-
-          const range = sel.getRangeAt(0);
-          let applied = false;
-          passageCard.querySelectorAll("[data-sentence-id]").forEach(sentEl => {
-            if (!range.intersectsNode(sentEl)) return;
-            const sId = sentEl.getAttribute("data-sentence-id");
-            const walker = document.createTreeWalker(sentEl, NodeFilter.SHOW_TEXT);
-            let offset = 0;
-            let hlStart = null;
-            let hlEnd = null;
-            let node;
-            while ((node = walker.nextNode())) {
-              const nodeLen = node.nodeValue ? node.nodeValue.length : 0;
-              if (nodeLen > 0) {
-                const nodeRange = document.createRange();
-                nodeRange.selectNodeContents(node);
-                const endsBefore = range.compareBoundaryPoints(Range.END_TO_START, nodeRange) >= 0;
-                const startsAfter = range.compareBoundaryPoints(Range.START_TO_END, nodeRange) <= 0;
-                if (!endsBefore && !startsAfter) {
-                  const localStart = range.compareBoundaryPoints(Range.START_TO_START, nodeRange) <= 0 ? 0 : range.startOffset;
-                  const localEnd = range.compareBoundaryPoints(Range.END_TO_END, nodeRange) >= 0 ? nodeLen : range.endOffset;
-                  if (localEnd > localStart) {
-                    if (hlStart === null) hlStart = offset + localStart;
-                    hlEnd = offset + localEnd;
-                  }
-                }
-              }
-              offset += nodeLen;
-            }
-            if (hlStart !== null && hlEnd !== null && hlEnd > hlStart) {
-              applyTextHighlight(exState, sId, hlStart, hlEnd, state.highlightColor);
-              applied = true;
-            }
-          });
-
-          if (applied) {
-            justAppliedDragHl = true;
-            try { sel.removeAllRanges(); } catch (e) {}
-            persist();
-            renderApp();
-            setTimeout(() => { justAppliedDragHl = false; }, 0);
-          }
-        };
-      }
-
-      // Click sentences (whole sentence) or existing partial mark for highlight, or translate
+      // Click sentences for inline translation when Translate mode is active
       document.querySelectorAll("[data-sentence-id]").forEach(el => {
-        el.onclick = e => {
-          if (justAppliedDragHl) return;
+        el.onclick = () => {
+          if (!state.translateModeActive) return;
           const sel = window.getSelection ? window.getSelection() : null;
           if (sel && !sel.isCollapsed && sel.toString().trim().length > 0) return;
 
           const sId = el.getAttribute("data-sentence-id");
-          if (state.highlightToolActive) {
-            const markEl = e.target.closest ? e.target.closest("[data-hl-sent]") : null;
-            if (markEl) {
-              const msId = markEl.getAttribute("data-hl-sent");
-              const mStart = parseInt(markEl.getAttribute("data-hl-start"), 10);
-              const mEnd = parseInt(markEl.getAttribute("data-hl-end"), 10);
-              removeOrRecolorTextHighlight(exState, msId, mStart, mEnd, state.highlightColor);
-              persist();
-              renderApp();
-              return;
-            }
-            if (!exState.highlightedSentences) exState.highlightedSentences = {};
-            const currentColor = normalizeHighlightColor(exState.highlightedSentences[sId]);
-            if (currentColor === state.highlightColor) {
-              delete exState.highlightedSentences[sId];
-            } else {
-              exState.highlightedSentences[sId] = state.highlightColor;
-            }
-            persist();
-            renderApp();
-          } else if (state.translateModeActive) {
-            state.revealedTranslations[sId] = !state.revealedTranslations[sId];
-            renderApp();
-          }
+          state.revealedTranslations[sId] = !state.revealedTranslations[sId];
+          renderApp();
         };
       });
 
@@ -5316,7 +6178,29 @@
     if (btnFcNext) btnFcNext.onclick = () => { state.flashcardIndex++; state.flashcardFlipped = false; renderApp(); };
   }
 
-  // Global document click / Escape listeners
+  // Global document click / contextmenu / Escape listeners
+  document.addEventListener("contextmenu", handleGlobalHighlightContextMenu);
+
+  document.addEventListener("mousedown", e => {
+    if (hlMenuEl && !hlMenuEl.contains(e.target)) {
+      closeHighlightContextMenu();
+    }
+  });
+
+  window.addEventListener(
+    "scroll",
+    e => {
+      if (hlMenuEl && (!e.target || !hlMenuEl.contains(e.target))) {
+        closeHighlightContextMenu();
+      }
+    },
+    true
+  );
+
+  window.addEventListener("resize", () => {
+    if (hlMenuEl) closeHighlightContextMenu();
+  });
+
   document.addEventListener("click", e => {
     let changed = false;
     if (state.notifOpen && !e.target.closest("#topbar-notif-wrap")) {
@@ -5332,6 +6216,9 @@
 
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
+      if (hlMenuEl) {
+        closeHighlightContextMenu();
+      }
       if (state.notifOpen || state.accountMenuOpen || state.vocabModalOpen) {
         state.notifOpen = false;
         state.accountMenuOpen = false;
